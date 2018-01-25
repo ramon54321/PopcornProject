@@ -4,12 +4,13 @@ Innovation Project where as a small team we develop an application to improve pr
 ## Overview
 Project is currently under development.
 
-## Conduct
+## Development Conduct
  - Development is done on its own feature branch.
  - Master branch is always in a deploy state. (Auto deployed with CI)
  - Once a feature is ready, merge development branch into YOUR feature with `git merge development`, resolve any conflicts and open a pull request. (**DO NOT PUSH TO MASTER OR DEVELOPMENT - USE A PULL REQUEST**)
  - ESLint is used.
  - JSDoc comments are required.
+ - 
 
 ## Contributing
 Unfortunatly this is a closed project, but feel free to browse the source!
