@@ -43,7 +43,7 @@ When a deployable version is ready on development branch.
 1. Open pull request to master branch
 
 ## Contributing
-Unfortunatly this is a closed project, but feel free to browse the source!
+Unfortunately this is a closed project, but feel free to browse the source!
 
 ## Technical Theory
 ### Buy / Sell Rates
