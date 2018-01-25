@@ -4,13 +4,37 @@ Innovation Project where as a small team we develop an application to improve pr
 ## Overview
 Project is currently under development.
 
-## Development Conduct
+### Development Conduct
  - Development is done on its own feature branch.
  - Master branch is always in a deploy state. (Auto deployed with CI)
- - Once a feature is ready, merge development branch into YOUR feature with `git merge development`, resolve any conflicts and open a pull request. (**DO NOT PUSH TO MASTER OR DEVELOPMENT - USE A PULL REQUEST**)
- - ESLint is used.
+ - ESLint is required.
  - JSDoc comments are required.
- - 
+
+### Development Stack
+ Client
+ - ES6
+ - React
+ - Babel
+ - Webpack
+ 
+ Server
+ - ES6
+ - Babel
+ - PostgreSQL
+ 
+ - Travis CI
+ 
+### Development Process
+Feature
+1. `git branch myNewFeature`
+2. `git checkout myNewFeature`
+3. Commits...
+
+When feature development is finished.
+
+4. `git merge development`
+5. Resolve any conflicts
+6. Open pull request to development branch
 
 ## Contributing
 Unfortunatly this is a closed project, but feel free to browse the source!
