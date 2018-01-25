@@ -12,20 +12,22 @@ Project is currently under development.
 
 ### Development Stack
  Client
+ 
  - ES6
  - React
  - Babel
  - Webpack
  
  Server
+ 
  - ES6
  - Babel
  - PostgreSQL
- 
  - Travis CI
  
 ### Development Process
 Feature
+
 1. `git branch myNewFeature`
 2. `git checkout myNewFeature`
 3. Commits...
@@ -35,6 +37,10 @@ When feature development is finished.
 4. `git merge development`
 5. Resolve any conflicts
 6. Open pull request to development branch
+
+When a deployable version is ready on development branch.
+
+1. Open pull request to master branch
 
 ## Contributing
 Unfortunatly this is a closed project, but feel free to browse the source!
