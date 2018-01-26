@@ -1,0 +1,14 @@
+{
+    "extends": "google",
+	"parser": "babel-eslint",
+	"rules": {
+		"linebreak-style": ["off"],
+		"quotes": ["warn", "double"],
+		"semi": ["warn", "never"],
+		"require-jsdoc": ["error", {
+			"require": {
+				"FunctionExpression": true
+			}
+		}]
+	}
+}
