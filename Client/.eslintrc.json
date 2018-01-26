@@ -2,6 +2,7 @@
     "extends": "google",
 	"parser": "babel-eslint",
 	"rules": {
+		"no-tabs": ["off"],
 		"linebreak-style": ["off"],
 		"quotes": ["warn", "double"],
 		"semi": ["warn", "never"],

@@ -10,3 +10,6 @@ Building will first ensure the source code passes ESLint, following which it wil
 `npm run build`
 
 #### Testing
+Testing is done with Mocha. It is important to note `import` syntax does not work in test since they are not transpiled, so be sure to use `const x = require("x")` instead.
+
+`npm run test`
