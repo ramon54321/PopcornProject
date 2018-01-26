@@ -1,0 +1,11 @@
+{
+  "name": "popcorn-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": ""
+  },
+  "author": "Ramon Brand, Aelitta Ezugbaya, Hannu Junno",
+  "license": "MIT"
+}
