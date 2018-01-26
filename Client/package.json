@@ -1,0 +1,23 @@
+{
+  "name": "popcorn-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "eslint ./src/**/*.js && webpack --color --config webpack.development.config.js"
+  },
+  "author": "Ramon Brand, Aelitta Ezugbaya, Hannu Junno",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.1",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.16.0",
+    "eslint-config-google": "^0.9.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "webpack": "^3.10.0"
+  }
+}
