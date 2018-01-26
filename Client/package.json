@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+	"test": "mocha",
     "build": "eslint ./src/**/*.js && webpack --color --config webpack.development.config.js"
   },
   "author": "Ramon Brand, Aelitta Ezugbaya, Hannu Junno",
@@ -16,6 +17,7 @@
     "babel-preset-react": "^6.24.1",
     "eslint": "^4.16.0",
     "eslint-config-google": "^0.9.1",
+    "mocha": "^5.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "webpack": "^3.10.0"
