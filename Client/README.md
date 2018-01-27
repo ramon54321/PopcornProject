@@ -13,3 +13,8 @@ Building will first ensure the source code passes ESLint, following which it wil
 Testing is done with Mocha. It is important to note `import` syntax does not work in test since they are not transpiled, so be sure to use `const x = require("x")` instead.
 
 `npm run test`
+
+#### Linting
+Linting is always done on build, and will cause the build to fail if the linting does not pass. However, you can also manually trigger the linting process if you want to lint without building.
+
+`npm run lint`
