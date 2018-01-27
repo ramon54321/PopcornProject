@@ -4,7 +4,7 @@ The server source code is all contained within the `src` folder. Source code is 
 ESLint rules are contained in `.eslintrc.json`.
 
 #### Building
-Building will first ensure the source code passes ESLint, following which it will be transpiled and output into the `dist` folder.
+Building will first ensure the source code passes ESLint, then the jsdoc comments will be converted to markdown documentation and saved in the `api.md` file, following which the source code will be transpiled and output into the `dist` folder.
 
 **Building will also run the built files!**
 
@@ -19,6 +19,11 @@ Testing is done with Mocha. It is important to note `import` syntax does not wor
 Linting is always done on build, and will cause the build to fail if the linting does not pass. However, you can also manually trigger the linting process if you want to lint without building.
 
 `npm run lint`
+
+#### Documenting
+Documenting will occur on build automatically, however, for the sake of convenience, documentation can be built manually also.
+
+`npm run doc`
 
 #### Deploying
 When the application gets deployed, only the server folder gets deployed, since the client folder is only the "recipe" required to create the static files in the `static` folder of the server.
