@@ -34,13 +34,11 @@ Feature
 
 When feature development is finished.
 
-4. `git merge development`
-5. Resolve any conflicts
-6. Open pull request to development branch
+4. Open pull request to development branch
 
 When a deployable version is ready on development branch.
 
-1. Open pull request to master branch
+5. Open pull request to master branch
 
 ## Contributing
 Unfortunately this is a closed project, but feel free to browse the source!
