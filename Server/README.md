@@ -1,5 +1,4 @@
 ## Server
-
 The server source code is all contained within the `src` folder. Source code is written in ES6. Babel is used to transpile the source to compatible ES5. The transpiled code is then output into the `dist` folder.
 
 ESLint rules are contained in `.eslintrc.json`.
