@@ -13,11 +13,19 @@
 
 * [Blockchain](#module_Blockchain)
     * _static_
+        * [.validateBlockchain()](#module_Blockchain.validateBlockchain) ⇒ <code>boolean</code>
         * [.createBlock(data, previousBlockIndex)](#module_Blockchain.createBlock) ⇒ <code>object</code>
         * [.addBlock(block)](#module_Blockchain.addBlock) ⇒ <code>boolean</code>
     * _inner_
         * [~hashData(data)](#module_Blockchain..hashData) ⇒ <code>string</code>
 
+<a name="module_Blockchain.validateBlockchain"></a>
+
+### Blockchain.validateBlockchain() ⇒ <code>boolean</code>
+Validates the entire blockchain. This function will iterate the chain, oneblock at a time, checking that the block contains the same hash as theprevious block's hash, and that the hash of the current block is indeedcorrect.
+
+**Kind**: static method of [<code>Blockchain</code>](#module_Blockchain)  
+**Returns**: <code>boolean</code> - True if the blockchain is valid in its entirity.  
 <a name="module_Blockchain.createBlock"></a>
 
 ### Blockchain.createBlock(data, previousBlockIndex) ⇒ <code>object</code>
