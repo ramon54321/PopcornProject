@@ -3,8 +3,8 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.blockchain = undefined;
-exports.validateBlockchain = validateBlockchain;
+exports.getLength = getLength;
+exports.validate = validate;
 exports.createBlock = createBlock;
 exports.addBlock = addBlock;
 
@@ -18,7 +18,15 @@ let publicKey = "popcornblockchain"; /**
                                       * @module Blockchain
                                       */
 
-let blockchain = exports.blockchain = [];
+let blockchain = [];
+
+/**
+* Gets the length of the blockchain.
+* @return {number} The length of the blockchain.
+*/
+function getLength() {
+	return blockchain.length;
+}
 
 /**
 * Validates the entire blockchain. This function will iterate the chain, one
@@ -27,7 +35,7 @@ let blockchain = exports.blockchain = [];
 * correct.
 * @return {boolean} True if the blockchain is valid in its entirity.
 */
-function validateBlockchain() {
+function validate() {
 	// -- If there is 1 or less entries in chain, assume it is valid
 	if (blockchain.length < 2) {
 		return true;

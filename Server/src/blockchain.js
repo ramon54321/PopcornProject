@@ -5,7 +5,15 @@
 import * as Crypto from "crypto"
 
 let publicKey = "popcornblockchain"
-export let blockchain = []
+let blockchain = []
+
+/**
+* Gets the length of the blockchain.
+* @return {number} The length of the blockchain.
+*/
+export function getLength() {
+	return blockchain.length
+}
 
 /**
 * Validates the entire blockchain. This function will iterate the chain, one
@@ -14,7 +22,7 @@ export let blockchain = []
 * correct.
 * @return {boolean} True if the blockchain is valid in its entirity.
 */
-export function validateBlockchain() {
+export function validate() {
 	// -- If there is 1 or less entries in chain, assume it is valid
 	if (blockchain.length < 2) {
 		return true
@@ -52,9 +60,9 @@ export function createBlock(data, previousBlockIndex) {
 	let hash = hashData({previousHash: previousHash, data: data})
 
 	let block = {
-	previousHash: previousHash,
-	data: data,
-	hash: hash,
+		previousHash: previousHash,
+		data: data,
+		hash: hash,
 	}
 
 	return block
