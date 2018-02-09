@@ -1,14 +1,6 @@
-import * as Utils from "./utils"
+import * as Blockchain from "./blockchain"
 
-/**
- * A quite wonderful function.
- * @param {object} cloak - privacy gown
- * @param {object} dagger - security
- * @return {number} - number of protection
- */
-function protection(cloak, dagger) {
-	return 54
-}
+let block = Blockchain.createBlock({name: "hannu"}, -1)
+Blockchain.addBlock(block)
 
-Utils.getDouble(3)
-protection()
+console.log(Blockchain.blockchain.length)

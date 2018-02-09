@@ -6,7 +6,7 @@
   "scripts": {
 	"test": "mocha",
 	"lint": "eslint ./src/**/*.js",
-    "build": "eslint ./src/**/*.js && webpack --color --config webpack.development.config.js"
+  "build": "eslint ./src/**/*.js && webpack --color --config webpack.development.config.js"
   },
   "author": "Ramon Brand, Aelitta Ezugbaya, Hannu Junno",
   "license": "MIT",

@@ -1,20 +1,12 @@
 "use strict";
 
-var _utils = require("./utils");
+var _blockchain = require("./blockchain");
 
-var Utils = _interopRequireWildcard(_utils);
+var Blockchain = _interopRequireWildcard(_blockchain);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-/**
- * A quite wonderful function.
- * @param {object} cloak - privacy gown
- * @param {object} dagger - security
- * @return {number} - number of protection
- */
-function protection(cloak, dagger) {
-  return 54;
-}
+let block = Blockchain.createBlock({ name: "hannu" }, -1);
+Blockchain.addBlock(block);
 
-Utils.getDouble(3);
-protection();
+console.log(Blockchain.blockchain.length);

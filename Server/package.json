@@ -7,7 +7,7 @@
     "test": "mocha",
     "lint": "eslint ./src/**/*.js",
     "build": "eslint ./src/**/*.js && npm run doc && babel src -d dist && node dist/index.js",
-	"doc": "jsdoc2md --files ./src/**/*.js > api.md",
+	  "doc": "jsdoc2md --files ./src/**/*.js > api.md",
     "start": "node dist/index.js"
   },
   "author": "Ramon Brand, Aelitta Ezugbaya, Hannu Junno",
