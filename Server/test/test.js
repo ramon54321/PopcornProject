@@ -1,22 +1,29 @@
-const assert = require("assert")
-const Blockchain = require("../dist/blockchain.js")
+import assert from "assert"
+import Blockchain from "../src/blockchain"
 
+let blockchain = new Blockchain()
 describe("Blockchain", function() {
 	it("Should add one block to end.", function() {
-		let block = Blockchain.createBlock({name: "hannu"}, -1)
-		Blockchain.addBlock(block)
-		assert.equal(Blockchain.getLength(), 1)
+		let block = blockchain.createBlock({name: "hannu"}, -1)
+		blockchain.addBlock(block)
+		assert.equal(blockchain.getLength(), 1)
 	})
 
 	it("Should contain 3 blocks.", function() {
-		let block = Blockchain.createBlock({name: "ramon"}, 0)
-		Blockchain.addBlock(block)
-		block = Blockchain.createBlock({name: "aelitta"}, 1)
-		Blockchain.addBlock(block)
-		assert.equal(Blockchain.getLength(), 3)
+		let block = blockchain.createBlock({name: "ramon"}, 0)
+		blockchain.addBlock(block)
+		block = blockchain.createBlock({name: "aelitta"}, 1)
+		blockchain.addBlock(block)
+		assert.equal(blockchain.getLength(), 3)
 	})
 
 	it("Should be valid.", function() {
-		assert.equal(true, Blockchain.validate())
+		assert.equal(true, blockchain.isValid())
+	})
+
+	it("Should return false when trying to add invalid block.", function() {
+		let block = blockchain.createBlock({name: "broken"}, 1)
+		let didAdd = blockchain.addBlock(block)
+		assert.equal(didAdd, false)
 	})
 })

@@ -4,91 +4,100 @@
 
 import * as Crypto from "crypto"
 
-let publicKey = "popcornblockchain"
-let blockchain = []
+export default class Blockchain {
+  constructor() {
+    this.publicKey = "popcornblockchain"
+    this.blockchain = []
+  }
 
-/**
-* Gets the length of the blockchain.
-* @return {number} The length of the blockchain.
-*/
-export function getLength() {
-	return blockchain.length
-}
+  /**
+  * Gets the length of the blockchain.
+  * @return {number} The length of the blockchain.
+  */
+  getLength() {
+    return this.blockchain.length
+  }
 
-/**
-* Validates the entire blockchain. This function will iterate the chain, one
-* block at a time, checking that the block contains the same hash as the
-* previous block's hash, and that the hash of the current block is indeed
-* correct.
-* @return {boolean} True if the blockchain is valid in its entirity.
-*/
-export function validate() {
-	// -- If there is 1 or less entries in chain, assume it is valid
-	if (blockchain.length < 2) {
-		return true
-	}
+  /**
+  * Creates a new block.
+  * @param {object} data The block data.
+  * @param {number} previousBlockIndex The index of the previous
+  * block in the blockchain.
+  * @return {object} The new block.
+  */
+  createBlock(data, previousBlockIndex) {
+    let previousHash = previousBlockIndex == -1 ? 0 :
+    this.blockchain[previousBlockIndex].hash
+    let hash = this.hashData({previousHash: previousHash, data: data})
 
-	// -- Iterate chain and check for errors
-	for (let i = 1; i < blockchain.length; i++) {
-		// -- Check if previous hash is wrong
-		if (blockchain[i].previousHash !== blockchain[i-1].hash) {
-			return false
-		}
+    let block = {
+      previousHash: previousHash,
+      data: data,
+      hash: hash,
+    }
 
-		// -- Check if hash itself is wrong
-		let hash = hashData({previousHash: blockchain[i].previousHash,
-			data: blockchain[i].data})
-		if (hash !== blockchain[i].hash) {
-			return false
-		}
-	}
+    return block
+  }
 
-	// -- No errors found at this point
-	return true
-}
+  /**
+  * Adds a block to the blockchain.
+  * @param {object} block The block to add.
+  * @return {boolean} True if the block was successfully added.
+  */
+  addBlock(block) {
+    if (!block) {
+      return false
+    }
 
-/**
-* Creates a new block.
-* @param {object} data The block data.
-* @param {number} previousBlockIndex The index of the previous
-* block in the blockchain.
-* @return {object} The new block.
-*/
-export function createBlock(data, previousBlockIndex) {
-	let previousHash = previousBlockIndex == -1 ? 0 :
-	blockchain[previousBlockIndex].hash
-	let hash = hashData({previousHash: previousHash, data: data})
+    if (this.blockchain.length > 0 &&
+      block.previousHash !== this.blockchain[this.blockchain.length - 1].hash) {
+      return false
+    }
 
-	let block = {
-		previousHash: previousHash,
-		data: data,
-		hash: hash,
-	}
+    this.blockchain.push(block)
+    return true
+  }
 
-	return block
-}
+  /**
+  * Validate the entire blockchain. This function will iterate the chain, one
+  * block at a time, checking that the block contains the same hash as the
+  * previous block's hash, and that the hash of the current block is indeed
+  * correct.
+  * @return {boolean} True if the blockchain is valid in its entirity.
+  */
+  isValid() {
+    // -- If there is 1 or less entries in chain, assume it is valid
+    if (this.blockchain.length < 2) {
+      return true
+    }
 
-/**
-* Adds a block to the blockchain.
-* @param {object} block The block to add.
-* @return {boolean} True if the block was successfully added.
-*/
-export function addBlock(block) {
-	if (!block) {
-	return false
-	}
+    // -- Iterate chain and check for errors
+    for (let i = 1; i < this.blockchain.length; i++) {
+      // -- Check if previous hash is wrong
+      if (this.blockchain[i].previousHash !== this.blockchain[i-1].hash) {
+        return false
+      }
 
-	blockchain.push(block)
-	return true
-}
+      // -- Check if hash itself is wrong
+      let hash = this.hashData({previousHash: this.blockchain[i].previousHash,
+        data: this.blockchain[i].data})
+      if (hash !== this.blockchain[i].hash) {
+        return false
+      }
+    }
 
-/**
-* Hashes the data with the set blockchain public key.
-* @param {object} data The data to hash.
-* @return {string} The hash in hex form.
-*/
-function hashData(data) {
-	return Crypto.createHmac("sha256", publicKey)
-	.update(JSON.stringify(data))
-	.digest("hex")
+    // -- No errors found at this point
+    return true
+  }
+
+  /**
+  * Hashes the data with the set blockchain public key.
+  * @param {object} data The data to hash.
+  * @return {string} The hash in hex form.
+  */
+  hashData(data) {
+    return Crypto.createHmac("sha256", this.publicKey)
+    .update(JSON.stringify(data))
+    .digest("hex")
+  }
 }
