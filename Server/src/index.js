@@ -2,8 +2,11 @@ import Blockchain from "./blockchain"
 
 let mychain = new Blockchain()
 
-for (let i = 0; i < 500; i++) {
-	let block = mychain.createBlock("hello", i-1)
+
+let myTransaction = {from: "Alex", to: "Hannah", amount: 56}
+
+for (let i = 0; i < 10; i++) {
+	let block = mychain.createBlock(myTransaction, i-1)
 	mychain.addBlock(block)
 }
 

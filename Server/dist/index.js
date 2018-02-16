@@ -8,7 +8,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 let mychain = new _blockchain2.default();
 
-for (let i = 0; i < 500; i++) {
+for (let i = 0; i < 10; i++) {
 	let block = mychain.createBlock("hello", i - 1);
 	mychain.addBlock(block);
 }

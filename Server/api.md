@@ -16,6 +16,7 @@
     * [.createBlock(data, previousBlockIndex)](#module_Blockchain+createBlock) ⇒ <code>object</code>
     * [.addBlock(block)](#module_Blockchain+addBlock) ⇒ <code>boolean</code>
     * [.isValid()](#module_Blockchain+isValid) ⇒ <code>boolean</code>
+    * [.hashBlock(block)](#module_Blockchain+hashBlock) ⇒ <code>string</code>
     * [.hashData(data)](#module_Blockchain+hashData) ⇒ <code>string</code>
 
 <a name="module_Blockchain+getLength"></a>
@@ -60,6 +61,18 @@ correct.
 
 **Kind**: instance method of [<code>Blockchain</code>](#module_Blockchain)  
 **Returns**: <code>boolean</code> - True if the blockchain is valid in its entirity.  
+<a name="module_Blockchain+hashBlock"></a>
+
+### blockchain.hashBlock(block) ⇒ <code>string</code>
+Hashes the block.
+
+**Kind**: instance method of [<code>Blockchain</code>](#module_Blockchain)  
+**Returns**: <code>string</code> - The hash in hex form.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| block | <code>object</code> | The block to hash. |
+
 <a name="module_Blockchain+hashData"></a>
 
 ### blockchain.hashData(data) ⇒ <code>string</code>

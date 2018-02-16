@@ -33,13 +33,19 @@ class Blockchain {
   */
   createBlock(data, previousBlockIndex) {
     let previousHash = previousBlockIndex == -1 ? 0 : this.blockchain[previousBlockIndex].hash;
-    let hash = this.hashData({ previousHash: previousHash, data: data });
 
+    // -- Create initial block
     let block = {
       previousHash: previousHash,
       data: data,
-      hash: hash
-    };
+      nonce: 0,
+      hash: ""
+
+      // -- Compute the hash with nonce until difficulty is met
+    };while (!block.hash.startsWith("00000")) {
+      block.nonce++;
+      block.hash = this.hashBlock(block);
+    }
 
     return block;
   }
@@ -54,6 +60,7 @@ class Blockchain {
       return false;
     }
 
+    // -- If blockchain is NOT empty AND previousHash is not correct
     if (this.blockchain.length > 0 && block.previousHash !== this.blockchain[this.blockchain.length - 1].hash) {
       return false;
     }
@@ -83,15 +90,23 @@ class Blockchain {
       }
 
       // -- Check if hash itself is wrong
-      let hash = this.hashData({ previousHash: this.blockchain[i].previousHash,
-        data: this.blockchain[i].data });
-      if (hash !== this.blockchain[i].hash) {
+      if (this.hashBlock(this.blockchain[i]) !== this.blockchain[i].hash) {
         return false;
       }
     }
 
     // -- No errors found at this point
     return true;
+  }
+
+  /**
+  * Hashes the block.
+  * @param {object} block The block to hash.
+  * @return {string} The hash in hex form.
+  */
+  hashBlock(block) {
+    return this.hashData({ previousHash: block.previousHash, data: block.data,
+      nonce: block.nonce });
   }
 
   /**
