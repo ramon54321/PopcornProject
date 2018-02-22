@@ -47,10 +47,11 @@ function generateCode() {
 * @return {boolean} True if code is unique.
 */
 function isUnique(code) {
-  for (let i = 0; i < requests.length; i++) {
-    if (requests[i] === code) {
-      return false
+  let allValid = true
+  requests.map((request) => {
+    if (request === code) {
+      allValid = false
     }
-  }
-  return true
+  })
+  return allValid
 }
