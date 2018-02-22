@@ -7,6 +7,17 @@
 <dd></dd>
 </dl>
 
+## Functions
+
+<dl>
+<dt><a href="#generateCode">generateCode()</a> ⇒ <code>object</code></dt>
+<dd><p>Generates a new code.</p>
+</dd>
+<dt><a href="#isUnique">isUnique(code)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Checks that the code doesn&#39;t already exists in requests[].</p>
+</dd>
+</dl>
+
 <a name="module_Blockchain"></a>
 
 ## Blockchain
@@ -54,10 +65,7 @@ Adds a block to the blockchain.
 <a name="module_Blockchain+isValid"></a>
 
 ### blockchain.isValid() ⇒ <code>boolean</code>
-Validate the entire blockchain. This function will iterate the chain, one
-block at a time, checking that the block contains the same hash as the
-previous block's hash, and that the hash of the current block is indeed
-correct.
+Validate the entire blockchain. This function will iterate the chain, oneblock at a time, checking that the block contains the same hash as theprevious block's hash, and that the hash of the current block is indeedcorrect.
 
 **Kind**: instance method of [<code>Blockchain</code>](#module_Blockchain)  
 **Returns**: <code>boolean</code> - True if the blockchain is valid in its entirity.  
@@ -99,4 +107,23 @@ The function that doubles the input given to it. Or so I think.
 | Param | Type | Description |
 | --- | --- | --- |
 | x | <code>number</code> | The parameter to double. |
+
+<a name="generateCode"></a>
+
+## generateCode() ⇒ <code>object</code>
+Generates a new code.
+
+**Kind**: global function  
+**Returns**: <code>object</code> - The new code.  
+<a name="isUnique"></a>
+
+## isUnique(code) ⇒ <code>boolean</code>
+Checks that the code doesn't already exists in requests[].
+
+**Kind**: global function  
+**Returns**: <code>boolean</code> - True if code is unique.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| code | <code>object</code> | Code to check. |
 

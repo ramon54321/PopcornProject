@@ -1,4 +1,4 @@
-
+import createRequest from "./transactions"
 /*
 
 import Blockchain from "./blockchain"
@@ -23,4 +23,7 @@ console.log(mychain.getLength())
 console.log(mychain.isValid())
 */
 
-let requests = []
+console.log(createRequest())
+console.log(createRequest())
+console.log(createRequest())
+console.log(createRequest())

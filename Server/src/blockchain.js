@@ -26,8 +26,9 @@ export default class Blockchain {
   * @return {object} The new block.
   */
   createBlock(data, previousBlockIndex) {
-    let previousHash = previousBlockIndex == -1 ? 0 :
-    this.blockchain[previousBlockIndex].hash
+    let previousHash = previousBlockIndex == -1
+      ? 0
+      : this.blockchain[previousBlockIndex].hash
 
     // -- Create initial block
     let block = {

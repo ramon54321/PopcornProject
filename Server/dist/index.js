@@ -1,20 +1,36 @@
 "use strict";
 
-var _blockchain = require("./blockchain");
+var _transactions = require("./transactions");
 
-var _blockchain2 = _interopRequireDefault(_blockchain);
+var _transactions2 = _interopRequireDefault(_transactions);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-let mychain = new _blockchain2.default();
+/*
 
-let myTransaction = { from: "Alex", to: "Hannah", amount: 56 };
+import Blockchain from "./blockchain"
 
-for (let i = 0; i < 10; i++) {
-	let block = mychain.createBlock(myTransaction, i - 1);
-	mychain.addBlock(block);
-	console.log(block.hash);
-}
+const myChain = new Blockchain()
 
-console.log(mychain.getLength());
-console.log(mychain.isValid());
+// -- Creating a transaction
+if(from and to exist)
+if(from has enough money)
+return true
+const myTransaction = {from: "Alex", to: "Hannah", amount: 56}
+const myNewBlock = myChain.createBlock(myTransaction, myChain.getLength()-1)
+myChain.addBlock(myNewBlock)
+Database.saveChain(myChain)
+
+
+// -- Get current user balance  [GET] /api/user/{username}/balance
+const myUser = Database.getUserByName("username")
+myChain.getBalance(myUser.id)
+
+console.log(mychain.getLength())
+console.log(mychain.isValid())
+*/
+
+console.log((0, _transactions2.default)());
+console.log((0, _transactions2.default)());
+console.log((0, _transactions2.default)());
+console.log((0, _transactions2.default)());
