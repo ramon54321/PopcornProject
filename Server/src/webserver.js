@@ -1,3 +1,7 @@
+/**
+ * @module WebServer
+ */
+
 import express from "express"
 import * as Transactions from "./transactions"
 

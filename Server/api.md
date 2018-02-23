@@ -5,7 +5,7 @@
 <dd></dd>
 <dt><a href="#module_Transactions">Transactions</a></dt>
 <dd></dd>
-<dt><a href="#module_Utils">Utils</a></dt>
+<dt><a href="#module_WebServer">WebServer</a></dt>
 <dd></dd>
 </dl>
 
@@ -127,18 +127,36 @@ Checks that the code doesn't already exists in requests[].
 | --- | --- | --- |
 | code | <code>object</code> | Code to check. |
 
-<a name="module_Utils"></a>
+<a name="module_WebServer"></a>
 
-## Utils
-<a name="module_Utils.getDouble"></a>
+## WebServer
 
-### Utils.getDouble(x) ⇒ <code>number</code>
-The function that doubles the input given to it. Or so I think.
+* [WebServer](#module_WebServer)
+    * [.createTransactionRequest(userid, amount)](#module_WebServer+createTransactionRequest) ⇒ <code>string</code>
+    * [.confirmTransaction(code)](#module_WebServer+confirmTransaction) ⇒ <code>boolean</code>
 
-**Kind**: static method of [<code>Utils</code>](#module_Utils)  
-**Returns**: <code>number</code> - Double the given parameter.  
+<a name="module_WebServer+createTransactionRequest"></a>
+
+### webServer.createTransactionRequest(userid, amount) ⇒ <code>string</code>
+Creates a transaction request, which can be retrieved using the returnedcode. The transaction request also stores the time of creation, and isvalid for a set period of time. Be sure to create a transaction requestonly when the confirmation of the transaction is expected soon.
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+**Returns**: <code>string</code> - A random code which can be used to reference to thistransaction request.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| x | <code>number</code> | The parameter to double. |
+| userid | <code>number</code> | The id of the user requesting the transaction. |
+| amount | <code>number</code> | The amount of currency to transfer in the transaction. |
+
+<a name="module_WebServer+confirmTransaction"></a>
+
+### webServer.confirmTransaction(code) ⇒ <code>boolean</code>
+Confirms the requested transaction by locking it into the blockchain. Thetransaction request is also deleted.
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+**Returns**: <code>boolean</code> - True if the transaction was added to the blockchainpool. False if there was an error in adding the request, commonly causedby the request with the given code not being present in the transactionrequests array. Ensure the code was first created with'createTransactionRequest'. The request code will only be deleted if thereturned value is true.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| code | <code>string</code> | The code received when creating the transaction request. |
 
