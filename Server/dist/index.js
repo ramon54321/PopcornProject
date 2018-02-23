@@ -1,13 +1,14 @@
 "use strict";
 
-var _transactions = require("./transactions");
+var _webserver = require("./webserver");
 
-var _transactions2 = _interopRequireDefault(_transactions);
+var _webserver2 = _interopRequireDefault(_webserver);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*
+const webServer = new _webserver2.default();
 
+/*  Blockchain
 import Blockchain from "./blockchain"
 
 const myChain = new Blockchain()
@@ -30,7 +31,7 @@ console.log(mychain.getLength())
 console.log(mychain.isValid())
 */
 
-console.log((0, _transactions2.default)());
-console.log((0, _transactions2.default)());
-console.log((0, _transactions2.default)());
-console.log((0, _transactions2.default)());
+/*  Transactions
+import createRequest from "./transactions"
+console.log(createRequest())
+*/

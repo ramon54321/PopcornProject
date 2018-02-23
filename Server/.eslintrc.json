@@ -3,6 +3,7 @@
 	"parser": "babel-eslint",
 	"rules": {
 		"no-tabs": ["off"],
+		"no-unused-vars": ["warn"],
 		"linebreak-style": ["off"],
 		"quotes": ["warn", "double"],
 		"semi": ["warn", "never"],

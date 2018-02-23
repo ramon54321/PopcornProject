@@ -1,6 +1,10 @@
-import createRequest from "./transactions"
-/*
 
+import WebServer from "./webserver"
+
+const webServer = new WebServer()
+
+
+/*  Blockchain
 import Blockchain from "./blockchain"
 
 const myChain = new Blockchain()
@@ -23,7 +27,8 @@ console.log(mychain.getLength())
 console.log(mychain.isValid())
 */
 
+
+/*  Transactions
+import createRequest from "./transactions"
 console.log(createRequest())
-console.log(createRequest())
-console.log(createRequest())
-console.log(createRequest())
+*/

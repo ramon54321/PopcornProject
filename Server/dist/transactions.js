@@ -3,7 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = createRequest;
+exports.createRequest = createRequest;
+/**
+ * @module Transactions
+ */
+
 let requests = [];
 
 /**

@@ -3,19 +3,10 @@
 <dl>
 <dt><a href="#module_Blockchain">Blockchain</a></dt>
 <dd></dd>
+<dt><a href="#module_Transactions">Transactions</a></dt>
+<dd></dd>
 <dt><a href="#module_Utils">Utils</a></dt>
 <dd></dd>
-</dl>
-
-## Functions
-
-<dl>
-<dt><a href="#generateCode">generateCode()</a> ⇒ <code>object</code></dt>
-<dd><p>Generates a new code.</p>
-</dd>
-<dt><a href="#isUnique">isUnique(code)</a> ⇒ <code>boolean</code></dt>
-<dd><p>Checks that the code doesn&#39;t already exists in requests[].</p>
-</dd>
 </dl>
 
 <a name="module_Blockchain"></a>
@@ -93,6 +84,49 @@ Hashes the data with the set blockchain public key.
 | --- | --- | --- |
 | data | <code>object</code> | The data to hash. |
 
+<a name="module_Transactions"></a>
+
+## Transactions
+
+* [Transactions](#module_Transactions)
+    * _static_
+        * [.createRequest(userid, amount)](#module_Transactions.createRequest) ⇒ <code>object</code>
+    * _inner_
+        * [~generateCode()](#module_Transactions..generateCode) ⇒ <code>object</code>
+        * [~isUnique(code)](#module_Transactions..isUnique) ⇒ <code>boolean</code>
+
+<a name="module_Transactions.createRequest"></a>
+
+### Transactions.createRequest(userid, amount) ⇒ <code>object</code>
+Creates a new request object that is added to requests[].
+
+**Kind**: static method of [<code>Transactions</code>](#module_Transactions)  
+**Returns**: <code>object</code> - The request object.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| userid | <code>string</code> | Requester's userID. |
+| amount | <code>number</code> | Amount to transfer. |
+
+<a name="module_Transactions..generateCode"></a>
+
+### Transactions~generateCode() ⇒ <code>object</code>
+Generates a new code.
+
+**Kind**: inner method of [<code>Transactions</code>](#module_Transactions)  
+**Returns**: <code>object</code> - The new code.  
+<a name="module_Transactions..isUnique"></a>
+
+### Transactions~isUnique(code) ⇒ <code>boolean</code>
+Checks that the code doesn't already exists in requests[].
+
+**Kind**: inner method of [<code>Transactions</code>](#module_Transactions)  
+**Returns**: <code>boolean</code> - True if code is unique.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| code | <code>object</code> | Code to check. |
+
 <a name="module_Utils"></a>
 
 ## Utils
@@ -107,23 +141,4 @@ The function that doubles the input given to it. Or so I think.
 | Param | Type | Description |
 | --- | --- | --- |
 | x | <code>number</code> | The parameter to double. |
-
-<a name="generateCode"></a>
-
-## generateCode() ⇒ <code>object</code>
-Generates a new code.
-
-**Kind**: global function  
-**Returns**: <code>object</code> - The new code.  
-<a name="isUnique"></a>
-
-## isUnique(code) ⇒ <code>boolean</code>
-Checks that the code doesn't already exists in requests[].
-
-**Kind**: global function  
-**Returns**: <code>boolean</code> - True if code is unique.  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| code | <code>object</code> | Code to check. |
 
