@@ -27,6 +27,32 @@ export function createRequest(userid, amount) {
 }
 
 /**
+* Get the request object
+* @param {string} code Code for searching the object.
+* @return {object} Request object.
+*/
+export function getRequest(code) {
+  requests.map((request) => {
+    if (request === code) {
+      return request
+    }
+  })
+  return null
+}
+
+/**
+* Delete request object
+* @param {string} code Code for the object to delete.
+*/
+export function deleteRequest(code) {
+  requests.map((request) => {
+    if (request === code) {
+      requests.delete(request)
+    }
+  })
+}
+
+/**
 * Generates a new code.
 * @return {object} The new code.
 */
