@@ -3,6 +3,8 @@
 <dl>
 <dt><a href="#module_Blockchain">Blockchain</a></dt>
 <dd></dd>
+<dt><a href="#module_Database">Database</a></dt>
+<dd></dd>
 <dt><a href="#module_Transactions">Transactions</a></dt>
 <dd></dd>
 <dt><a href="#module_WebServer">WebServer</a></dt>
@@ -84,6 +86,9 @@ Hashes the data with the set blockchain public key.
 | --- | --- | --- |
 | data | <code>object</code> | The data to hash. |
 
+<a name="module_Database"></a>
+
+## Database
 <a name="module_Transactions"></a>
 
 ## Transactions

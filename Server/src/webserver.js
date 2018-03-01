@@ -4,16 +4,28 @@
 
 import express from "express"
 import cookieParser from "cookie-parser"
+import bodyParser from "body-parser"
 import session from "express-session"
 import * as Transactions from "./transactions"
+import * as _ from "lodash"
+
+
+const users = [
+	{userid: 0, nickname: "Bobby", password: "bobby123"},
+	{userid: 1, nickname: "Andy", password: "andy123"},
+	{userid: 2, nickname: "Jane", password: "jane123"},
+]
+
 
 export default class WebServer {
-	constructor(blockchain) {
+	constructor(blockchain, database) {
 		this.blockchain = blockchain
+		this.database = database
 		this.sessions = {}
 
 		this.app = express()
 		this.app.use(cookieParser())
+		this.app.use(bodyParser())
 		this.app.use(session({
 			secret: "thisisthesecretfortestingonly!",
 			cookie: {
@@ -32,28 +44,41 @@ export default class WebServer {
 			response.send("API - Description")
 		})
 		this.app.post("/api/login", (request, response, next) => {
-			let user = {} // Get user from database
+			const user = _.find(users, (user) => {
+				return user.nickname == request.body.nickname
+			})
 
 			// -- If the password or username was wrong
 			if (!user) {
 				response.send(false)
 
 				// -- Stop execution of this route
-				return next()
+				return
 			}
+			console.log("Linking session.")
 
 			// -- Link session with user
-			this.linkSessionWithUser(request)
+			this.linkSessionWithUser(request, user.userid)
 			response.send(true)
 		})
-		this.app.get("/api/protected", (request, response) => {
-			if (request.session.userid == 5) {
-				console.log("Valid")
-			} else {
-				console.log("Invalid")
+		this.app.post("/api/logout", (request, response, next) => {
+			delete request.session.userid
+			response.send(true)
+		})
+		this.app.all(/\/api\/*/, (request, response, next) => {
+			const user = _.find(users, (user) => {
+				return user.userid == request.session.userid
+			})
+
+			if (!user) {
+				response.send(false)
+
+				// -- Stop execution of this route
+				return
 			}
 
-			response.send()
+			console.log("Thanks for viewing the secret page " + user.nickname + "!")
+			next()
 		})
 
 		/* User creates a request to get specific amount of coins.
@@ -81,9 +106,14 @@ export default class WebServer {
 		this.app.get("/api/balance", (request, response) => {
 			// params: 1.userId
 			// get: 1.userBalance
+
+			console.log("The balance is " + 23523523562)
+
+			response.send("Hello the balance is " + 23626262)
 		})
 	}
 	startListening() {
+		console.log("Listening now")
 		this.app.listen(this.port)
 	}
 

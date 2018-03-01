@@ -12,6 +12,10 @@ var _cookieParser = require("cookie-parser");
 
 var _cookieParser2 = _interopRequireDefault(_cookieParser);
 
+var _bodyParser = require("body-parser");
+
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
+
 var _expressSession = require("express-session");
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
@@ -19,6 +23,10 @@ var _expressSession2 = _interopRequireDefault(_expressSession);
 var _transactions = require("./transactions");
 
 var Transactions = _interopRequireWildcard(_transactions);
+
+var _lodash = require("lodash");
+
+var _ = _interopRequireWildcard(_lodash);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -28,6 +36,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @module WebServer
  */
 
+const users = [{ userid: 0, nickname: "Bobby", password: "bobby123" }, { userid: 1, nickname: "Andy", password: "andy123" }, { userid: 2, nickname: "Jane", password: "jane123" }];
+
 class WebServer {
 	constructor(blockchain) {
 		this.blockchain = blockchain;
@@ -35,6 +45,7 @@ class WebServer {
 
 		this.app = (0, _express2.default)();
 		this.app.use((0, _cookieParser2.default)());
+		this.app.use((0, _bodyParser2.default)());
 		this.app.use((0, _expressSession2.default)({
 			secret: "thisisthesecretfortestingonly!",
 			cookie: {
@@ -53,29 +64,77 @@ class WebServer {
 			response.send("API - Description");
 		});
 		this.app.post("/api/login", (request, response, next) => {
-			let user = {}; // Get user from database
+			const user = _.find(users, user => {
+				return user.nickname == request.body.nickname;
+			});
 
 			// -- If the password or username was wrong
 			if (!user) {
-				console.log("wrong");
 				response.send(false);
-				return next();
+
+				// -- Stop execution of this route
+				return;
 			}
+			console.log("Linking session.");
 
 			// -- Link session with user
-			console.log("end");
-			this.linkSessionWithUser(request);
+			this.linkSessionWithUser(request, user.userid);
 			response.send(true);
 		});
-		this.app.get("/api/protected", (request, response) => {
-			if (request.session.userid == 5) {
-				console.log("Valid");
-			} else {
-				console.log("Invalid");
+		this.app.post("/api/logout", (request, response, next) => {
+			delete request.session.userid;
+			response.send(true);
+		});
+		this.app.all(/\/api\/*/, (request, response, next) => {
+			const user = _.find(users, user => {
+				return user.userid == request.session.userid;
+			});
+
+			if (!user) {
+				response.send(false);
+
+				// -- Stop execution of this route
+				return;
 			}
 
-			response.send();
+			console.log("Thanks for viewing the secret page " + user.nickname + "!");
+			next();
 		});
+
+		/* User creates a request to get specific amount of coins.
+     User gets the uniq code when the request is done
+  */
+		this.app.post("/api/transaction/receive", (request, response) => {
+			// params: 1.senderId, amountOfcoins
+			// get: code
+		});
+
+		// User typed the code to get the information of the request
+		this.app.get("/api/transaction/send", (request, response) => {
+			// params: code
+			// get: 1.receiverId 2. amountOfCoins
+		});
+
+		/* User confirm the request to send specific
+     amount of coinc to a specific person
+  */
+		this.app.post("/api/transaction/confirm", (request, response) => {
+			// params: 1:senderId 2. receiverId, 3. code
+		});
+
+		// Get a balance of the current user
+		this.app.get("/api/balance", (request, response) => {
+			// params: 1.userId
+			// get: 1.userBalance
+
+			console.log("The balance is " + 23523523562);
+
+			response.send("Hello the balance is " + 23626262);
+		});
+	}
+	startListening() {
+		console.log("Listening now");
+		this.app.listen(this.port);
 	}
 
 	// -- Route functions
