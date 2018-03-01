@@ -17,6 +17,24 @@ export default class WebServer {
 		this.app.get("/api/", (request, response) => {
 			response.send("API - Description")
 		})
+
+		this.app.post("/api/transaction/receive", (request, response) => {
+			// params: 1.senderId, amountOfcoins
+		})
+
+		this.app.get("/api/transaction/send", (request, response) => {
+			// params: code
+			// get: 1.receiverId 2. amountOfCoins
+		})
+
+		this.app.post("/api/transaction/confirm", (request, response) => {
+			// params: 1:senderId 2. receiverId, 3. code
+		})
+
+		this.app.get("/api/balance", (request, response) => {
+			// params: 1.userId
+			// get: 1.userBalance
+		})
 	}
 	startListening() {
 		this.app.listen(this.port)
