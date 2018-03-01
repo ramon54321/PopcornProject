@@ -132,8 +132,21 @@ Checks that the code doesn't already exists in requests[].
 ## WebServer
 
 * [WebServer](#module_WebServer)
+    * [.linkSessionWithUser(request, userid)](#module_WebServer+linkSessionWithUser)
     * [.createTransactionRequest(userid, amount)](#module_WebServer+createTransactionRequest) ⇒ <code>string</code>
     * [.confirmTransaction(code)](#module_WebServer+confirmTransaction) ⇒ <code>boolean</code>
+
+<a name="module_WebServer+linkSessionWithUser"></a>
+
+### webServer.linkSessionWithUser(request, userid)
+Links the created session with the user in the request body. The sessionuserid can then be used to look up details with respect to the activeuser from a database for example.The user can have multiple sessions open because all sessions will pointto the same userid, meaning all actions will be taken on the sameinstance of the user, irrespective from which session the changes aremade.
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| request | <code>object</code> | Request object containing the session to which the userid will be added. |
+| userid | <code>number</code> | The userid to add to the session. |
 
 <a name="module_WebServer+createTransactionRequest"></a>
 

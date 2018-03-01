@@ -16,9 +16,11 @@
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-preset-env": "^1.6.1",
+    "cookie-parser": "^1.4.3",
     "eslint": "^4.16.0",
     "eslint-config-google": "^0.9.1",
     "express": "^4.16.2",
+    "express-session": "^1.15.6",
     "jsdoc-to-markdown": "^4.0.1",
     "mocha": "^5.0.0"
   }
