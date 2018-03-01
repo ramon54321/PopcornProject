@@ -18,19 +18,28 @@ export default class WebServer {
 			response.send("API - Description")
 		})
 
+		/* User creates a request to get specific amount of coins.
+		   User gets the uniq code when the request is done
+		*/
 		this.app.post("/api/transaction/receive", (request, response) => {
 			// params: 1.senderId, amountOfcoins
+			// get: code
 		})
 
+		// User typed the code to get the information of the request
 		this.app.get("/api/transaction/send", (request, response) => {
 			// params: code
 			// get: 1.receiverId 2. amountOfCoins
 		})
 
+		/* User confirm the request to send specific
+		   amount of coinc to a specific person
+		*/
 		this.app.post("/api/transaction/confirm", (request, response) => {
 			// params: 1:senderId 2. receiverId, 3. code
 		})
 
+		// Get a balance of the current user
 		this.app.get("/api/balance", (request, response) => {
 			// params: 1.userId
 			// get: 1.userBalance
