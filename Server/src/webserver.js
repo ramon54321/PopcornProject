@@ -43,6 +43,10 @@ export default class WebServer {
 		this.app.get("/api/", (request, response) => {
 			response.send("API - Description")
 		})
+		this.app.post("/api/admin/initdatabase", (request, response, next) => {
+			this.database.init()
+			response.send(true)
+		})
 		this.app.post("/api/login", (request, response, next) => {
 			const user = _.find(users, (user) => {
 				return user.nickname == request.body.nickname

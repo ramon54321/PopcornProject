@@ -39,8 +39,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const users = [{ userid: 0, nickname: "Bobby", password: "bobby123" }, { userid: 1, nickname: "Andy", password: "andy123" }, { userid: 2, nickname: "Jane", password: "jane123" }];
 
 class WebServer {
-	constructor(blockchain) {
+	constructor(blockchain, database) {
 		this.blockchain = blockchain;
+		this.database = database;
 		this.sessions = {};
 
 		this.app = (0, _express2.default)();
@@ -62,6 +63,10 @@ class WebServer {
 	setupRoutes() {
 		this.app.get("/api/", (request, response) => {
 			response.send("API - Description");
+		});
+		this.app.post("/api/admin/initdatabase", (request, response, next) => {
+			this.database.init();
+			response.send(true);
 		});
 		this.app.post("/api/login", (request, response, next) => {
 			const user = _.find(users, user => {
