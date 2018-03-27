@@ -140,6 +140,8 @@ Checks that the code doesn't already exists in requests[].
     * [.linkSessionWithUser(request, userid)](#module_WebServer+linkSessionWithUser)
     * [.createTransactionRequest(userid, amount)](#module_WebServer+createTransactionRequest) ⇒ <code>string</code>
     * [.confirmTransaction(code)](#module_WebServer+confirmTransaction) ⇒ <code>boolean</code>
+    * [.createBalanceSheet()](#module_WebServer+createBalanceSheet)
+    * [.balanceSheetUpdate(from, to, amount)](#module_WebServer+balanceSheetUpdate)
 
 <a name="module_WebServer+linkSessionWithUser"></a>
 
@@ -177,4 +179,23 @@ Confirms the requested transaction by locking it into the blockchain. Thetransa
 | Param | Type | Description |
 | --- | --- | --- |
 | code | <code>string</code> | The code received when creating the transaction request. |
+
+<a name="module_WebServer+createBalanceSheet"></a>
+
+### webServer.createBalanceSheet()
+Creates balance sheetFetches all blocks from databaseGoes through every block's transaction and updates balances accordingly
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+<a name="module_WebServer+balanceSheetUpdate"></a>
+
+### webServer.balanceSheetUpdate(from, to, amount)
+Updates balance sheet
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| from | <code>object</code> | Sender |
+| to | <code>object</code> | Receiver |
+| amount | <code>object</code> |  |
 

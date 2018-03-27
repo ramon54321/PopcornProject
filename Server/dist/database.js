@@ -30,28 +30,38 @@ class Database {
         console.log("[INFO][Database] Successfully connected to database");
     }
 
-    // -- Admin
-    init() {
-        console.log("[ADMIN][Database] Initializing database");
-        this.runQuery("./src/queries/init.sql");
-        // this.runQuery("./src/queries/person_select_all.sql")
-    }
-
     async runQuery(filename) {
-        const query = (0, _fs.readFileSync)(filename, { encoding: "UTF8" }).substring(1);
+        const query = (0, _fs.readFileSync)(filename, { encoding: "UTF8" }).trim();
         const res = await this.client.query(query);
         return res.rows;
     }
 
-    // -- User table
-    getUserById(id) {}
-    getUserByNickname(nickname) {}
-    createUser(nickname, password) {}
+    // -- Admin
+    init() {
+        console.log("[ADMIN][Database] Initializing database");
+        this.runQuery("./src/queries/init.sql");
+    }
+
+    // -- Person table
+    getPersonAll() {
+        return this.runQuery("./src/queries/person_select_all.sql");
+    }
+    getPersonById(id) {
+        return this.runQuery("./src/queries/person_select_by_id.sql");
+    }
+    getPersonByNickname(nickname) {
+        return this.runQuery("./src/queries/person_select_by_nickname.sql");
+    }
+    createPerson(nickname, password) {}
+    // return this.runQuery("./src/queries/person_select_all.sql")
+
 
     // -- Blockchain table
     getBlockById(id) {}
     getBlockByHash(hash) {}
-    getBlocksAll() {}
+    getBlockAll() {
+        return this.runQuery("./src/queries/block_select_all.sql");
+    }
     createBlock(previousHash, data, nonce, hash) {} // MAKE SURE PREHASH MATCHES
 }
 exports.default = Database;

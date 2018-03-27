@@ -25,7 +25,7 @@ export default class Database {
     }
 
     async runQuery(filename) {
-        const query = readFileSync(filename, {encoding: "UTF8"}).substring(1)
+        const query = readFileSync(filename, {encoding: "UTF8"}).trim()
         const res = await this.client.query(query)
 		return res.rows
     }
@@ -53,6 +53,8 @@ export default class Database {
     // -- Blockchain table
     getBlockById(id) {}
     getBlockByHash(hash) {}
-    getBlocksAll() {}
+    getBlockAll() {
+        return this.runQuery("./src/queries/block_select_all.sql")
+    }
     createBlock(previousHash, data, nonce, hash) {} // MAKE SURE PREHASH MATCHES
 }

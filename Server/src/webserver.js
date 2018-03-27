@@ -16,12 +16,15 @@ const users = [
 	{userid: 2, nickname: "Jane", password: "jane123"},
 ]
 
+let balanceSheet = {}
+
 
 export default class WebServer {
 	constructor(blockchain, database) {
 		this.blockchain = blockchain
 		this.database = database
 		this.sessions = {}
+		this.createBalanceSheet()
 
 		this.app = express()
 		this.app.use(cookieParser())
@@ -46,6 +49,13 @@ export default class WebServer {
 		this.app.post("/api/admin/initdatabase", (request, response, next) => {
 			this.database.init()
 			response.send(true)
+		})
+		this.app.get("/api/nickname/:nickname", (request, response) => {
+			this.database.getPersonByNickname(request.params.nickname)
+			.then((resp) => {
+				console.log(resp)
+				response.send("finished")
+			})
 		})
 		this.app.post("/api/login", (request, response, next) => {
 			const user = _.find(users, (user) => {
@@ -85,9 +95,9 @@ export default class WebServer {
 			next()
 		})
 
-		/* User creates a request to get specific amount of coins.
-		   User gets the uniq code when the request is done
-		*/
+		/*
+		// User creates a request to get specific amount of coins.
+		// User gets the uniq code when the request is done
 		this.app.post("/api/transaction/receive", (request, response) => {
 			// params: 1.senderId, amountOfcoins
 			// get: code
@@ -99,13 +109,13 @@ export default class WebServer {
 			// get: 1.receiverId 2. amountOfCoins
 		})
 
-		/* User confirm the request to send specific
-		   amount of coinc to a specific person
-		*/
+		// User confirm the request to send specific
+		// amount of coinc to a specific person
 		this.app.post("/api/transaction/confirm", (request, response) => {
 			// params: 1:senderId 2. receiverId, 3. code
 		})
 
+		*/
 		// Get a balance of the current user
 		this.app.get("/api/balance", (request, response) => {
 			// params: 1.userId
@@ -116,6 +126,7 @@ export default class WebServer {
 			response.send("Hello the balance is " + 23626262)
 		})
 	}
+
 	startListening() {
 		console.log("Listening now")
 		this.app.listen(this.port)
@@ -192,5 +203,43 @@ export default class WebServer {
 		Transactions.deleteRequest(code)
 
 		return true
+	}
+
+	/**
+	* Creates balance sheet
+	* Fetches all blocks from database
+	* Goes through every block's transaction and updates balances accordingly
+	*/
+	createBalanceSheet() {
+		console.log("[INFO] Creating balance scheet")
+		this.database.getBlockAll()
+		.then((resp) => {
+			for (let i = 0; resp[i] != null; i++ ) {
+				const from = resp[i].body.from
+				const to = resp[i].body.to
+				const amount = resp[i].body.amount
+				this.balanceSheetUpdate(from, to, amount)
+			}
+		})
+	}
+	/**
+	* Updates balance sheet
+	* @param {object} from Sender
+	* @param {object} to Receiver
+	* @param {object} amount
+	*/
+	balanceSheetUpdate(from, to, amount) {
+		// -- Update sender's balance
+		let userAmount = 0
+		if (from in balanceSheet) {
+			userAmount = balanceSheet[from].amount
+		}
+		balanceSheet[from] = {amount: (userAmount - amount)}
+		// -- Update receiver's balanceSheet
+		userAmount = 0
+		if (to in balanceSheet) {
+			userAmount = balanceSheet[to].amount
+		}
+		balanceSheet[to] = {amount: (userAmount + amount)}
 	}
 }
