@@ -72,7 +72,7 @@ class WebServer {
 			response.send(true);
 		});
 		this.app.get("/api/nickname/:nickname", (request, response) => {
-			this.database.getPersonByNickname(request.params.nickname).then(resp => {
+			this.database.getPersonByNickname([request.params.nickname]).then(resp => {
 				console.log(resp);
 				response.send("finished");
 			});
@@ -234,9 +234,6 @@ class WebServer {
 				const to = resp[i].body.to;
 				const amount = resp[i].body.amount;
 				this.balanceSheetUpdate(from, to, amount);
-				console.log(balanceSheet["Andy"]);
-				console.log(balanceSheet["Jane"]);
-				console.log(balanceSheet["Zoe"]);
 			}
 		});
 	}
@@ -247,13 +244,13 @@ class WebServer {
  * @param {object} amount
  */
 	balanceSheetUpdate(from, to, amount) {
-		// Update sender's balance
+		// -- Update sender's balance
 		let userAmount = 0;
 		if (from in balanceSheet) {
 			userAmount = balanceSheet[from].amount;
 		}
 		balanceSheet[from] = { amount: userAmount - amount
-			// Update receiver's balanceSheet
+			// -- Update receiver's balanceSheet
 		};userAmount = 0;
 		if (to in balanceSheet) {
 			userAmount = balanceSheet[to].amount;

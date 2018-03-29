@@ -36,6 +36,12 @@ class Database {
         return res.rows;
     }
 
+    async runQuery2(filename, param1) {
+        const query = (0, _fs.readFileSync)(filename, { encoding: "UTF8" }).trim();
+        const res = await this.client.query(query, param1);
+        return res.rows;
+    }
+
     // -- Admin
     init() {
         console.log("[ADMIN][Database] Initializing database");
@@ -50,7 +56,11 @@ class Database {
         return this.runQuery("./src/queries/person_select_by_id.sql");
     }
     getPersonByNickname(nickname) {
-        return this.runQuery("./src/queries/person_select_by_nickname.sql");
+        return this.runQuery2("./src/queries/person_select_by_nickname.sql", nickname);
+    }
+    getPersonByNickname2(nickname) {
+        console.log(nickname);
+        return this.runQuery2("./src/queries/testi.sql", nickname);
     }
     createPerson(nickname, password) {}
     // return this.runQuery("./src/queries/person_select_all.sql")
