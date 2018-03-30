@@ -141,7 +141,8 @@ Checks that the code doesn't already exists in requests[].
     * [.createTransactionRequest(userid, amount)](#module_WebServer+createTransactionRequest) ⇒ <code>string</code>
     * [.confirmTransaction(code)](#module_WebServer+confirmTransaction) ⇒ <code>boolean</code>
     * [.createBalanceSheet()](#module_WebServer+createBalanceSheet)
-    * [.balanceSheetUpdate(from, to, amount)](#module_WebServer+balanceSheetUpdate)
+    * [.updateBalanceSheet(from, to, amount)](#module_WebServer+updateBalanceSheet)
+    * [.getBalanceById(id)](#module_WebServer+getBalanceById) ⇒ <code>object</code>
 
 <a name="module_WebServer+linkSessionWithUser"></a>
 
@@ -186,9 +187,9 @@ Confirms the requested transaction by locking it into the blockchain. Thetransa
 Creates balance sheetFetches all blocks from databaseGoes through every block's transaction and updates balances accordingly
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
-<a name="module_WebServer+balanceSheetUpdate"></a>
+<a name="module_WebServer+updateBalanceSheet"></a>
 
-### webServer.balanceSheetUpdate(from, to, amount)
+### webServer.updateBalanceSheet(from, to, amount)
 Updates balance sheet
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
@@ -198,4 +199,16 @@ Updates balance sheet
 | from | <code>object</code> | Sender |
 | to | <code>object</code> | Receiver |
 | amount | <code>object</code> |  |
+
+<a name="module_WebServer+getBalanceById"></a>
+
+### webServer.getBalanceById(id) ⇒ <code>object</code>
+Get user's balance by id
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+**Returns**: <code>object</code> - User's balance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>object</code> | User's id |
 

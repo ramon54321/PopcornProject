@@ -58,10 +58,6 @@ class Database {
     getPersonByNickname(nickname) {
         return this.runQuery2("./src/queries/person_select_by_nickname.sql", nickname);
     }
-    getPersonByNickname2(nickname) {
-        console.log(nickname);
-        return this.runQuery2("./src/queries/testi.sql", nickname);
-    }
     createPerson(nickname, password) {}
     // return this.runQuery("./src/queries/person_select_all.sql")
 

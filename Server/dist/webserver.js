@@ -135,12 +135,8 @@ class WebServer {
   		*/
 		// Get a balance of the current user
 		this.app.get("/api/balance", (request, response) => {
-			// params: 1.userId
-			// get: 1.userBalance
-
-			console.log("The balance is " + 23523523562);
-
-			response.send("Hello the balance is " + 23626262);
+			const balance = this.getBalanceById(request.session.userid);
+			response.send("Your balance is: " + balance);
 		});
 	}
 
@@ -227,13 +223,13 @@ class WebServer {
  * Goes through every block's transaction and updates balances accordingly
  */
 	createBalanceSheet() {
-		console.log("[INFO] Creating balance scheet");
+		console.log("[INFO][SERVER] Creating balance scheet");
 		this.database.getBlockAll().then(resp => {
 			for (let i = 0; resp[i] != null; i++) {
 				const from = resp[i].body.from;
 				const to = resp[i].body.to;
 				const amount = resp[i].body.amount;
-				this.balanceSheetUpdate(from, to, amount);
+				this.updateBalanceSheet(from, to, amount);
 			}
 		});
 	}
@@ -243,7 +239,7 @@ class WebServer {
  * @param {object} to Receiver
  * @param {object} amount
  */
-	balanceSheetUpdate(from, to, amount) {
+	updateBalanceSheet(from, to, amount) {
 		// -- Update sender's balance
 		let userAmount = 0;
 		if (from in balanceSheet) {
@@ -256,6 +252,17 @@ class WebServer {
 			userAmount = balanceSheet[to].amount;
 		}
 		balanceSheet[to] = { amount: userAmount + amount };
+	}
+	/**
+ * Get user's balance by id
+ * @param {object} id User's id
+ * @return {object} User's balance
+ */
+	getBalanceById(id) {
+		if (id in balanceSheet) {
+			return balanceSheet[id].amount;
+		}
+		return false;
 	}
 }
 exports.default = WebServer;

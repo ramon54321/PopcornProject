@@ -35,18 +35,9 @@ CREATE TABLE block (
 
 INSERT INTO block (previous_hash, hash, nonce, body) VALUES (
 	'hash1', 'hash2', 100,
-	'{ "from": "Jane", "to": "Andy", "amount": 56 }'
+	'{ "from": 2, "to": 3, "amount": 56 }'
 );
 INSERT INTO block (previous_hash, hash, nonce, body) VALUES (
 	'hash2', 'hash3', 200,
-	'{ "from": "Zoe", "to": "Andy", "amount": 18 }'
+	'{ "from": 4, "to": 3, "amount": 18 }'
 );
-
-
-
-
-
-
-
-
-
