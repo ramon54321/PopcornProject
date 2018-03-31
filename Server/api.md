@@ -96,6 +96,7 @@ Hashes the data with the set blockchain public key.
 * [Transactions](#module_Transactions)
     * _static_
         * [.createRequest(userid, amount)](#module_Transactions.createRequest) ⇒ <code>object</code>
+        * [.getRequest(code)](#module_Transactions.getRequest) ⇒ <code>object</code>
     * _inner_
         * [~generateCode()](#module_Transactions..generateCode) ⇒ <code>object</code>
         * [~isUnique(code)](#module_Transactions..isUnique) ⇒ <code>boolean</code>
@@ -112,6 +113,18 @@ Creates a new request object that is added to requests[].
 | --- | --- | --- |
 | userid | <code>string</code> | Requester's userID. |
 | amount | <code>number</code> | Amount to transfer. |
+
+<a name="module_Transactions.getRequest"></a>
+
+### Transactions.getRequest(code) ⇒ <code>object</code>
+Creates a new request object that is added to requests[].
+
+**Kind**: static method of [<code>Transactions</code>](#module_Transactions)  
+**Returns**: <code>object</code> - The request object.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| code | <code>string</code> | Request's code. |
 
 <a name="module_Transactions..generateCode"></a>
 

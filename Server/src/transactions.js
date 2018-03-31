@@ -27,6 +27,20 @@ export function createRequest(userid, amount) {
 }
 
 /**
+* Creates a new request object that is added to requests[].
+* @param {string} code Request's code.
+* @return {object} The request object.
+*/
+export function getRequest(code) {
+    for (let i = 0; i < requests.length; i++) {
+        if (requests[i].code === code) {
+            return requests[i]
+        }
+    }
+    return false
+}
+
+/**
 * Generates a new code.
 * @return {object} The new code.
 */
@@ -48,7 +62,7 @@ function generateCode() {
 */
 function isUnique(code) {
   for (let i = 0; i < requests.length; i++) {
-    if (requests[i] === code) {
+    if (requests[i].code === code) {
       return false
     }
   }

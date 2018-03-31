@@ -85,26 +85,29 @@ export default class WebServer {
 		})
 
 		/*
-		// User creates a request to get specific amount of coins.
-		// User gets the uniq code when the request is done
-		this.app.post("/api/transaction/receive", (request, response) => {
-			// params: 1.senderId, amountOfcoins
-			// get: code
-		})
-
-		// User typed the code to get the information of the request
-		this.app.get("/api/transaction/send", (request, response) => {
-			// params: code
-			// get: 1.receiverId 2. amountOfCoins
-		})
-
 		// User confirm the request to send specific
 		// amount of coinc to a specific person
 		this.app.post("/api/transaction/confirm", (request, response) => {
 			// params: 1:senderId 2. receiverId, 3. code
 		})
-
 		*/
+
+		// Get transaction by code
+		this.app.get("/api/transaction/:code", (request, response) => {
+			const code = request.params.code
+			const req = Transactions.getRequest(code)
+			response.send(req)
+		})
+
+		// User creates a request to get specific amount of coins.
+		// User gets the uniq code when the request is done
+		this.app.post("/api/transactionrequest/:amount", (request, response) => {
+			const userid = request.session.userid
+			const amount = request.params.amount
+			const requestCode = this.createTransactionRequest(userid, amount)
+			response.send("Request created! Code: " + requestCode)
+		})
+
 		// Get balance of the current user
 		this.app.get("/api/balance", (request, response) => {
 			const balance = this.getBalanceById(request.session.userid)

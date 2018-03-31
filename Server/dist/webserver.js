@@ -127,6 +127,22 @@ class WebServer {
   	// params: 1:senderId 2. receiverId, 3. code
   })
   		*/
+
+		this.app.get("/api/transaction/:code", (request, response) => {
+			const code = request.params.code;
+			console.log("[INFO][ROUTE] Got parameter: " + code);
+			const req = Transactions.getRequest(code);
+			console.log(req);
+			response.send(req);
+		});
+
+		this.app.post("/api/transactionrequest/:amount", (request, response) => {
+			const userid = request.session.userid;
+			const amount = request.params.amount;
+			const requestCode = this.createTransactionRequest(userid, amount);
+			response.send("Request created! Code: " + requestCode);
+		});
+
 		// Get balance of the current user
 		this.app.get("/api/balance", (request, response) => {
 			const balance = this.getBalanceById(request.session.userid);

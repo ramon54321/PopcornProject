@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.createRequest = createRequest;
+exports.getRequest = getRequest;
 /**
  * @module Transactions
  */
@@ -33,6 +34,23 @@ function createRequest(userid, amount) {
 }
 
 /**
+* Creates a new request object that is added to requests[].
+* @param {string} code Request's code.
+* @return {object} The request object.
+*/
+function getRequest(code) {
+  console.log("[INFO][TRANSACTION] Trying to look for code: " + code);
+  for (let i = 0; i < requests.length; i++) {
+    console.log(requests[i]);
+    console.log(requests[i].code);
+    if (requests[i].code === code) {
+      return requests[i];
+    }
+  }
+  return false;
+}
+
+/**
 * Generates a new code.
 * @return {object} The new code.
 */
@@ -54,7 +72,7 @@ function generateCode() {
 */
 function isUnique(code) {
   for (let i = 0; i < requests.length; i++) {
-    if (requests[i] === code) {
+    if (requests[i].code === code) {
       return false;
     }
   }
