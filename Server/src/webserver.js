@@ -58,40 +58,36 @@ export default class WebServer {
 			})
 		})
 		this.app.post("/api/login", (request, response, next) => {
-			const user = _.find(users, (user) => {
-				return user.nickname == request.body.nickname
-			})
-
-			// -- If the password or username was wrong
-			if (!user) {
-				response.send(false)
-
+			const nickname = request.body.nickname
+			const pass = request.body.pass
+			this.database.getPersonByNickname([nickname])
+			.then((resp) => {
+				// -- Check that database query by nickname result is not empty
+				if (resp.length > 0) {
+					// -- Check if the nickname and password is correct
+					if (nickname === resp[0].nickname && pass === resp[0].pass) {
+						// -- Link session with user
+						this.linkSessionWithUser(request, resp[0].id)
+						response.send(true)
+					}
+				}
+				// -- If the nickname or password was wrong
 				// -- Stop execution of this route
+				response.send(false)
 				return
-			}
-			console.log("Linking session.")
-
-			// -- Link session with user
-			this.linkSessionWithUser(request, user.userid)
-			response.send(true)
+			})
 		})
 		this.app.post("/api/logout", (request, response, next) => {
 			delete request.session.userid
 			response.send(true)
 		})
 		this.app.all(/\/api\/*/, (request, response, next) => {
-			const user = _.find(users, (user) => {
-				return user.userid == request.session.userid
-			})
-
-			if (!user) {
+			// -- If userid not found in session stop execution of this route
+			if (!request.session.userid) {
 				response.send(false)
-
-				// -- Stop execution of this route
 				return
 			}
-
-			console.log("Thanks for viewing the secret page " + user.nickname + "!")
+			// -- Userid found in session so continue to secure page
 			next()
 		})
 
@@ -118,6 +114,7 @@ export default class WebServer {
 		*/
 		// Get balance of the current user
 		this.app.get("/api/balance", (request, response) => {
+			console.log("Session userid: " + request.session.userid)
 			const balance = this.getBalanceById(request.session.userid)
 			response.send("Your balance is: " + balance)
 		})
@@ -203,19 +200,26 @@ export default class WebServer {
 
 	/**
 	* Creates balance sheet
-	* Fetches all blocks from database
-	* Goes through every block's transaction and updates balances accordingly
 	*/
 	createBalanceSheet() {
 		console.log("[INFO][SERVER] Creating balance scheet")
-		this.database.getBlockAll()
+		// -- Set every persons balance to 0
+		this.database.getPersonAll()
 		.then((resp) => {
-			for (let i = 0; resp[i] != null; i++ ) {
-				const from = resp[i].body.from
-				const to = resp[i].body.to
-				const amount = resp[i].body.amount
-				this.updateBalanceSheet(from, to, amount)
+			for (let i = 0; resp[i] != null; i++) {
+				const userid = resp[i].id
+				balanceSheet[userid] = {amount: 0}
 			}
+			// -- Go through every block's transaction and update balances accordingly
+			this.database.getBlockAll()
+			.then((resp) => {
+				for (let i = 0; resp[i] != null; i++ ) {
+					const from = resp[i].body.from
+					const to = resp[i].body.to
+					const amount = resp[i].body.amount
+					this.updateBalanceSheet(from, to, amount)
+				}
+			})
 		})
 	}
 	/**
@@ -226,17 +230,13 @@ export default class WebServer {
 	*/
 	updateBalanceSheet(from, to, amount) {
 		// -- Update sender's balance
-		let userAmount = 0
 		if (from in balanceSheet) {
-			userAmount = balanceSheet[from].amount
+			balanceSheet[from] = {amount: (balanceSheet[from].amount - amount)}
 		}
-		balanceSheet[from] = {amount: (userAmount - amount)}
 		// -- Update receiver's balanceSheet
-		userAmount = 0
 		if (to in balanceSheet) {
-			userAmount = balanceSheet[to].amount
+			balanceSheet[to] = {amount: (balanceSheet[to].amount + amount)}
 		}
-		balanceSheet[to] = {amount: (userAmount + amount)}
 	}
 	/**
 	* Get user's balance by id

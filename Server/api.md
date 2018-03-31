@@ -184,7 +184,7 @@ Confirms the requested transaction by locking it into the blockchain. Thetransa
 <a name="module_WebServer+createBalanceSheet"></a>
 
 ### webServer.createBalanceSheet()
-Creates balance sheetFetches all blocks from databaseGoes through every block's transaction and updates balances accordingly
+Creates balance sheetFetches all blocks from databaseGoes through every block's transaction and updates balances accordinglyfasddafsInitialize balance sheet by setting every persons balance to 0
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
 <a name="module_WebServer+updateBalanceSheet"></a>
