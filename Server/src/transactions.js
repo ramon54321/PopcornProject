@@ -41,6 +41,21 @@ export function getRequest(code) {
 }
 
 /**
+* Deletes request by code
+* @param {string} code Request's code.
+* @return {object} The request object.
+*/
+export function deleteRequest(code) {
+    for (let i = 0; i < requests.length; i++) {
+        if (requests[i].code === code) {
+            delete requests[i]
+            return true
+        }
+    }
+    return false
+}
+
+/**
 * Generates a new code.
 * @return {object} The new code.
 */
