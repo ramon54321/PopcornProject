@@ -36,8 +36,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @module WebServer
  */
 
-const users = [{ userid: 0, nickname: "Bobby", password: "bobby123" }, { userid: 1, nickname: "Andy", password: "andy123" }, { userid: 2, nickname: "Jane", password: "jane123" }];
-
 let balanceSheet = {};
 
 class WebServer {
@@ -61,6 +59,7 @@ class WebServer {
 		this.startListening();
 	}
 	startListening() {
+		console.log("[INFO][SERVER] Listening now");
 		this.app.listen(this.port);
 	}
 	setupRoutes() {
@@ -130,15 +129,9 @@ class WebServer {
   		*/
 		// Get balance of the current user
 		this.app.get("/api/balance", (request, response) => {
-			console.log("Session userid: " + request.session.userid);
 			const balance = this.getBalanceById(request.session.userid);
 			response.send("Your balance is: " + balance);
 		});
-	}
-
-	startListening() {
-		console.log("Listening now");
-		this.app.listen(this.port);
 	}
 
 	// -- Route functions
@@ -215,10 +208,6 @@ class WebServer {
 
 	/**
  * Creates balance sheet
- * Fetches all blocks from database
- * Goes through every block's transaction and updates balances accordingly
- * fasddafs
- * Initialize balance sheet by setting every persons balance to 0
  */
 	createBalanceSheet() {
 		console.log("[INFO][SERVER] Creating balance scheet");
@@ -226,14 +215,12 @@ class WebServer {
 		this.database.getPersonAll().then(resp => {
 			for (let i = 0; resp[i] != null; i++) {
 				const userid = resp[i].id;
-				console.log(userid);
 				balanceSheet[userid] = { amount: 0 };
 			}
 			// -- Go through every block's transaction and update balances accordingly
 			this.database.getBlockAll().then(resp => {
 				for (let i = 0; resp[i] != null; i++) {
 					const from = resp[i].body.from;
-					console.log(from);
 					const to = resp[i].body.to;
 					const amount = resp[i].body.amount;
 					this.updateBalanceSheet(from, to, amount);

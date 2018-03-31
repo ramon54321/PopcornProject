@@ -9,15 +9,7 @@ import session from "express-session"
 import * as Transactions from "./transactions"
 import * as _ from "lodash"
 
-
-const users = [
-	{userid: 0, nickname: "Bobby", password: "bobby123"},
-	{userid: 1, nickname: "Andy", password: "andy123"},
-	{userid: 2, nickname: "Jane", password: "jane123"},
-]
-
 let balanceSheet = {}
-
 
 export default class WebServer {
 	constructor(blockchain, database) {
@@ -40,6 +32,7 @@ export default class WebServer {
 		this.startListening()
 	}
 	startListening() {
+		console.log("[INFO][SERVER] Listening now")
 		this.app.listen(this.port)
 	}
 	setupRoutes() {
@@ -114,15 +107,9 @@ export default class WebServer {
 		*/
 		// Get balance of the current user
 		this.app.get("/api/balance", (request, response) => {
-			console.log("Session userid: " + request.session.userid)
 			const balance = this.getBalanceById(request.session.userid)
 			response.send("Your balance is: " + balance)
 		})
-	}
-
-	startListening() {
-		console.log("Listening now")
-		this.app.listen(this.port)
 	}
 
 	// -- Route functions
