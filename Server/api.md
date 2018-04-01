@@ -16,12 +16,24 @@
 ## Blockchain
 
 * [Blockchain](#module_Blockchain)
+    * [.loadBlockchain(blocks)](#module_Blockchain+loadBlockchain)
     * [.getLength()](#module_Blockchain+getLength) ⇒ <code>number</code>
     * [.createBlock(data, previousBlockIndex)](#module_Blockchain+createBlock) ⇒ <code>object</code>
     * [.addBlock(block)](#module_Blockchain+addBlock) ⇒ <code>boolean</code>
     * [.isValid()](#module_Blockchain+isValid) ⇒ <code>boolean</code>
     * [.hashBlock(block)](#module_Blockchain+hashBlock) ⇒ <code>string</code>
     * [.hashData(data)](#module_Blockchain+hashData) ⇒ <code>string</code>
+
+<a name="module_Blockchain+loadBlockchain"></a>
+
+### blockchain.loadBlockchain(blocks)
+Inserts blocks fetched from database to blockchain array.
+
+**Kind**: instance method of [<code>Blockchain</code>](#module_Blockchain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| blocks | <code>object</code> | All block's |
 
 <a name="module_Blockchain+getLength"></a>
 

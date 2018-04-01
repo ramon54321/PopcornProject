@@ -30,21 +30,6 @@ class Database {
         console.log("[INFO][Database] Successfully connected to database");
     }
 
-    /*
-        async runQuery(filename) {
-            const query = readFileSync(filename, {encoding: "UTF8"}).trim()
-            const res = await this.client.query(query)
-    		return res.rows
-        }
-    
-        async runQuery2(filename, params) {
-            console.log("[ADMIN][Database] runQuery2 started")
-            const query = readFileSync(filename, {encoding: "UTF8"}).trim()
-            const res = await this.client.query(query, params)
-            console.log("[ADMIN][Database] runQuery2 ending")
-    		return res.rows
-        }
-    */
     async runQuery(filename, params = "") {
         const query = (0, _fs.readFileSync)(filename, { encoding: "UTF8" }).trim();
         const res = await this.client.query(query, params);
@@ -80,7 +65,6 @@ class Database {
     }
     createBlock(params) {
         // MAKE SURE PREHASH MATCHES
-        console.log("[ADMIN][Database] Create block started");
         return this.runQuery("./src/queries/block_create.sql", params);
     }
 }

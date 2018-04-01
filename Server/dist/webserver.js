@@ -44,6 +44,7 @@ class WebServer {
 		this.database = database;
 		this.sessions = {};
 		this.createBalanceSheet();
+		this.initializeBlockchain();
 
 		this.app = (0, _express2.default)();
 		this.app.use((0, _cookieParser2.default)());
@@ -278,6 +279,12 @@ class WebServer {
 			return balanceSheet[id].amount;
 		}
 		return false;
+	}
+
+	initializeBlockchain() {
+		this.database.getBlockAll().then(resp => {
+			this.blockchain.loadBlockchain(resp);
+		});
 	}
 }
 exports.default = WebServer;

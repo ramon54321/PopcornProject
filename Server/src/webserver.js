@@ -17,6 +17,7 @@ export default class WebServer {
 		this.database = database
 		this.sessions = {}
 		this.createBalanceSheet()
+		this.initializeBlockchain()
 
 		this.app = express()
 		this.app.use(cookieParser())
@@ -259,5 +260,12 @@ export default class WebServer {
 			return balanceSheet[id].amount
 		}
 		return false
+	}
+
+	initializeBlockchain() {
+		this.database.getBlockAll()
+		.then((resp) => {
+			this.blockchain.loadBlockchain(resp)
+		})
 	}
 }
