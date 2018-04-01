@@ -109,33 +109,24 @@ class WebServer {
 			next();
 		});
 
-		/*
-  // User creates a request to get specific amount of coins.
-  // User gets the uniq code when the request is done
-  this.app.post("/api/transaction/receive", (request, response) => {
-  	// params: 1.senderId, amountOfcoins
-  	// get: code
-  })
-  		// User typed the code to get the information of the request
-  this.app.get("/api/transaction/send", (request, response) => {
-  	// params: code
-  	// get: 1.receiverId 2. amountOfCoins
-  })
-  		// User confirm the request to send specific
-  // amount of coinc to a specific person
-  this.app.post("/api/transaction/confirm", (request, response) => {
-  	// params: 1:senderId 2. receiverId, 3. code
-  })
-  		*/
-
+		// Get transaction by code
 		this.app.get("/api/transaction/:code", (request, response) => {
 			const code = request.params.code;
-			console.log("[INFO][ROUTE] Got parameter: " + code);
 			const req = Transactions.getRequest(code);
-			console.log(req);
 			response.send(req);
 		});
 
+		// Confirm transaction
+		this.app.post("/api/transaction/:code", (request, response) => {
+			const code = request.params.code;
+			const userid = request.session.userid;
+			this.confirmTransaction(code, userid);
+			console.log("[INFO][ROUTE] Transaction confirmed successfuly");
+			response.send("Transaction done!");
+		});
+
+		// User creates a request to get specific amount of coins.
+		// User gets the uniq code when the request is done
 		this.app.post("/api/transactionrequest/:amount", (request, response) => {
 			const userid = request.session.userid;
 			const amount = request.params.amount;
@@ -190,6 +181,7 @@ class WebServer {
   * transaction request is also deleted.
   * @param {string} code The code received when creating the transaction
   * request.
+  * @param {number} userid User's id
   * @return {boolean} True if the transaction was added to the blockchain
   * pool. False if there was an error in adding the request, commonly caused
   * by the request with the given code not being present in the transaction
@@ -197,29 +189,40 @@ class WebServer {
   * 'createTransactionRequest'. The request code will only be deleted if the
   * returned value is true.
   */
-	confirmTransaction(code) {
+	confirmTransaction(code, userid) {
 		// -- Get transaction request with the given code - else return false
+		console.log("[INFO][SERVER] Starting to confirm transaction");
 		let request = Transactions.getRequest(code);
 		if (!request) {
 			return false;
 		}
 
 		// -- Create transaction data
-		let data = {}
-		// some transaction data here
+		let data = {
+			// some transaction data here
+			"from": userid,
+			"to": request.userid,
+			"amount": request.amount
 
-
-		// -- Create and add block to blockchain
-		;let block = this.blockchain.createBlock(data, this.blockchain.getLength() - 1);
+			// -- Create and add block to blockchain
+		};let block = this.blockchain.createBlock(data, this.blockchain.getLength() - 1);
 		let successfullyAdded = this.blockchain.addBlock(block);
 		if (!successfullyAdded) {
-			return false;
+			console.log("Something failed");
+			// return false
 		}
+
+		// -- Add block to database
+		console.log(block.previousHash.length + " " + block.previousHash);
+		console.log(block.data.length + " " + block.data);
+		console.log(block.nonce.length + " " + block.nonce);
+		console.log(block.hash.length + " " + block.hash);
+		this.database.createBlock([block.previousHash, block.data, block.nonce, block.hash]);
 
 		// -- Delete transaction request
 		Transactions.deleteRequest(code);
-
-		return true;
+		// return true
+		console.log("[INFO][SERVER] Ending confirm transaction");
 	}
 
 	/**

@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createRequest = createRequest;
 exports.getRequest = getRequest;
+exports.deleteRequest = deleteRequest;
 /**
  * @module Transactions
  */
@@ -39,12 +40,24 @@ function createRequest(userid, amount) {
 * @return {object} The request object.
 */
 function getRequest(code) {
-  console.log("[INFO][TRANSACTION] Trying to look for code: " + code);
   for (let i = 0; i < requests.length; i++) {
-    console.log(requests[i]);
-    console.log(requests[i].code);
     if (requests[i].code === code) {
       return requests[i];
+    }
+  }
+  return false;
+}
+
+/**
+* Deletes request by code
+* @param {string} code Request's code.
+* @return {object} The request object.
+*/
+function deleteRequest(code) {
+  for (let i = 0; i < requests.length; i++) {
+    if (requests[i].code === code) {
+      requests.splice(i, 1);
+      return true;
     }
   }
   return false;

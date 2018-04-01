@@ -27,17 +27,21 @@ INSERT INTO person (nickname, pass) VALUES ('Saara', 'saara123');
 
 CREATE TABLE block (
 	id		BIGSERIAL		PRIMARY KEY		NOT NULL,
-	previous_hash	varchar(32)		UNIQUE			NOT NULL,
-	hash		varchar(32)		UNIQUE			NOT NULL,
+	previous_hash	varchar(64)		UNIQUE			NOT NULL,
+    body        json,
 	nonce		BIGINT						NOT NULL,
-	body		json
+    hash		varchar(64)		UNIQUE			NOT NULL
 );
 
-INSERT INTO block (previous_hash, hash, nonce, body) VALUES (
-	'hash1', 'hash2', 100,
-	'{ "from": 2, "to": 3, "amount": 56 }'
+INSERT INTO block (previous_hash, body, nonce, hash) VALUES (
+	'hash1',
+    '{ "from": 2, "to": 3, "amount": 56 }',
+    100,
+    'hash2'
 );
-INSERT INTO block (previous_hash, hash, nonce, body) VALUES (
-	'hash2', 'hash3', 200,
-	'{ "from": 4, "to": 3, "amount": 18 }'
+INSERT INTO block (previous_hash, body, nonce, hash) VALUES (
+	'hash2',
+    '{ "from": 4, "to": 3, "amount": 18 }',
+    200,
+    'hash3'
 );

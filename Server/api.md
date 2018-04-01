@@ -97,6 +97,7 @@ Hashes the data with the set blockchain public key.
     * _static_
         * [.createRequest(userid, amount)](#module_Transactions.createRequest) ⇒ <code>object</code>
         * [.getRequest(code)](#module_Transactions.getRequest) ⇒ <code>object</code>
+        * [.deleteRequest(code)](#module_Transactions.deleteRequest) ⇒ <code>object</code>
     * _inner_
         * [~generateCode()](#module_Transactions..generateCode) ⇒ <code>object</code>
         * [~isUnique(code)](#module_Transactions..isUnique) ⇒ <code>boolean</code>
@@ -118,6 +119,18 @@ Creates a new request object that is added to requests[].
 
 ### Transactions.getRequest(code) ⇒ <code>object</code>
 Creates a new request object that is added to requests[].
+
+**Kind**: static method of [<code>Transactions</code>](#module_Transactions)  
+**Returns**: <code>object</code> - The request object.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| code | <code>string</code> | Request's code. |
+
+<a name="module_Transactions.deleteRequest"></a>
+
+### Transactions.deleteRequest(code) ⇒ <code>object</code>
+Deletes request by code
 
 **Kind**: static method of [<code>Transactions</code>](#module_Transactions)  
 **Returns**: <code>object</code> - The request object.  
@@ -152,7 +165,7 @@ Checks that the code doesn't already exists in requests[].
 * [WebServer](#module_WebServer)
     * [.linkSessionWithUser(request, userid)](#module_WebServer+linkSessionWithUser)
     * [.createTransactionRequest(userid, amount)](#module_WebServer+createTransactionRequest) ⇒ <code>string</code>
-    * [.confirmTransaction(code)](#module_WebServer+confirmTransaction) ⇒ <code>boolean</code>
+    * [.confirmTransaction(code, userid)](#module_WebServer+confirmTransaction) ⇒ <code>boolean</code>
     * [.createBalanceSheet()](#module_WebServer+createBalanceSheet)
     * [.updateBalanceSheet(from, to, amount)](#module_WebServer+updateBalanceSheet)
     * [.getBalanceById(id)](#module_WebServer+getBalanceById) ⇒ <code>object</code>
@@ -184,7 +197,7 @@ Creates a transaction request, which can be retrieved using the returnedcode. T
 
 <a name="module_WebServer+confirmTransaction"></a>
 
-### webServer.confirmTransaction(code) ⇒ <code>boolean</code>
+### webServer.confirmTransaction(code, userid) ⇒ <code>boolean</code>
 Confirms the requested transaction by locking it into the blockchain. Thetransaction request is also deleted.
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
@@ -193,6 +206,7 @@ Confirms the requested transaction by locking it into the blockchain. Thetransa
 | Param | Type | Description |
 | --- | --- | --- |
 | code | <code>string</code> | The code received when creating the transaction request. |
+| userid | <code>number</code> | User's id |
 
 <a name="module_WebServer+createBalanceSheet"></a>
 

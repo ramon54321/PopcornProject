@@ -36,6 +36,14 @@ export default class Database {
 		return res.rows
     }
 
+    runQuery3(filename, params) {
+        console.log("[ADMIN][Database] runQuery3 started")
+        const query = readFileSync(filename, {encoding: "UTF8"}).trim()
+        // this.client.query(query, param1, param2, param3, param4)
+        this.client.query(query, params)
+        console.log("[ADMIN][Database] runQuery3 ending")
+    }
+
     // -- Admin
     init() {
         console.log("[ADMIN][Database] Initializing database")
@@ -63,5 +71,8 @@ export default class Database {
     getBlockAll() {
         return this.runQuery("./src/queries/block_select_all.sql")
     }
-    createBlock(previousHash, data, nonce, hash) {} // MAKE SURE PREHASH MATCHES
+    createBlock(params) { // MAKE SURE PREHASH MATCHES
+        console.log("[ADMIN][Database] Create block started")
+        this.runQuery3("./src/queries/block_create.sql", params)
+    }
 }

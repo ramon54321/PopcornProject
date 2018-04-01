@@ -48,7 +48,7 @@ export function getRequest(code) {
 export function deleteRequest(code) {
     for (let i = 0; i < requests.length; i++) {
         if (requests[i].code === code) {
-            delete requests[i]
+            requests.splice(i, 1)
             return true
         }
     }
