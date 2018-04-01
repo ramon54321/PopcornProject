@@ -24,24 +24,10 @@ export default class Database {
         console.log("[INFO][Database] Successfully connected to database")
     }
 
-    async runQuery(filename) {
+    async runQuery(filename, params = "") {
         const query = readFileSync(filename, {encoding: "UTF8"}).trim()
-        const res = await this.client.query(query)
+        const res = await this.client.query(query, params)
 		return res.rows
-    }
-
-    async runQuery2(filename, param1) {
-        const query = readFileSync(filename, {encoding: "UTF8"}).trim()
-        const res = await this.client.query(query, param1)
-		return res.rows
-    }
-
-    runQuery3(filename, params) {
-        console.log("[ADMIN][Database] runQuery3 started")
-        const query = readFileSync(filename, {encoding: "UTF8"}).trim()
-        // this.client.query(query, param1, param2, param3, param4)
-        this.client.query(query, params)
-        console.log("[ADMIN][Database] runQuery3 ending")
     }
 
     // -- Admin
@@ -54,25 +40,24 @@ export default class Database {
     getPersonAll() {
         return this.runQuery("./src/queries/person_select_all.sql")
     }
-    getPersonById(id) {
+    getPersonById(id) { // TODO
         return this.runQuery("./src/queries/person_select_by_id.sql")
     }
-    getPersonByNickname(nickname) {
-        return this.runQuery2("./src/queries/person_select_by_nickname.sql",
-        nickname)
+    getPersonByNickname(params) {
+        return this.runQuery("./src/queries/person_select_by_nickname.sql",
+        params)
     }
-    createPerson(nickname, password) {
+    createPerson(nickname, password) { // TODO
         // return this.runQuery("./src/queries/person_select_all.sql")
     }
 
     // -- Blockchain table
-    getBlockById(id) {}
-    getBlockByHash(hash) {}
+    getBlockById(id) {} // TODO
+    getBlockByHash(hash) {} // TODO
     getBlockAll() {
         return this.runQuery("./src/queries/block_select_all.sql")
     }
     createBlock(params) { // MAKE SURE PREHASH MATCHES
-        console.log("[ADMIN][Database] Create block started")
-        this.runQuery3("./src/queries/block_create.sql", params)
+        return this.runQuery("./src/queries/block_create.sql", params)
     }
 }

@@ -104,7 +104,7 @@ export default class WebServer {
 		// User gets the uniq code when the request is done
 		this.app.post("/api/transactionrequest/:amount", (request, response) => {
 			const userid = request.session.userid
-			const amount = request.params.amount
+			const amount = parseInt(request.params.amount)
 			const requestCode = this.createTransactionRequest(userid, amount)
 			response.send("Request created! Code: " + requestCode)
 		})
@@ -112,6 +112,11 @@ export default class WebServer {
 		// Get balance of the current user
 		this.app.get("/api/balance", (request, response) => {
 			const balance = this.getBalanceById(request.session.userid)
+			console.log("1: " + this.getBalanceById(1))
+			console.log("2: " + this.getBalanceById(2))
+			console.log("3: " + this.getBalanceById(3))
+			console.log("4: " + this.getBalanceById(4))
+			console.log("5: " + this.getBalanceById(5))
 			response.send("Your balance is: " + balance)
 		})
 	}
@@ -190,17 +195,16 @@ export default class WebServer {
 		}
 
 		// -- Add block to database
-		console.log(block.previousHash.length + " " + block.previousHash)
-		console.log(block.data.length + " " + block.data)
-		console.log(block.nonce.length + " " + block.nonce)
-		console.log(block.hash.length + " " + block.hash)
 		this.database.createBlock([block.previousHash, block.data, block.nonce,
 		block.hash])
-
-		// -- Delete transaction request
-		Transactions.deleteRequest(code)
-		// return true
-		console.log("[INFO][SERVER] Ending confirm transaction")
+		.then((resp) => {
+			// -- Update balance scheet
+			this.updateBalanceSheet(data.from, data.to, data.amount)
+			// -- Delete transaction request
+			Transactions.deleteRequest(code)
+			// return true
+			console.log("[INFO][SERVER] Ending confirm transaction")
+		})
 	}
 
 	/**
@@ -212,8 +216,10 @@ export default class WebServer {
 		this.database.getPersonAll()
 		.then((resp) => {
 			for (let i = 0; resp[i] != null; i++) {
-				const userid = resp[i].id
-				balanceSheet[userid] = {amount: 0}
+				if (resp[i].id != null) {
+					const userid = resp[i].id
+					balanceSheet[userid] = {amount: 0}
+				}
 			}
 			// -- Go through every block's transaction and update balances accordingly
 			this.database.getBlockAll()
