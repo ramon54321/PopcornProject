@@ -14,6 +14,11 @@ export default class LoginPage extends Component {
       nickname: "",
       password: ""
     };
+    this.createNewAccount = this.createNewAccount.bind(this);
+  }
+
+  createNewAccount() {
+    console.log("create new account");
   }
   render() {
     return (
@@ -37,6 +42,9 @@ export default class LoginPage extends Component {
         <TouchableOpacity style={styles.button} onPress={this.onPress}>
           <Text style={styles.buttonText}> Login </Text>
         </TouchableOpacity>
+        <Text onPress={this.createNewAccount} style={styles.link}>
+          Create a new account?
+        </Text>
       </View>
     );
   }
@@ -44,6 +52,7 @@ export default class LoginPage extends Component {
 
 const styles = StyleSheet.create({
   text: {
+    color: "#331a00",
     fontSize: 30
   },
   button: {
@@ -69,5 +78,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  link: {
+    color: "#663300",
+    marginTop: 10
   }
 });
