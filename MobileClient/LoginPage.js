@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet
+} from "react-native";
 
 export default class LoginPage extends Component {
   constructor(props) {
@@ -11,49 +17,57 @@ export default class LoginPage extends Component {
   }
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontSize: 30 }}>Nickname</Text>
+      <View style={styles.view}>
+        <Text style={styles.text}>Nickname</Text>
         <TextInput
           placeholder={"Nickname"}
           editable={true}
           maxLength={40}
           onChangeText={nickname => this.setState({ nickname })}
-          style={{
-            borderColor: "#000000",
-            borderWidth: 1,
-            width: 200,
-            height: 40,
-            padding: 10
-          }}
+          style={styles.input}
         />
-        <Text style={{ fontSize: 30 }}>Password</Text>
+        <Text style={styles.text}>Password</Text>
         <TextInput
           placeholder={"Password"}
           editable={true}
           maxLength={40}
           onChangeText={password => this.setState({ password })}
-          style={{
-            borderColor: "#000000",
-            borderWidth: 1,
-            width: 200,
-            height: 40,
-            padding: 10
-          }}
+          style={styles.input}
         />
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#663300",
-            width: 200,
-            height: 40,
-            marginTop: 10,
-            padding: 5,
-            alignItems: "center"
-          }}
-          onPress={this.onPress}
-        >
-          <Text style={{ fontSize: 25, color: "#fff" }}> Log in </Text>
+        <TouchableOpacity style={styles.button} onPress={this.onPress}>
+          <Text style={styles.buttonText}> Login </Text>
         </TouchableOpacity>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 30
+  },
+  button: {
+    backgroundColor: "#663300",
+    width: 200,
+    height: 40,
+    marginTop: 10,
+    padding: 5,
+    alignItems: "center"
+  },
+  buttonText: {
+    fontSize: 25,
+    color: "#fff"
+  },
+  input: {
+    borderColor: "#000000",
+    borderWidth: 1,
+    width: 200,
+    height: 40,
+    padding: 10
+  },
+  view: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+});
