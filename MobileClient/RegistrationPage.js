@@ -74,7 +74,8 @@ const styles = StyleSheet.create({
     height: 40,
     marginTop: 10,
     padding: 5,
-    alignItems: "center"
+    alignItems: "center",
+    borderRadius: 10
   },
   buttonText: {
     fontSize: 25,
