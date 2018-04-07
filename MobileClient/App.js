@@ -6,7 +6,7 @@
 
 import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
-//import LoginPage from "./LoginPage";
+// import LoginPage from "./LoginPage";
 import RegistrationPage from "./RegistrationPage";
 
 const instructions = Platform.select({
