@@ -6,7 +6,8 @@
 
 import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
-import LoginPage from "./LoginPage";
+//import LoginPage from "./LoginPage";
+import RegistrationPage from "./RegistrationPage";
 
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
@@ -17,7 +18,7 @@ const instructions = Platform.select({
 
 export default class App extends Component {
   render() {
-    return <LoginPage />;
+    return <RegistrationPage />;
   }
 }
 
