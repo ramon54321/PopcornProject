@@ -44,6 +44,23 @@ export default class WebServer {
 			this.database.init()
 			response.send(true)
 		})
+		this.app.post("/api/register", (request, response) => {
+			// -- Query by nickname to check if it exists already
+			this.database.getPersonByNickname([request.body.nickname])
+			.then((resp) => {
+				// -- If nickname existed inform client
+				if (resp.length > 0) {
+					response.send("Nickname existed, can't create new user")
+					// -- Else create new user
+				} else {
+					const user = [request.body.nickname, request.body.pass]
+					this.database.createPerson(user)
+					.then((res) => {
+						response.send("User created!")
+					})
+				}
+			})
+		})
 		this.app.get("/api/nickname/:nickname", (request, response) => {
 			this.database.getPersonByNickname([request.params.nickname])
 			.then((resp) => {

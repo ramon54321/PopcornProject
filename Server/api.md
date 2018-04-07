@@ -109,7 +109,7 @@ Hashes the data with the set blockchain public key.
     * _static_
         * [.createRequest(userid, amount)](#module_Transactions.createRequest) ⇒ <code>object</code>
         * [.getRequest(code)](#module_Transactions.getRequest) ⇒ <code>object</code>
-        * [.getRequestsByUser(userid)](#module_Transactions.getRequestsByUser) ⇒ <code>object</code>
+        * [.getRequestsFromUser(userid)](#module_Transactions.getRequestsFromUser) ⇒ <code>object</code>
         * [.deleteRequest(code)](#module_Transactions.deleteRequest) ⇒ <code>object</code>
     * _inner_
         * [~generateCode()](#module_Transactions..generateCode) ⇒ <code>object</code>
@@ -140,9 +140,9 @@ Gets request by code.
 | --- | --- | --- |
 | code | <code>string</code> | Request's code. |
 
-<a name="module_Transactions.getRequestsByUser"></a>
+<a name="module_Transactions.getRequestsFromUser"></a>
 
-### Transactions.getRequestsByUser(userid) ⇒ <code>object</code>
+### Transactions.getRequestsFromUser(userid) ⇒ <code>object</code>
 Gets all request by user
 
 **Kind**: static method of [<code>Transactions</code>](#module_Transactions)  

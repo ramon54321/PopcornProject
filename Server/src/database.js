@@ -47,8 +47,8 @@ export default class Database {
         return this.runQuery("./src/queries/person_select_by_nickname.sql",
         params)
     }
-    createPerson(nickname, password) { // TODO
-        // return this.runQuery("./src/queries/person_select_all.sql")
+    createPerson(params) {
+        return this.runQuery("./src/queries/person_create.sql", params)
     }
 
     // -- Blockchain table
