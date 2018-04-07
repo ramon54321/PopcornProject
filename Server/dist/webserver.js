@@ -76,7 +76,7 @@ class WebServer {
 			this.database.getPersonByNickname([request.body.nickname]).then(resp => {
 				// -- If nickname existed inform client
 				if (resp.length > 0) {
-					response.send("Nickname existed, can't create user");
+					response.send("Nickname existed, can't create new user");
 					// -- Else create new user
 				} else {
 					const user = [request.body.nickname, request.body.pass];
@@ -84,12 +84,6 @@ class WebServer {
 						response.send("User created!");
 					});
 				}
-			});
-		});
-		this.app.get("/api/nickname/:nickname", (request, response) => {
-			this.database.getPersonByNickname([request.params.nickname]).then(resp => {
-				console.log(resp);
-				response.send("finished");
 			});
 		});
 		this.app.post("/api/login", (request, response, next) => {
@@ -123,6 +117,13 @@ class WebServer {
 			}
 			// -- Userid found in session so continue to secure page
 			next();
+		});
+
+		this.app.get("/api/nickname/:nickname", (request, response) => {
+			this.database.getPersonByNickname([request.params.nickname]).then(resp => {
+				console.log(resp);
+				response.send("finished");
+			});
 		});
 
 		// Get all transaction requests made by user
