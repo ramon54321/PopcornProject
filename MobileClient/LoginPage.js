@@ -63,11 +63,12 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#663300",
-    width: 200,
-    height: 40,
+    width: 300,
+    height: 45,
     marginTop: 10,
     padding: 5,
-    alignItems: "center"
+    alignItems: "center",
+    borderRadius: 20
   },
   buttonText: {
     fontSize: 25,
