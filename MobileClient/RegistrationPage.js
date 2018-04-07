@@ -24,14 +24,7 @@ export default class RegistrationPage extends Component {
     return (
       <View style={styles.view}>
         <View>
-          <Text
-            style={{
-              fontSize: 45,
-              color: "#331a00"
-            }}
-          >
-            Registration
-          </Text>
+          <Text style={styles.header}>Registration</Text>
         </View>
         <View>
           <Text style={styles.text}>Nickname</Text>
@@ -102,5 +95,9 @@ const styles = StyleSheet.create({
   link: {
     color: "#663300",
     marginTop: 10
+  },
+  header: {
+    fontSize: 45,
+    color: "#331a00"
   }
 });
