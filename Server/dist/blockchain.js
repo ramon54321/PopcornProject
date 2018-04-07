@@ -80,7 +80,6 @@ class Blockchain {
     }
 
     this.blockchain.push(block);
-    console.log("Added block succesffully");
     return true;
   }
 

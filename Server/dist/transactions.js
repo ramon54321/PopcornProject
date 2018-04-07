@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createRequest = createRequest;
 exports.getRequest = getRequest;
+exports.getRequestsByUser = getRequestsByUser;
 exports.deleteRequest = deleteRequest;
 /**
  * @module Transactions
@@ -35,7 +36,7 @@ function createRequest(userid, amount) {
 }
 
 /**
-* Creates a new request object that is added to requests[].
+* Gets request by code.
 * @param {string} code Request's code.
 * @return {object} The request object.
 */
@@ -46,6 +47,21 @@ function getRequest(code) {
     }
   }
   return false;
+}
+
+/**
+* Gets all request by user
+* @param {string} userid Userid
+* @return {object} List of requests
+*/
+function getRequestsByUser(userid) {
+  let list = [];
+  for (let i = 0; i < requests.length; i++) {
+    if (requests[i].userid === userid) {
+      list.push(requests[i]);
+    }
+  }
+  return list;
 }
 
 /**

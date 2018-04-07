@@ -109,6 +109,7 @@ Hashes the data with the set blockchain public key.
     * _static_
         * [.createRequest(userid, amount)](#module_Transactions.createRequest) ⇒ <code>object</code>
         * [.getRequest(code)](#module_Transactions.getRequest) ⇒ <code>object</code>
+        * [.getRequestsByUser(userid)](#module_Transactions.getRequestsByUser) ⇒ <code>object</code>
         * [.deleteRequest(code)](#module_Transactions.deleteRequest) ⇒ <code>object</code>
     * _inner_
         * [~generateCode()](#module_Transactions..generateCode) ⇒ <code>object</code>
@@ -130,7 +131,7 @@ Creates a new request object that is added to requests[].
 <a name="module_Transactions.getRequest"></a>
 
 ### Transactions.getRequest(code) ⇒ <code>object</code>
-Creates a new request object that is added to requests[].
+Gets request by code.
 
 **Kind**: static method of [<code>Transactions</code>](#module_Transactions)  
 **Returns**: <code>object</code> - The request object.  
@@ -138,6 +139,18 @@ Creates a new request object that is added to requests[].
 | Param | Type | Description |
 | --- | --- | --- |
 | code | <code>string</code> | Request's code. |
+
+<a name="module_Transactions.getRequestsByUser"></a>
+
+### Transactions.getRequestsByUser(userid) ⇒ <code>object</code>
+Gets all request by user
+
+**Kind**: static method of [<code>Transactions</code>](#module_Transactions)  
+**Returns**: <code>object</code> - List of requests  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| userid | <code>string</code> | Userid |
 
 <a name="module_Transactions.deleteRequest"></a>
 

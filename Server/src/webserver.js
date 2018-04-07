@@ -85,6 +85,13 @@ export default class WebServer {
 			next()
 		})
 
+		// Get all transaction requests made by user
+		this.app.get("/api/transaction", (request, response) => {
+			const userid = request.session.userid
+			const req = Transactions.getRequestsFromUser(userid)
+			response.send(req)
+		})
+
 		// Get transaction by code
 		this.app.get("/api/transaction/:code", (request, response) => {
 			const code = request.params.code
