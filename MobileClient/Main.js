@@ -28,12 +28,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  view2: {
-    // flex: 1,
-    // flexDirection: "column",
-    // justifyContent: "flex-end",
-    // alignItems: "center"
-  },
   mainView: {
     flex: 1,
     flexDirection: "column",
