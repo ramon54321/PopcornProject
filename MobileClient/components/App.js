@@ -1,15 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import LoginPage from "./LoginPage";
 import RegistrationPage from "./RegistrationPage";
 import Main from "./Main";
 import SendPage from "./SendPage";
+import ListView from "./ListView";
 
 import AskPage from "./AskPage";
 
@@ -23,7 +18,7 @@ const instructions = Platform.select({
 export default class App extends Component {
   render() {
     //return <RegistrationPage />;
-    return <AskPage />;
+    return <ListView />;
   }
 }
 
