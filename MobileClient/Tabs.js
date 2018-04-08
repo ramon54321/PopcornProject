@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import SendPage from "./SendPage";
 
 export default class Tabs extends Component {
@@ -18,7 +18,11 @@ export default class Tabs extends Component {
     let newTabs = [];
     for (let i = 0; i < this.props.names.length; i++) {
       newTabs.push(
-        <TouchableOpacity key={i} style={styles.tab} onPress={this.onPress}>
+        <TouchableOpacity
+          key={i}
+          style={styles.tab}
+          onPress={this.props.functions[i]}
+        >
           <Text style={styles.text}> {this.props.names[i]} </Text>
         </TouchableOpacity>
       );

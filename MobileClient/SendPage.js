@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, TextInput, StyleSheet } from "react-native";
+import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import Tabs from "./Tabs";
 
 export default class SendPage extends Component {
@@ -9,8 +9,26 @@ export default class SendPage extends Component {
       values: [null, null, null, null],
       text: ""
     };
+
+    this.showAlert = this.showAlert.bind(this);
+    this.back = this.back.bind(this);
   }
   inputs = [];
+
+  showAlert() {
+    Alert.alert("Confirmation window", "Do you want send money?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+      },
+      { text: "OK", onPress: () => console.log("OK Pressed") }
+    ]);
+  }
+
+  back() {
+    console.log("back");
+  }
 
   handleTextInputChange = (value, index) => {
     if (!value) return;
@@ -71,7 +89,10 @@ export default class SendPage extends Component {
           <Text style={styles.text}>{this.state.text}</Text>
         </View>
 
-        <Tabs names={["Back", "Confirm"]} />
+        <Tabs
+          names={["Back", "Confirm"]}
+          functions={[this.back, this.showAlert]}
+        />
       </View>
     );
   }
