@@ -194,6 +194,7 @@ Checks that the code doesn't already exists in requests[].
     * [.createBalanceSheet()](#module_WebServer+createBalanceSheet)
     * [.updateBalanceSheet(from, to, amount)](#module_WebServer+updateBalanceSheet)
     * [.getBalanceById(id)](#module_WebServer+getBalanceById) ⇒ <code>object</code>
+    * [.initializeBlockchain()](#module_WebServer+initializeBlockchain)
 
 <a name="module_WebServer+linkSessionWithUser"></a>
 
@@ -264,3 +265,9 @@ Get user's balance by id
 | --- | --- | --- |
 | id | <code>object</code> | User's id |
 
+<a name="module_WebServer+initializeBlockchain"></a>
+
+### webServer.initializeBlockchain()
+Initializes the blockchain in servers memory by fetching all the blocksfrom database and passing them to loadBlockChain function, which addsthem to blockchain array.
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
