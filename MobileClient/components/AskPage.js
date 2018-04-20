@@ -66,7 +66,11 @@ export default class AskPage extends Component {
           )}
         </View>
 
-        <Tabs names={["Back", "Ask"]} functions={[this.back, this.showAlert]} />
+        <Tabs
+          names={["Back", "Ask"]}
+          pages={["Back", "Back"]}
+          navigation={this.props.navigation}
+        />
       </View>
     );
   }

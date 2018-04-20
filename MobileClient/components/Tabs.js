@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import SendPage from "./SendPage";
+import AskPage from "./AskPage";
+import { StackNavigator } from "react-navigation";
 
 export default class Tabs extends Component {
   constructor(props) {
@@ -14,15 +16,23 @@ export default class Tabs extends Component {
   componentWillMount() {
     this.renderTabs();
   }
+
+  navigate = i => () => {
+    const navigation = this.props.navigation;
+    console.log(this.props);
+    if (this.props.pages[i] == "Back") {
+      navigation.goBack();
+    } else {
+      navigation.navigate(this.props.pages[i]);
+    }
+  };
+
   renderTabs() {
     let newTabs = [];
+    const navigation = this.props.navigation;
     for (let i = 0; i < this.props.names.length; i++) {
       newTabs.push(
-        <TouchableOpacity
-          key={i}
-          style={styles.tab}
-          onPress={this.props.functions[i]}
-        >
+        <TouchableOpacity key={i} style={styles.tab} onPress={this.navigate(i)}>
           <Text style={styles.text}> {this.props.names[i]} </Text>
         </TouchableOpacity>
       );

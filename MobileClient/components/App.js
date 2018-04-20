@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View, AppRegistry } from "react-native";
 import LoginPage from "./LoginPage";
 import RegistrationPage from "./RegistrationPage";
 import Main from "./Main";
 import SendPage from "./SendPage";
 import ListView from "./ListView";
+import { StackNavigator } from "react-navigation";
 
 import AskPage from "./AskPage";
-
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:
@@ -18,7 +18,7 @@ const instructions = Platform.select({
 export default class App extends Component {
   render() {
     //return <RegistrationPage />;
-    return <ListView />;
+    return <Main />;
   }
 }
 

@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import SendPage from "./SendPage";
 import Tabs from "./Tabs";
+import { StackNavigator } from "react-navigation";
+import AskPage from "./AskPage";
 
-export default class Main extends Component {
+class Main extends Component {
   render() {
     return (
       <View style={styles.mainView}>
@@ -11,7 +13,11 @@ export default class Main extends Component {
           <Text style={styles.text}>27 $</Text>
         </View>
 
-        <Tabs names={["Send", "Ask"]} />
+        <Tabs
+          names={["Send", "Ask"]}
+          pages={["SendPage", "AskPage"]}
+          navigation={this.props.navigation}
+        />
       </View>
     );
   }
@@ -33,5 +39,17 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center"
+  }
+});
+
+export default StackNavigator({
+  Main: {
+    screen: Main
+  },
+  AskPage: {
+    screen: AskPage
+  },
+  SendPage: {
+    screen: SendPage
   }
 });

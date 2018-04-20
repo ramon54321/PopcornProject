@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import Tabs from "./Tabs";
+import Main from "./Main";
+import { StackNavigator } from "react-navigation";
 
 export default class SendPage extends Component {
   constructor(props) {
@@ -91,7 +93,8 @@ export default class SendPage extends Component {
 
         <Tabs
           names={["Back", "Confirm"]}
-          functions={[this.back, this.showAlert]}
+          pages={["Back", "Back"]}
+          navigation={this.props.navigation}
         />
       </View>
     );
