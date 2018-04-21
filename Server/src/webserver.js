@@ -50,15 +50,22 @@ export default class WebServer {
 
 		// Register new user
 		this.app.post("/api/register", (request, response) => {
+			const nickname = request.body.nickname
+			const pass = request.body.pass
+			// -- Check that nickname or password field wasn't empty
+			if (nickname.length == 0 || pass.length == 0) {
+				response.send("Nickname or password field was empty!")
+				return
+			}
 			// -- Query by nickname to check if it exists already
-			this.database.getPersonByNickname([request.body.nickname])
+			this.database.getPersonByNickname([nickname])
 			.then((resp) => {
 				// -- If nickname existed inform client
 				if (resp.length > 0) {
 					response.send("Nickname existed, can't create new user")
 					// -- Else create new user
 				} else {
-					const user = [request.body.nickname, request.body.pass]
+					const user = [nickname, pass]
 					this.database.createPerson(user)
 					.then((res) => {
 						response.send("User created!")
@@ -100,8 +107,7 @@ export default class WebServer {
 		this.app.get("/api/nickname/:nickname", (request, response) => {
 			this.database.getPersonByNickname([request.params.nickname])
 			.then((resp) => {
-				console.log(resp)
-				response.send("finished")
+				response.send(resp)
 			})
 		})
 
@@ -119,7 +125,7 @@ export default class WebServer {
 		// Get balance of user
 		this.app.get("/api/balance", (request, response) => {
 			const balance = this.getBalanceById(request.session.userid)
-			response.send("Your balance is: " + balance)
+			response.send({balance: balance})
 		})
 
 		// Get all transaction requests made by user

@@ -70,7 +70,10 @@ Adds a block to the blockchain.
 <a name="module_Blockchain+isValid"></a>
 
 ### blockchain.isValid() ⇒ <code>boolean</code>
-Validate the entire blockchain. This function will iterate the chain, oneblock at a time, checking that the block contains the same hash as theprevious block's hash, and that the hash of the current block is indeedcorrect.
+Validate the entire blockchain. This function will iterate the chain, one
+block at a time, checking that the block contains the same hash as the
+previous block's hash, and that the hash of the current block is indeed
+correct.
 
 **Kind**: instance method of [<code>Blockchain</code>](#module_Blockchain)  
 **Returns**: <code>boolean</code> - True if the blockchain is valid in its entirity.  
@@ -199,7 +202,14 @@ Checks that the code doesn't already exists in requests[].
 <a name="module_WebServer+linkSessionWithUser"></a>
 
 ### webServer.linkSessionWithUser(request, userid)
-Links the created session with the user in the request body. The sessionuserid can then be used to look up details with respect to the activeuser from a database for example.The user can have multiple sessions open because all sessions will pointto the same userid, meaning all actions will be taken on the sameinstance of the user, irrespective from which session the changes aremade.
+Links the created session with the user in the request body. The session
+userid can then be used to look up details with respect to the active
+user from a database for example.
+
+The user can have multiple sessions open because all sessions will point
+to the same userid, meaning all actions will be taken on the same
+instance of the user, irrespective from which session the changes are
+made.
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
 
@@ -211,10 +221,14 @@ Links the created session with the user in the request body. The sessionuserid 
 <a name="module_WebServer+createTransactionRequest"></a>
 
 ### webServer.createTransactionRequest(userid, amount) ⇒ <code>string</code>
-Creates a transaction request, which can be retrieved using the returnedcode. The transaction request also stores the time of creation, and isvalid for a set period of time. Be sure to create a transaction requestonly when the confirmation of the transaction is expected soon.
+Creates a transaction request, which can be retrieved using the returned
+code. The transaction request also stores the time of creation, and is
+valid for a set period of time. Be sure to create a transaction request
+only when the confirmation of the transaction is expected soon.
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
-**Returns**: <code>string</code> - A random code which can be used to reference to thistransaction request.  
+**Returns**: <code>string</code> - A random code which can be used to reference to this
+transaction request.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -224,10 +238,16 @@ Creates a transaction request, which can be retrieved using the returnedcode. T
 <a name="module_WebServer+confirmTransaction"></a>
 
 ### webServer.confirmTransaction(code, userid) ⇒ <code>boolean</code>
-Confirms the requested transaction by locking it into the blockchain. Thetransaction request is also deleted.
+Confirms the requested transaction by locking it into the blockchain. The
+transaction request is also deleted.
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
-**Returns**: <code>boolean</code> - True if the transaction was added to the blockchainpool. False if there was an error in adding the request, commonly causedby the request with the given code not being present in the transactionrequests array. Ensure the code was first created with'createTransactionRequest'. The request code will only be deleted if thereturned value is true.  
+**Returns**: <code>boolean</code> - True if the transaction was added to the blockchain
+pool. False if there was an error in adding the request, commonly caused
+by the request with the given code not being present in the transaction
+requests array. Ensure the code was first created with
+'createTransactionRequest'. The request code will only be deleted if the
+returned value is true.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -268,6 +288,8 @@ Get user's balance by id
 <a name="module_WebServer+initializeBlockchain"></a>
 
 ### webServer.initializeBlockchain()
-Initializes the blockchain in servers memory by fetching all the blocksfrom database and passing them to loadBlockChain function, which addsthem to blockchain array.
+Initializes the blockchain in servers memory by fetching all the blocks
+from database and passing them to loadBlockChain function, which adds
+them to blockchain array.
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
