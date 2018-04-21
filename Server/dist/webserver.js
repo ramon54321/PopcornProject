@@ -130,8 +130,7 @@ class WebServer {
 		// Get user by nickname
 		this.app.get("/api/nickname/:nickname", (request, response) => {
 			this.database.getPersonByNickname([request.params.nickname]).then(resp => {
-				console.log(resp);
-				response.send("finished");
+				response.send(resp);
 			});
 		});
 
