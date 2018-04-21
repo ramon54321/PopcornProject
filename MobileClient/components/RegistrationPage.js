@@ -8,6 +8,8 @@ import {
 } from "react-native";
 
 import {
+  register,
+  nickname,
   logout,
   login,
   balance,
@@ -22,16 +24,57 @@ export default class RegistrationPage extends Component {
     this.state = {
       nickname: "",
       password: "",
-      checkPassword: ""
+      checkPassword: "",
+      inputStyle: styles.input,
+      checkPassText: styles.hidden,
+      checkNickText: false
     };
     this.createNewAccount = this.createNewAccount.bind(this);
   }
 
-  createNewAccount() {
-    //login("123", 123);
-    //askTransaction(5);
-    getTransactionByCode("QQDZ");
-  }
+  checkPassword = () => {
+    const { nickname, password, checkPassword } = this.state;
+    if (password === "" && checkPassword === "") {
+      this.setState({
+        checkPassText: styles.hidden
+      });
+    }
+    if (password !== checkPassword) {
+      this.setState({
+        checkPassText: styles.redText
+      });
+    } else {
+      this.setState({
+        checkPassText: styles.hidden
+      });
+    }
+  };
+
+  checkName = async () => {
+    const response = await nickname(this.state.nickname);
+    console.log("kek");
+    console.log(response);
+    if (!response) {
+      this.setState({
+        inputStyle: styles.redInput,
+        checkNickText: true
+      });
+    }
+  };
+
+  createNewAccount = async () => {
+    const { nickname, password, checkPassword } = this.state;
+    this.checkPassword();
+    if (nickname === "" || password === "" || checkPassword !== password)
+      return;
+
+    const response = await register(nickname, password);
+    console.log(response);
+    console.log(response.text());
+    if (response) {
+      this.props.navigation.navigate("Login");
+    }
+  };
 
   render() {
     return (
@@ -45,11 +88,17 @@ export default class RegistrationPage extends Component {
             placeholder={"Nickname"}
             autoCorrect={false}
             autoCapitalize="none"
+            onEndEditing={this.checkName}
             editable={true}
             maxLength={40}
             onChangeText={nickname => this.setState({ nickname })}
-            style={styles.input}
+            style={this.state.inputStyle}
           />
+          {this.checkName ? (
+            <Text style={styles.hidden}>Nickname already exists!</Text>
+          ) : (
+            ""
+          )}
           <Text style={styles.text}>Password</Text>
           <TextInput
             placeholder={"Password"}
@@ -64,10 +113,14 @@ export default class RegistrationPage extends Component {
             placeholder={"Repeat Password"}
             editable={true}
             maxLength={40}
+            onContentSizeChange={this.checkPassword}
             onChangeText={checkPassword => this.setState({ checkPassword })}
             secureTextEntry={true}
             style={styles.input}
           />
+          <Text style={this.state.checkPassText}>
+            Passwords are not the same!
+          </Text>
         </View>
         <TouchableOpacity style={styles.button} onPress={this.createNewAccount}>
           <Text style={styles.buttonText}> Create Account </Text>
@@ -78,6 +131,12 @@ export default class RegistrationPage extends Component {
 }
 
 const styles = StyleSheet.create({
+  hidden: {
+    opacity: 0
+  },
+  redText: {
+    color: "#FF0000"
+  },
   text: {
     color: "#331a00",
     fontSize: 25,
@@ -98,6 +157,13 @@ const styles = StyleSheet.create({
   },
   input: {
     borderColor: "#000000",
+    borderWidth: 1,
+    width: 300,
+    height: 40,
+    padding: 10
+  },
+  redInput: {
+    borderColor: "#FF0000",
     borderWidth: 1,
     width: 300,
     height: 40,
