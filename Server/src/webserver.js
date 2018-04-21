@@ -45,7 +45,7 @@ export default class WebServer {
 		// Initialize database
 		this.app.post("/api/admin/initdatabase", (request, response, next) => {
 			this.database.init()
-			response.send(true)
+			response.send({success: true})
 		})
 
 		// Register new user
@@ -54,23 +54,23 @@ export default class WebServer {
 			const pass = request.body.pass
 			// -- Check that nickname or password field wasn't empty
 			if (nickname.length == 0 || pass.length == 0) {
-				response.send("Nickname or password field was empty!")
+				response.send({success: false})
 				return
 			}
 			// -- Query by nickname to check if it exists already
 			this.database.getPersonByNickname([nickname])
 			.then((resp) => {
-				// -- If nickname existed inform client
+				// -- If nickname existed return false
 				if (resp.length > 0) {
-					response.send("Nickname existed, can't create new user")
-					// -- Else create new user
-				} else {
-					const user = [nickname, pass]
-					this.database.createPerson(user)
-					.then((res) => {
-						response.send("User created!")
-					})
+					response.send({success: false})
+					return
+				// -- Create new user and return true
 				}
+				const user = [nickname, pass]
+				this.database.createPerson(user)
+				.then((res) => {
+					response.send({success: true})
+				})
 			})
 		})
 
@@ -86,12 +86,12 @@ export default class WebServer {
 					if (nickname === resp[0].nickname && pass === resp[0].pass) {
 						// -- Link session with user
 						this.linkSessionWithUser(request, resp[0].id)
-						response.send(true)
+						response.send({success: true})
 					}
 				}
 				// -- If the nickname or password was wrong
 				// -- Stop execution of this route
-				response.send(false)
+				response.send({success: false})
 				return
 			})
 		})
@@ -100,14 +100,14 @@ export default class WebServer {
 		// Deletes userid from session
 		this.app.post("/api/logout", (request, response, next) => {
 			delete request.session.userid
-			response.send(true)
+			response.send({success: true})
 		})
 
 		// Get user by nickname
 		this.app.get("/api/nickname/:nickname", (request, response) => {
 			this.database.getPersonByNickname([request.params.nickname])
 			.then((resp) => {
-				response.send(resp)
+				response.send({success: true, user: resp})
 			})
 		})
 
@@ -115,7 +115,7 @@ export default class WebServer {
 		this.app.all(/\/api\/*/, (request, response, next) => {
 			// -- If userid not found in session stop execution of this route
 			if (!request.session.userid) {
-				response.send(false)
+				response.send({success: false})
 				return
 			}
 			// -- Userid found in session so continue to secure page
@@ -125,21 +125,21 @@ export default class WebServer {
 		// Get balance of user
 		this.app.get("/api/balance", (request, response) => {
 			const balance = this.getBalanceById(request.session.userid)
-			response.send({balance: balance})
+			response.send({success: true, balance: balance})
 		})
 
 		// Get all transaction requests made by user
 		this.app.get("/api/transaction", (request, response) => {
 			const userid = request.session.userid
-			const req = Transactions.getRequestsFromUser(userid)
-			response.send(req)
+			const reqs = Transactions.getRequestsFromUser(userid)
+			response.send({success: true, requests: reqs})
 		})
 
-		// Get transaction by code
+		// Get transaction request by code
 		this.app.get("/api/transaction/:code", (request, response) => {
 			const code = request.params.code
 			const req = Transactions.getRequest(code)
-			response.send(req)
+			response.send({success: true, request: req})
 		})
 
 		// Create a request to get specific amount of coins.
@@ -148,7 +148,7 @@ export default class WebServer {
 			const userid = request.session.userid
 			const amount = parseInt(request.params.amount)
 			const requestCode = this.createTransactionRequest(userid, amount)
-			response.send("Request created! Code: " + requestCode)
+			response.send({success: true, requestCode: requestCode})
 		})
 
 		// Confirm transaction (send the coins)
@@ -157,7 +157,7 @@ export default class WebServer {
 			const userid = request.session.userid
 			this.confirmTransaction(code, userid)
 			console.log("[INFO][ROUTE] Transaction confirmed successfuly")
-			response.send("Transaction done!")
+			response.send({success: true})
 		})
 	}
 
