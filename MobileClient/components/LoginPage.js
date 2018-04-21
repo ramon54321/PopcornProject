@@ -1,4 +1,9 @@
 import React, { Component } from "react";
+import { AsyncStorage } from "react-native";
+import { connect } from "react-redux";
+import actions from "../redux/actions";
+import { login } from "../api";
+
 import {
   Text,
   View,
@@ -7,19 +12,50 @@ import {
   StyleSheet
 } from "react-native";
 
-export default class LoginPage extends Component {
+const mapStateToProps = store => {
+  return { user: store.user };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    saveUserData: nickname => {
+      const action = {
+        type: actions.SAVE_USER,
+        payload: {
+          nickname
+        }
+      };
+
+      dispatch(action);
+    }
+  };
+};
+
+class LoginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       nickname: "",
       password: ""
     };
-    this.createNewAccount = this.createNewAccount.bind(this);
   }
 
-  createNewAccount() {
-    console.log("create new account");
-  }
+  onPressLogin = async () => {
+    const { nickname, password } = this.state;
+    if (nickname === "" || password === "") return;
+
+    const response = await login(nickname, password);
+    if (response) {
+      await AsyncStorage.setItem("nickname", nickname);
+      this.props.saveUserData(nickname);
+      this.props.navigation.navigate("SignedIn");
+    }
+  };
+
+  createNewAccount = () => {
+    this.props.navigation.navigate("Register");
+  };
+
   render() {
     return (
       <View style={styles.view}>
@@ -28,6 +64,8 @@ export default class LoginPage extends Component {
           <Text style={styles.text}>Nickname</Text>
           <TextInput
             placeholder={"Nickname"}
+            autoCorrect={false}
+            autoCapitalize="none"
             editable={true}
             maxLength={40}
             onChangeText={nickname => this.setState({ nickname })}
@@ -43,7 +81,7 @@ export default class LoginPage extends Component {
           />
         </View>
         <View style={{ alignItems: "center" }}>
-          <TouchableOpacity style={styles.button} onPress={this.onPress}>
+          <TouchableOpacity style={styles.button} onPress={this.onPressLogin}>
             <Text style={styles.buttonText}> Log in </Text>
           </TouchableOpacity>
           <Text onPress={this.createNewAccount} style={styles.link}>
@@ -95,3 +133,5 @@ const styles = StyleSheet.create({
     color: "#331a00"
   }
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

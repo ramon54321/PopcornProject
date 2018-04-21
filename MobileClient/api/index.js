@@ -28,6 +28,8 @@ async function login(nickname, password) {
   });
 
   const response = await loginRequest.json();
+
+  return response;
 }
 
 async function logout() {

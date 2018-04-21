@@ -1,16 +1,24 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import SendPage from "./SendPage";
+import { Text, View, StyleSheet, AsyncStorage } from "react-native";
+import { connect } from "react-redux";
 import Tabs from "./Tabs";
-import { StackNavigator } from "react-navigation";
-import AskPage from "./AskPage";
 
 class Main extends Component {
   render() {
+    console.log(this.props);
     return (
       <View style={styles.mainView}>
         <View style={styles.view1}>
           <Text style={styles.text}>27 $</Text>
+          <Text
+            style={styles.text}
+            onPress={async () => {
+              await AsyncStorage.removeItem("nickname");
+              this.props.navigation.navigate("SignedOut");
+            }}
+          >
+            Logout
+          </Text>
         </View>
 
         <Tabs
@@ -22,6 +30,12 @@ class Main extends Component {
     );
   }
 }
+
+const mapStateToProps = store => ({
+  user: store.user
+});
+
+export default connect(mapStateToProps)(Main);
 
 const styles = StyleSheet.create({
   text: {
@@ -39,17 +53,5 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center"
-  }
-});
-
-export default StackNavigator({
-  Main: {
-    screen: Main
-  },
-  AskPage: {
-    screen: AskPage
-  },
-  SendPage: {
-    screen: SendPage
   }
 });

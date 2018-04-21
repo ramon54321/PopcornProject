@@ -1,3 +1,4 @@
+import React from "react";
 import { AppRegistry } from "react-native";
 import App from "./components/App";
 
@@ -13,4 +14,4 @@ const appContainer = () => (
   </Provider>
 );
 
-AppRegistry.registerComponent("AwesomeProject", () => App);
+AppRegistry.registerComponent("AwesomeProject", () => appContainer);
