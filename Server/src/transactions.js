@@ -27,7 +27,7 @@ export function createRequest(userid, amount) {
 }
 
 /**
-* Creates a new request object that is added to requests[].
+* Gets request by code.
 * @param {string} code Request's code.
 * @return {object} The request object.
 */
@@ -38,6 +38,21 @@ export function getRequest(code) {
         }
     }
     return false
+}
+
+/**
+* Gets all request by user
+* @param {string} userid Userid
+* @return {object} List of requests
+*/
+export function getRequestsFromUser(userid) {
+    let list = []
+    for (let i = 0; i < requests.length; i++) {
+        if (requests[i].userid === userid) {
+            list.push(requests[i])
+        }
+    }
+    return list
 }
 
 /**
@@ -61,9 +76,8 @@ export function deleteRequest(code) {
 */
 function generateCode() {
   const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  const codeLength = 5
+  const codeLength = 4
   let code = ""
-
   for (let i = 0; i < codeLength; i++) {
     code += characters.charAt(Math.floor(Math.random() * characters.length))
   }

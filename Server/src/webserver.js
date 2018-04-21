@@ -37,20 +37,37 @@ export default class WebServer {
 		this.app.listen(this.port)
 	}
 	setupRoutes() {
+		// API description
 		this.app.get("/api/", (request, response) => {
 			response.send("API - Description")
 		})
+
+		// Initialize database
 		this.app.post("/api/admin/initdatabase", (request, response, next) => {
 			this.database.init()
 			response.send(true)
 		})
-		this.app.get("/api/nickname/:nickname", (request, response) => {
-			this.database.getPersonByNickname([request.params.nickname])
+
+		// Register new user
+		this.app.post("/api/register", (request, response) => {
+			// -- Query by nickname to check if it exists already
+			this.database.getPersonByNickname([request.body.nickname])
 			.then((resp) => {
-				console.log(resp)
-				response.send("finished")
+				// -- If nickname existed inform client
+				if (resp.length > 0) {
+					response.send("Nickname existed, can't create new user")
+					// -- Else create new user
+				} else {
+					const user = [request.body.nickname, request.body.pass]
+					this.database.createPerson(user)
+					.then((res) => {
+						response.send("User created!")
+					})
+				}
 			})
 		})
+
+		// Login user
 		this.app.post("/api/login", (request, response, next) => {
 			const nickname = request.body.nickname
 			const pass = request.body.pass
@@ -71,10 +88,24 @@ export default class WebServer {
 				return
 			})
 		})
+
+		// Logut user
+		// Deletes userid from session
 		this.app.post("/api/logout", (request, response, next) => {
 			delete request.session.userid
 			response.send(true)
 		})
+
+		// Get user by nickname
+		this.app.get("/api/nickname/:nickname", (request, response) => {
+			this.database.getPersonByNickname([request.params.nickname])
+			.then((resp) => {
+				console.log(resp)
+				response.send("finished")
+			})
+		})
+
+		// Secure route (every route below this)
 		this.app.all(/\/api\/*/, (request, response, next) => {
 			// -- If userid not found in session stop execution of this route
 			if (!request.session.userid) {
@@ -85,6 +116,19 @@ export default class WebServer {
 			next()
 		})
 
+		// Get balance of user
+		this.app.get("/api/balance", (request, response) => {
+			const balance = this.getBalanceById(request.session.userid)
+			response.send("Your balance is: " + balance)
+		})
+
+		// Get all transaction requests made by user
+		this.app.get("/api/transaction", (request, response) => {
+			const userid = request.session.userid
+			const req = Transactions.getRequestsFromUser(userid)
+			response.send(req)
+		})
+
 		// Get transaction by code
 		this.app.get("/api/transaction/:code", (request, response) => {
 			const code = request.params.code
@@ -92,17 +136,8 @@ export default class WebServer {
 			response.send(req)
 		})
 
-		// Confirm transaction
-		this.app.post("/api/transaction/:code", (request, response) => {
-			const code = request.params.code
-			const userid = request.session.userid
-			this.confirmTransaction(code, userid)
-			console.log("[INFO][ROUTE] Transaction confirmed successfuly")
-			response.send("Transaction done!")
-		})
-
-		// User creates a request to get specific amount of coins.
-		// User gets the uniq code when the request is done
+		// Create a request to get specific amount of coins.
+		// Get the uniq code when the request is done
 		this.app.post("/api/transactionrequest/:amount", (request, response) => {
 			const userid = request.session.userid
 			const amount = parseInt(request.params.amount)
@@ -110,15 +145,13 @@ export default class WebServer {
 			response.send("Request created! Code: " + requestCode)
 		})
 
-		// Get balance of the current user
-		this.app.get("/api/balance", (request, response) => {
-			const balance = this.getBalanceById(request.session.userid)
-			console.log("1: " + this.getBalanceById(1))
-			console.log("2: " + this.getBalanceById(2))
-			console.log("3: " + this.getBalanceById(3))
-			console.log("4: " + this.getBalanceById(4))
-			console.log("5: " + this.getBalanceById(5))
-			response.send("Your balance is: " + balance)
+		// Confirm transaction (send the coins)
+		this.app.post("/api/transaction/:code", (request, response) => {
+			const code = request.params.code
+			const userid = request.session.userid
+			this.confirmTransaction(code, userid)
+			console.log("[INFO][ROUTE] Transaction confirmed successfuly")
+			response.send("Transaction done!")
 		})
 	}
 
@@ -180,7 +213,6 @@ export default class WebServer {
 
 		// -- Create transaction data
 		let data = {
-			// some transaction data here
 			"from": userid,
 			"to": request.userid,
 			"amount": request.amount,
@@ -262,6 +294,11 @@ export default class WebServer {
 		return false
 	}
 
+	/**
+	* Initializes the blockchain in servers memory by fetching all the blocks
+	* from database and passing them to loadBlockChain function, which adds
+	* them to blockchain array.
+	*/
 	initializeBlockchain() {
 		this.database.getBlockAll()
 		.then((resp) => {

@@ -54,16 +54,16 @@ export default class AskPage extends Component {
           {this.state.isHash ? (
             <Text style={styles.text}>{this.state.hash}</Text>
           ) : (
-            <View style={styles.inputContainer}>
-              <TextInput
-                editable={true}
-                ref={ref => this.inputs.push(ref)}
-                maxLength={6}
-                style={styles.input}
-              />
-              <Text style={styles.currency}>$</Text>
-            </View>
-          )}
+              <View style={styles.inputContainer}>
+                <TextInput
+                  editable={true}
+                  ref={ref => this.inputs.push(ref)}
+                  maxLength={6}
+                  style={styles.input}
+                />
+                <Text style={styles.currency}>$</Text>
+              </View>
+            )}
         </View>
 
         <Tabs
