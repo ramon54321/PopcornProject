@@ -46,10 +46,6 @@ class Database {
     getPersonAll() {
         return this.runQuery("./src/queries/person_select_all.sql");
     }
-    getPersonById(id) {
-        // TODO
-        return this.runQuery("./src/queries/person_select_by_id.sql");
-    }
     getPersonByNickname(params) {
         return this.runQuery("./src/queries/person_select_by_nickname.sql", params);
     }
@@ -58,8 +54,6 @@ class Database {
     }
 
     // -- Blockchain table
-    getBlockById(id) {} // TODO
-    getBlockByHash(hash) {} // TODO
     getBlockAll() {
         return this.runQuery("./src/queries/block_select_all.sql");
     }
