@@ -148,7 +148,7 @@ class WebServer {
 		// Get balance of user
 		this.app.get("/api/balance", (request, response) => {
 			const balance = this.getBalanceById(request.session.userid);
-			response.send("Your balance is: " + balance);
+			response.send({ balance: balance });
 		});
 
 		// Get all transaction requests made by user
