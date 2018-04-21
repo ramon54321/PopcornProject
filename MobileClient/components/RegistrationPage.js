@@ -7,19 +7,32 @@ import {
   StyleSheet
 } from "react-native";
 
+import {
+  logout,
+  login,
+  balance,
+  askTransaction,
+  transactionsList,
+  getTransactionByCode
+} from "../api";
+
 export default class RegistrationPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       nickname: "",
-      password: ""
+      password: "",
+      checkPassword: ""
     };
     this.createNewAccount = this.createNewAccount.bind(this);
   }
 
   createNewAccount() {
-    console.log("create new account");
+    //login("123", 123);
+    //askTransaction(5);
+    getTransactionByCode("QQDZ");
   }
+
   render() {
     return (
       <View style={styles.view}>
@@ -30,6 +43,8 @@ export default class RegistrationPage extends Component {
           <Text style={styles.text}>Nickname</Text>
           <TextInput
             placeholder={"Nickname"}
+            autoCorrect={false}
+            autoCapitalize="none"
             editable={true}
             maxLength={40}
             onChangeText={nickname => this.setState({ nickname })}
@@ -46,15 +61,15 @@ export default class RegistrationPage extends Component {
           />
           <Text style={styles.text}>Repeat Password</Text>
           <TextInput
-            placeholder={"Reapest Password"}
+            placeholder={"Repeat Password"}
             editable={true}
             maxLength={40}
-            onChangeText={password => this.setState({ password })}
+            onChangeText={checkPassword => this.setState({ checkPassword })}
             secureTextEntry={true}
             style={styles.input}
           />
         </View>
-        <TouchableOpacity style={styles.button} onPress={this.onPress}>
+        <TouchableOpacity style={styles.button} onPress={this.createNewAccount}>
           <Text style={styles.buttonText}> Create Account </Text>
         </TouchableOpacity>
       </View>
