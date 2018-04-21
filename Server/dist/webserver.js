@@ -77,14 +77,21 @@ class WebServer {
 
 		// Register new user
 		this.app.post("/api/register", (request, response) => {
+			const nickname = request.body.nickname;
+			const pass = request.body.pass;
+			// -- Check that nickname or password field wasn't empty
+			if (nickname.length == 0 || pass.length == 0) {
+				response.send("Nickname or password field was empty!");
+				return;
+			}
 			// -- Query by nickname to check if it exists already
-			this.database.getPersonByNickname([request.body.nickname]).then(resp => {
+			this.database.getPersonByNickname([nickname]).then(resp => {
 				// -- If nickname existed inform client
 				if (resp.length > 0) {
 					response.send("Nickname existed, can't create new user");
 					// -- Else create new user
 				} else {
-					const user = [request.body.nickname, request.body.pass];
+					const user = [nickname, pass];
 					this.database.createPerson(user).then(res => {
 						response.send("User created!");
 					});
