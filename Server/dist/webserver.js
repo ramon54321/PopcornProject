@@ -137,13 +137,30 @@ class WebServer {
 			response.send({ success: true });
 		});
 
+		// Get user by id
+		this.app.get("/api/userid/:id", (request, response) => {
+			// -- Query database by id
+			this.database.getPersonById([request.params.id]).then(resp => {
+				// -- Check that response is not empty and send it
+				if (resp.length > 0) {
+					const user = { id: resp[0].id, nickname: resp[0].nickname };
+					response.send({ success: true, user: user });
+					return;
+				}
+				// -- Else send response with status code 404
+				response.statusCode = 404;
+				response.send({ success: false });
+			});
+		});
+
 		// Get user by nickname
 		this.app.get("/api/nickname/:nickname", (request, response) => {
 			// -- Query database by nickname
 			this.database.getPersonByNickname([request.params.nickname]).then(resp => {
 				// -- Check that response is not empty and send it
 				if (resp.length > 0) {
-					response.send({ success: true, user: resp });
+					const user = { id: resp[0].id, nickname: resp[0].nickname };
+					response.send({ success: true, user: user });
 					return;
 				}
 				// -- Else send response with status code 404

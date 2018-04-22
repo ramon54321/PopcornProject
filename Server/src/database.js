@@ -40,6 +40,10 @@ export default class Database {
     getPersonAll() {
         return this.runQuery("./src/queries/person_select_all.sql")
     }
+    getPersonById(params) {
+        return this.runQuery("./src/queries/person_select_by_id.sql",
+        params)
+    }
     getPersonByNickname(params) {
         return this.runQuery("./src/queries/person_select_by_nickname.sql",
         params)
