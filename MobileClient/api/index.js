@@ -12,6 +12,9 @@ async function register(nickname, password) {
     },
     body
   });
+  const response = await regiserRequest.json();
+
+  return response;
 }
 
 async function login(nickname, password) {
@@ -111,6 +114,7 @@ async function nickname(nickname) {
   });
 
   const response = await nicknameRequest.json();
+  return response;
 }
 
 async function confirmTransaction(code) {

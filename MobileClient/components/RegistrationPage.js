@@ -27,7 +27,9 @@ export default class RegistrationPage extends Component {
       checkPassword: "",
       inputStyle: styles.input,
       checkPassText: styles.hidden,
-      checkNickText: false
+      checkNickText: false,
+      error: false,
+      text: ""
     };
     this.createNewAccount = this.createNewAccount.bind(this);
   }
@@ -41,11 +43,14 @@ export default class RegistrationPage extends Component {
     }
     if (password !== checkPassword) {
       this.setState({
-        checkPassText: styles.redText
+        checkPassText: styles.redText,
+        error: true,
+        text: "The passwords are not the same!"
       });
     } else {
       this.setState({
-        checkPassText: styles.hidden
+        checkPassText: styles.hidden,
+        error: false
       });
     }
   };
@@ -54,10 +59,19 @@ export default class RegistrationPage extends Component {
     const response = await nickname(this.state.nickname);
     console.log("kek");
     console.log(response);
-    if (!response) {
+    console.log(this.state.checkNickText);
+    if (response && response.success) {
       this.setState({
         inputStyle: styles.redInput,
-        checkNickText: true
+        checkNickText: true,
+        error: true,
+        text: "Nickname already exists"
+      });
+    } else {
+      this.setState({
+        inputStyle: styles.input,
+        checkNickText: false,
+        error: false
       });
     }
   };
@@ -69,10 +83,16 @@ export default class RegistrationPage extends Component {
       return;
 
     const response = await register(nickname, password);
-    console.log(response);
-    console.log(response.text());
-    if (response) {
+    if (response.success) {
       this.props.navigation.navigate("Login");
+      this.setState({
+        error: false
+      });
+    } else {
+      this.setState({
+        error: true,
+        text: "Something went wrong!"
+      });
     }
   };
 
@@ -94,16 +114,12 @@ export default class RegistrationPage extends Component {
             onChangeText={nickname => this.setState({ nickname })}
             style={this.state.inputStyle}
           />
-          {this.checkName ? (
-            <Text style={styles.hidden}>Nickname already exists!</Text>
-          ) : (
-            ""
-          )}
           <Text style={styles.text}>Password</Text>
           <TextInput
             placeholder={"Password"}
             editable={true}
             maxLength={40}
+            onContentSizeChange={this.checkPassword}
             onChangeText={password => this.setState({ password })}
             secureTextEntry={true}
             style={styles.input}
@@ -118,9 +134,11 @@ export default class RegistrationPage extends Component {
             secureTextEntry={true}
             style={styles.input}
           />
-          <Text style={this.state.checkPassText}>
-            Passwords are not the same!
-          </Text>
+          {this.state.error ? (
+            <Text style={styles.redText}>{this.state.text}</Text>
+          ) : (
+            ""
+          )}
         </View>
         <TouchableOpacity style={styles.button} onPress={this.createNewAccount}>
           <Text style={styles.buttonText}> Create Account </Text>
@@ -135,7 +153,10 @@ const styles = StyleSheet.create({
     opacity: 0
   },
   redText: {
-    color: "#FF0000"
+    color: "#FF0000",
+    fontSize: 20,
+    marginTop: 10,
+    marginLeft: 5
   },
   text: {
     color: "#331a00",
