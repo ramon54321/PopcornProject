@@ -81,6 +81,7 @@ class WebServer {
 			const pass = request.body.pass;
 			// -- Check that nickname or password field wasn't empty
 			if (nickname.length == 0 || pass.length == 0) {
+				response.statusCode = 400;
 				response.send({ success: false });
 				return;
 			}
@@ -88,6 +89,7 @@ class WebServer {
 			this.database.getPersonByNickname([nickname]).then(resp => {
 				// -- If nickname existed return false
 				if (resp.length > 0) {
+					response.statusCode = 403;
 					response.send({ success: false });
 					return;
 					// -- Create new user and return true
@@ -103,6 +105,12 @@ class WebServer {
 		this.app.post("/api/login", (request, response, next) => {
 			const nickname = request.body.nickname;
 			const pass = request.body.pass;
+			// -- Check that nickname or password field wasn't empty
+			if (nickname.length == 0 || pass.length == 0) {
+				response.statusCode = 400;
+				response.send({ success: false });
+				return;
+			}
 			this.database.getPersonByNickname([nickname]).then(resp => {
 				// -- Check that database query by nickname result is not empty
 				if (resp.length > 0) {
@@ -111,12 +119,12 @@ class WebServer {
 						// -- Link session with user
 						this.linkSessionWithUser(request, resp[0].id);
 						response.send({ success: true });
+						return;
 					}
 				}
 				// -- If the nickname or password was wrong
-				// -- Stop execution of this route
+				response.statusCode = 400;
 				response.send({ success: false });
-				return;
 			});
 		});
 
@@ -129,8 +137,16 @@ class WebServer {
 
 		// Get user by nickname
 		this.app.get("/api/nickname/:nickname", (request, response) => {
+			// -- Query database by nickname
 			this.database.getPersonByNickname([request.params.nickname]).then(resp => {
-				response.send({ success: true, user: resp });
+				// -- Check that response is not empty and send it
+				if (resp.length > 0) {
+					response.send({ success: true, user: resp });
+					return;
+				}
+				// -- Else send response with status code 404
+				response.statusCode = 404;
+				response.send({ success: false });
 			});
 		});
 
@@ -138,6 +154,7 @@ class WebServer {
 		this.app.all(/\/api\/*/, (request, response, next) => {
 			// -- If userid not found in session stop execution of this route
 			if (!request.session.userid) {
+				response.statusCode = 401;
 				response.send({ success: false });
 				return;
 			}
