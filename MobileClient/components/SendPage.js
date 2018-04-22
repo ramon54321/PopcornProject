@@ -3,6 +3,7 @@ import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import Tabs from "./Tabs";
 import Main from "./Main";
 import { StackNavigator } from "react-navigation";
+import { getTransactionByCode } from "../api";
 
 export default class SendPage extends Component {
   constructor(props) {
@@ -41,14 +42,28 @@ export default class SendPage extends Component {
       {
         values: currentValues
       },
-      () => {
+      async () => {
         if (index !== 3) {
           this.inputs[index + 1].focus();
         } else {
           this.inputs[index].blur();
-          this.setState({
-            text: "Send 5$ to HannuBoy "
-          });
+          console.log(currentValues);
+          const code = currentValues.reduce((string, input) => {
+            return string + input;
+          }, "");
+          const response = await getTransactionByCode(code);
+          console.log(response);
+          if (response.request) {
+            this.setState({
+              text: `Send ${response.request.amount}$ to ${
+                response.request.userid
+              } `
+            });
+          } else {
+            this.setState({
+              text: `The code is wrong! `
+            });
+          }
         }
       }
     );
@@ -121,8 +136,8 @@ const styles = StyleSheet.create({
   input: {
     borderColor: "#000000",
     borderWidth: 1,
-    width: 60,
-    height: 60,
+    width: 70,
+    height: 70,
     padding: 10,
     margin: 5,
     borderRadius: 4,

@@ -102,7 +102,8 @@ async function getTransactionByCode(code) {
   });
 
   const response = await transactionsRequest.json();
-  console.log(response);
+
+  return response;
 }
 
 async function nickname(nickname) {
