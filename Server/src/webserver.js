@@ -66,11 +66,13 @@ export default class WebServer {
 					response.statusCode = 403
 					response.send({success: false})
 					return
-				// -- Create new user and return true
 				}
+				// -- Add new user to database
 				const user = [nickname, pass]
 				this.database.createPerson(user)
 				.then((res) => {
+					// -- Add to locally stored balance sheet
+					this.addUserToBalanceSheet(res[0].id)
 					response.send({success: true})
 				})
 			})
@@ -156,7 +158,14 @@ export default class WebServer {
 		this.app.get("/api/transaction/:code", (request, response) => {
 			const code = request.params.code
 			const req = Transactions.getRequest(code)
-			response.send({success: true, request: req})
+			// -- If request was found
+			if (req) {
+				response.send({success: true, request: req})
+				return
+			}
+			// -- If request was not found send 404 as response
+			response.statusCode = 404
+			response.send({success: false})
 		})
 
 		// Create a request to get specific amount of coins.
@@ -172,9 +181,17 @@ export default class WebServer {
 		this.app.post("/api/transaction/:code", (request, response) => {
 			const code = request.params.code
 			const userid = request.session.userid
-			this.confirmTransaction(code, userid)
-			console.log("[INFO][ROUTE] Transaction confirmed successfuly")
-			response.send({success: true})
+			const success = this.confirmTransaction(code, userid)
+			console.log(success)
+			// -- Check that transaction was confirmed successfully
+			if (success) {
+				console.log("[INFO][ROUTE] Transaction confirmed successfuly")
+				response.send({success: true})
+				return
+			}
+			// -- If transaction was not successful, send 400 as response
+			response.statusCode = 400
+			response.send({success: false})
 		})
 	}
 
@@ -247,18 +264,20 @@ export default class WebServer {
 		let successfullyAdded = this.blockchain.addBlock(block)
 		if (!successfullyAdded) {
 			console.log("Something failed")
-			// return false
+			return false
 		}
 
 		// -- Add block to database
+		console.log("[INFO][SERVER] Starting to add block to database")
 		this.database.createBlock([block.previousHash, block.data, block.nonce,
 		block.hash])
 		.then((resp) => {
+			console.log("[INFO][SERVER] Response got!")
 			// -- Update balance scheet
 			this.updateBalanceSheet(data.from, data.to, data.amount)
 			// -- Delete transaction request
 			Transactions.deleteRequest(code)
-			// return true
+			return true
 			console.log("[INFO][SERVER] Ending confirm transaction")
 		})
 	}
@@ -304,6 +323,13 @@ export default class WebServer {
 		if (to in balanceSheet) {
 			balanceSheet[to] = {amount: (balanceSheet[to].amount + amount)}
 		}
+	}
+	/**
+	* Adds new registered user to balance sheet
+	* @param {number} userid User's id
+	*/
+	addUserToBalanceSheet(userid) {
+		balanceSheet[userid] = {amount: 0}
 	}
 	/**
 	* Get user's balance by id

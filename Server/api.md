@@ -193,6 +193,7 @@ Checks that the code doesn't already exists in requests[].
     * [.confirmTransaction(code, userid)](#module_WebServer+confirmTransaction) ⇒ <code>boolean</code>
     * [.createBalanceSheet()](#module_WebServer+createBalanceSheet)
     * [.updateBalanceSheet(from, to, amount)](#module_WebServer+updateBalanceSheet)
+    * [.addUserToBalanceSheet(userid)](#module_WebServer+addUserToBalanceSheet)
     * [.getBalanceById(id)](#module_WebServer+getBalanceById) ⇒ <code>object</code>
     * [.initializeBlockchain()](#module_WebServer+initializeBlockchain)
 
@@ -252,6 +253,17 @@ Updates balance sheet
 | from | <code>object</code> | Sender |
 | to | <code>object</code> | Receiver |
 | amount | <code>object</code> |  |
+
+<a name="module_WebServer+addUserToBalanceSheet"></a>
+
+### webServer.addUserToBalanceSheet(userid)
+Adds new registered user to balance sheet
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| userid | <code>number</code> | User's id |
 
 <a name="module_WebServer+getBalanceById"></a>
 
