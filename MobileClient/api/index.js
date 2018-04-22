@@ -57,8 +57,9 @@ async function balance() {
     credentials: "include"
   });
 
-  const response = await balanceRequest.text();
-  console.log(response);
+  const response = await balanceRequest.json();
+  console.log(response.balance);
+  return response;
 }
 
 async function askTransaction(coins) {
@@ -69,8 +70,9 @@ async function askTransaction(coins) {
     credentials: "include"
   });
 
-  const response = await transactionRequest.text();
+  const response = await transactionRequest.json();
   console.log(response);
+  return response;
 }
 
 async function transactionsList() {

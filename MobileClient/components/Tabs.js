@@ -22,6 +22,8 @@ export default class Tabs extends Component {
     console.log(this.props);
     if (this.props.pages[i] == "Back") {
       navigation.goBack();
+    } else if (typeof this.props.pages[i] === "function") {
+      this.props.pages[i]();
     } else {
       navigation.navigate(this.props.pages[i]);
     }

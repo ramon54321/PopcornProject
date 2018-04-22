@@ -1,22 +1,24 @@
 import React, { Component } from "react";
 import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import Tabs from "./Tabs";
+import { askTransaction } from "../api";
 
 export default class AskPage extends Component {
   constructor(props) {
     super(props);
-
-    this.showAlert = this.showAlert.bind(this);
-    this.back = this.back.bind(this);
+    this.confirmAsk = this.confirmAsk.bind(this);
     this.state = {
+      coins: "",
       isHash: false,
-      hash: 2345
+      hash: ""
     };
   }
-  inputs = [];
 
-  showAlert() {
+  async confirmAsk() {
+    const hash = await askTransaction(this.state.coins);
+    console.log(hash.requestCode);
     this.setState({
+      hash: hash.requestCode,
       isHash: true
     });
   }
@@ -57,7 +59,7 @@ export default class AskPage extends Component {
             <View style={styles.inputContainer}>
               <TextInput
                 editable={true}
-                ref={ref => this.inputs.push(ref)}
+                onChange={coins => this.setState({ coins })}
                 maxLength={6}
                 style={styles.input}
               />
@@ -68,7 +70,7 @@ export default class AskPage extends Component {
 
         <Tabs
           names={["Back", "Ask"]}
-          pages={["Back", "Back"]}
+          pages={["Back", this.confirmAsk]}
           navigation={this.props.navigation}
         />
       </View>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { AsyncStorage } from "react-native";
 import { connect } from "react-redux";
 import actions from "../redux/actions";
-import { login } from "../api";
+import { login, balance } from "../api";
 
 import {
   Text,
@@ -27,6 +27,15 @@ const mapDispatchToProps = dispatch => {
       };
 
       dispatch(action);
+    },
+    saveUserBalance: balance => {
+      const action = {
+        type: actions.SAVE_BALANCE,
+        payload: {
+          balance
+        }
+      };
+      dispatch(action);
     }
   };
 };
@@ -40,6 +49,17 @@ class LoginPage extends Component {
     };
   }
 
+  getBalance = async () => {
+    const response = await balance();
+    console.log(response);
+    if (response.balance) {
+      const balance = response.balance;
+    } else {
+      const balance = 0;
+    }
+    this.props.saveUserBalance(balance);
+  };
+
   onPressLogin = async () => {
     const { nickname, password } = this.state;
     if (nickname === "" || password === "") return;
@@ -47,6 +67,7 @@ class LoginPage extends Component {
     const response = await login(nickname, password);
     if (response) {
       await AsyncStorage.setItem("nickname", nickname);
+      this.getBalance();
       this.props.saveUserData(nickname);
       this.props.navigation.navigate("SignedIn");
     }
@@ -75,6 +96,8 @@ class LoginPage extends Component {
           <TextInput
             placeholder={"Password"}
             editable={true}
+            autoCorrect={false}
+            autoCapitalize="none"
             maxLength={40}
             onChangeText={password => this.setState({ password })}
             style={styles.input}

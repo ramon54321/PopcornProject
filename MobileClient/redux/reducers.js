@@ -1,7 +1,8 @@
 import actions from "./actions";
 
 const initialState = {
-  user: null
+  user: null,
+  balance: 0
 };
 
 function popcornProject(state, action) {
@@ -15,6 +16,12 @@ function popcornProject(state, action) {
       return {
         ...state,
         user: action.payload
+      };
+      break;
+    case actions.SAVE_BALANCE:
+      return {
+        ...state,
+        balance: action.SAVE_BALANCE
       };
       break;
     default:

@@ -4,21 +4,33 @@ import { connect } from "react-redux";
 import Tabs from "./Tabs";
 
 class Main extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      balance: ""
+    };
+  }
+
+  static navigationOptions = ({ navigation }) => ({
+    headerLeft: (
+      <Text
+        onPress={async () => {
+          await AsyncStorage.removeItem("nickname");
+          navigation.navigate("SignedOut");
+        }}
+        style={styles.headerLeftText}
+      >
+        Logout
+      </Text>
+    )
+  });
   render() {
     console.log(this.props);
     return (
       <View style={styles.mainView}>
         <View style={styles.view1}>
-          <Text style={styles.text}>27 $</Text>
-          <Text
-            style={styles.text}
-            onPress={async () => {
-              await AsyncStorage.removeItem("nickname");
-              this.props.navigation.navigate("SignedOut");
-            }}
-          >
-            Logout
-          </Text>
+          <Text style={styles.text}>{`${this.props.balance} $`}</Text>
         </View>
 
         <Tabs
@@ -32,7 +44,8 @@ class Main extends Component {
 }
 
 const mapStateToProps = store => ({
-  user: store.user
+  user: store.user,
+  balance: store.balance
 });
 
 export default connect(mapStateToProps)(Main);
@@ -53,5 +66,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center"
+  },
+  headerLeftText: {
+    marginLeft: 10
   }
 });
