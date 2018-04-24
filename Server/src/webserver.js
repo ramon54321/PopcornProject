@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser"
 import bodyParser from "body-parser"
 import session from "express-session"
 import * as Transactions from "./transactions"
-import * as _ from "lodash"
+import popLog from "./logger.js"
 
 let balanceSheet = {}
 
@@ -33,7 +33,7 @@ export default class WebServer {
 		this.startListening()
 	}
 	startListening() {
-		console.log("[INFO][SERVER] Listening now")
+		popLog("info", "[SERVER] Listening now")
 		this.app.listen(this.port)
 	}
 	setupRoutes() {
@@ -199,17 +199,19 @@ export default class WebServer {
 		this.app.post("/api/transaction/:code", (request, response) => {
 			const code = request.params.code
 			const userid = request.session.userid
-			const success = this.confirmTransaction(code, userid)
-			console.log(success)
-			// -- Check that transaction was confirmed successfully
-			if (success) {
-				console.log("[INFO][ROUTE] Transaction confirmed successfuly")
-				response.send({success: true})
-				return
-			}
-			// -- If transaction was not successful, send 400 as response
-			response.statusCode = 400
-			response.send({success: false})
+			this.confirmTransaction(code, userid, (success) => {
+				// -- Check that transaction was confirmed successfully
+				if (success) {
+					popLog("info", "[ROUTE] Transaction confirmed successfully")
+					response.send({success: true})
+					// return
+				} else {
+					// -- If transaction was not successful, send 400 as response
+					popLog("warning", "[ROUTE] Transaction not confirmed")
+					response.statusCode = 400
+					response.send({success: false})
+				}
+			})
 		})
 	}
 
@@ -254,19 +256,22 @@ export default class WebServer {
 	 * @param {string} code The code received when creating the transaction
 	 * request.
 	 * @param {number} userid User's id
-	 * @return {boolean} True if the transaction was added to the blockchain
+	 * @param {function} routeCallback The function to call after the promise
+	 * resolves.
+	 * OLD BEHAVIOUR: True if the transaction was added to the blockchain
 	 * pool. False if there was an error in adding the request, commonly caused
 	 * by the request with the given code not being present in the transaction
 	 * requests array. Ensure the code was first created with
 	 * 'createTransactionRequest'. The request code will only be deleted if the
 	 * returned value is true.
 	 */
-	confirmTransaction(code, userid) {
+	confirmTransaction(code, userid, routeCallback) {
 		// -- Get transaction request with the given code - else return false
-		console.log("[INFO][SERVER] Starting to confirm transaction")
+		popLog("info", "[SERVER] Starting to confirm transaction")
 		let request = Transactions.getRequest(code)
 		if (!request) {
-			return false
+			routeCallback(false)
+			return
 		}
 
 		// -- Create transaction data
@@ -281,22 +286,27 @@ export default class WebServer {
 			this.blockchain.getLength() - 1)
 		let successfullyAdded = this.blockchain.addBlock(block)
 		if (!successfullyAdded) {
-			console.log("Something failed")
-			return false
+			routeCallback(false)
+			return
 		}
 
 		// -- Add block to database
-		console.log("[INFO][SERVER] Starting to add block to database")
+		popLog("info", "[SERVER] Starting to add block to database")
 		this.database.createBlock([block.previousHash, block.data, block.nonce,
 		block.hash])
 		.then((resp) => {
-			console.log("[INFO][SERVER] Response got!")
+			popLog("info", "[SERVER] Block added to database")
 			// -- Update balance scheet
 			this.updateBalanceSheet(data.from, data.to, data.amount)
 			// -- Delete transaction request
 			Transactions.deleteRequest(code)
-			return true
-			console.log("[INFO][SERVER] Ending confirm transaction")
+			popLog("info", "[SERVER] Ending confirm transaction")
+			routeCallback(true)
+			return
+		})
+		.catch(() => {
+			routeCallback(false)
+			return
 		})
 	}
 
@@ -304,7 +314,7 @@ export default class WebServer {
 	* Creates balance sheet
 	*/
 	createBalanceSheet() {
-		console.log("[INFO][SERVER] Creating balance scheet")
+		popLog("info", "[SERVER] Creating balance sheet")
 		// -- Set every persons balance to 0
 		this.database.getPersonAll()
 		.then((resp) => {

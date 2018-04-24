@@ -3,6 +3,7 @@
  */
 
 import * as Crypto from "crypto"
+import popLog from "./logger.js"
 
 export default class Blockchain {
   constructor() {
@@ -15,7 +16,7 @@ export default class Blockchain {
   * @param {object} blocks All block's
   */
   loadBlockchain(blocks) {
-      console.log("[INFO][BLOCKCHAIN] Initializing blockchain")
+      popLog("info", "[BLOCKCHAIN] Initializing blockchain")
       for (let i = 0; blocks[i] != null; i++) {
           // Assigning to different variable because database has different name
           blocks[i].previousHash = blocks[i].previous_hash
@@ -73,7 +74,7 @@ export default class Blockchain {
     // -- If blockchain is NOT empty AND previousHash is not correct
     if (this.blockchain.length > 0 &&
     block.previousHash !== this.blockchain[this.blockchain.length-1].hash) {
-        console.log("[INFO][BLOCKCHAIN] Previous hash was not correct")
+        popLog("warning", "[BLOCKCHAIN] Previous hash was not correct")
         return false
     }
 

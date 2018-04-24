@@ -24,9 +24,9 @@ var _transactions = require("./transactions");
 
 var Transactions = _interopRequireWildcard(_transactions);
 
-var _lodash = require("lodash");
+var _logger = require("./logger.js");
 
-var _ = _interopRequireWildcard(_lodash);
+var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -60,7 +60,7 @@ class WebServer {
 		this.startListening();
 	}
 	startListening() {
-		console.log("[INFO][SERVER] Listening now");
+		(0, _logger2.default)("info", "[SERVER] Listening now");
 		this.app.listen(this.port);
 	}
 	setupRoutes() {
@@ -221,17 +221,19 @@ class WebServer {
 		this.app.post("/api/transaction/:code", (request, response) => {
 			const code = request.params.code;
 			const userid = request.session.userid;
-			const success = this.confirmTransaction(code, userid);
-			console.log(success);
-			// -- Check that transaction was confirmed successfully
-			if (success) {
-				console.log("[INFO][ROUTE] Transaction confirmed successfuly");
-				response.send({ success: true });
-				return;
-			}
-			// -- If transaction was not successful, send 400 as response
-			response.statusCode = 400;
-			response.send({ success: false });
+			this.confirmTransaction(code, userid, success => {
+				// -- Check that transaction was confirmed successfully
+				if (success) {
+					(0, _logger2.default)("info", "[ROUTE] Transaction confirmed successfully");
+					response.send({ success: true });
+					// return
+				} else {
+					// -- If transaction was not successful, send 400 as response
+					(0, _logger2.default)("warning", "[ROUTE] Transaction not confirmed");
+					response.statusCode = 400;
+					response.send({ success: false });
+				}
+			});
 		});
 	}
 
@@ -276,19 +278,22 @@ class WebServer {
   * @param {string} code The code received when creating the transaction
   * request.
   * @param {number} userid User's id
-  * @return {boolean} True if the transaction was added to the blockchain
+  * @param {function} routeCallback The function to call after the promise
+  * resolves.
+  * OLD BEHAVIOUR: True if the transaction was added to the blockchain
   * pool. False if there was an error in adding the request, commonly caused
   * by the request with the given code not being present in the transaction
   * requests array. Ensure the code was first created with
   * 'createTransactionRequest'. The request code will only be deleted if the
   * returned value is true.
   */
-	confirmTransaction(code, userid) {
+	confirmTransaction(code, userid, routeCallback) {
 		// -- Get transaction request with the given code - else return false
-		console.log("[INFO][SERVER] Starting to confirm transaction");
+		(0, _logger2.default)("info", "[SERVER] Starting to confirm transaction");
 		let request = Transactions.getRequest(code);
 		if (!request) {
-			return false;
+			routeCallback(false);
+			return;
 		}
 
 		// -- Create transaction data
@@ -301,20 +306,24 @@ class WebServer {
 		};let block = this.blockchain.createBlock(data, this.blockchain.getLength() - 1);
 		let successfullyAdded = this.blockchain.addBlock(block);
 		if (!successfullyAdded) {
-			console.log("Something failed");
-			return false;
+			routeCallback(false);
+			return;
 		}
 
 		// -- Add block to database
-		console.log("[INFO][SERVER] Starting to add block to database");
+		(0, _logger2.default)("info", "[SERVER] Starting to add block to database");
 		this.database.createBlock([block.previousHash, block.data, block.nonce, block.hash]).then(resp => {
-			console.log("[INFO][SERVER] Response got!");
+			(0, _logger2.default)("info", "[SERVER] Block added to database");
 			// -- Update balance scheet
 			this.updateBalanceSheet(data.from, data.to, data.amount);
 			// -- Delete transaction request
 			Transactions.deleteRequest(code);
-			return true;
-			console.log("[INFO][SERVER] Ending confirm transaction");
+			(0, _logger2.default)("info", "[SERVER] Ending confirm transaction");
+			routeCallback(true);
+			return;
+		}).catch(() => {
+			routeCallback(false);
+			return;
 		});
 	}
 
@@ -322,7 +331,7 @@ class WebServer {
  * Creates balance sheet
  */
 	createBalanceSheet() {
-		console.log("[INFO][SERVER] Creating balance scheet");
+		(0, _logger2.default)("info", "[SERVER] Creating balance sheet");
 		// -- Set every persons balance to 0
 		this.database.getPersonAll().then(resp => {
 			for (let i = 0; resp[i] != null; i++) {

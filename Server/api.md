@@ -5,6 +5,8 @@
 <dd></dd>
 <dt><a href="#module_Database">Database</a></dt>
 <dd></dd>
+<dt><a href="#module_Logger">Logger</a></dt>
+<dd></dd>
 <dt><a href="#module_Transactions">Transactions</a></dt>
 <dd></dd>
 <dt><a href="#module_WebServer">WebServer</a></dt>
@@ -101,6 +103,19 @@ Hashes the data with the set blockchain public key.
 <a name="module_Database"></a>
 
 ## Database
+<a name="module_Logger"></a>
+
+## Logger
+<a name="exp_module_Logger--module.exports"></a>
+
+### module.exports(level, message) ⏏
+**Kind**: Exported function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| level | <code>string</code> | log level. |
+| message | <code>string</code> | message to log. |
+
 <a name="module_Transactions"></a>
 
 ## Transactions
@@ -190,7 +205,7 @@ Checks that the code doesn't already exists in requests[].
 * [WebServer](#module_WebServer)
     * [.linkSessionWithUser(request, userid)](#module_WebServer+linkSessionWithUser)
     * [.createTransactionRequest(userid, amount)](#module_WebServer+createTransactionRequest) ⇒ <code>string</code>
-    * [.confirmTransaction(code, userid)](#module_WebServer+confirmTransaction) ⇒ <code>boolean</code>
+    * [.confirmTransaction(code, userid, routeCallback)](#module_WebServer+confirmTransaction)
     * [.createBalanceSheet()](#module_WebServer+createBalanceSheet)
     * [.updateBalanceSheet(from, to, amount)](#module_WebServer+updateBalanceSheet)
     * [.addUserToBalanceSheet(userid)](#module_WebServer+addUserToBalanceSheet)
@@ -224,16 +239,16 @@ Creates a transaction request, which can be retrieved using the returnedcode. T
 
 <a name="module_WebServer+confirmTransaction"></a>
 
-### webServer.confirmTransaction(code, userid) ⇒ <code>boolean</code>
+### webServer.confirmTransaction(code, userid, routeCallback)
 Confirms the requested transaction by locking it into the blockchain. Thetransaction request is also deleted.
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
-**Returns**: <code>boolean</code> - True if the transaction was added to the blockchainpool. False if there was an error in adding the request, commonly causedby the request with the given code not being present in the transactionrequests array. Ensure the code was first created with'createTransactionRequest'. The request code will only be deleted if thereturned value is true.  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | code | <code>string</code> | The code received when creating the transaction request. |
 | userid | <code>number</code> | User's id |
+| routeCallback | <code>function</code> | The function to call after the promise resolves. OLD BEHAVIOUR: True if the transaction was added to the blockchain pool. False if there was an error in adding the request, commonly caused by the request with the given code not being present in the transaction requests array. Ensure the code was first created with 'createTransactionRequest'. The request code will only be deleted if the returned value is true. |
 
 <a name="module_WebServer+createBalanceSheet"></a>
 
