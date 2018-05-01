@@ -3,14 +3,17 @@ import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import Tabs from "./Tabs";
 import Main from "./Main";
 import { StackNavigator } from "react-navigation";
-import { getTransactionByCode } from "../api";
+import { getTransactionByCode, confirmTransaction } from "../api";
 
 export default class SendPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       values: [null, null, null, null],
-      text: ""
+      text: "",
+      user: "",
+      coins: "",
+      hash: ""
     };
 
     this.showAlert = this.showAlert.bind(this);
@@ -18,15 +21,33 @@ export default class SendPage extends Component {
   }
   inputs = [];
 
+  confirmRequest = async () => {
+    const response = await confirmTransaction(this.state.hash);
+    if (response.success) {
+      this.setState({
+        text: "You sent brownies!",
+        values: [null, null, null, null]
+      });
+    } else {
+      this.setState({
+        text: "Something went wrong!"
+      });
+    }
+  };
+
   showAlert() {
-    Alert.alert("Confirmation window", "Do you want send money?", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel"
-      },
-      { text: "OK", onPress: () => console.log("OK Pressed") }
-    ]);
+    Alert.alert(
+      "Confirmation window",
+      `Do you want send ${this.state.coins}$ to ${this.state.user}`,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: this.confirmRequest }
+      ]
+    );
   }
 
   back() {
@@ -57,7 +78,10 @@ export default class SendPage extends Component {
             this.setState({
               text: `Send ${response.request.amount}$ to ${
                 response.request.userid
-              } `
+              } `,
+              user: response.request.userid,
+              coins: response.request.amount,
+              hash: code
             });
           } else {
             this.setState({
@@ -80,6 +104,7 @@ export default class SendPage extends Component {
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 0)}
               style={styles.input}
+              value={this.state.values[0]}
             />
             <TextInput
               editable={true}
@@ -87,6 +112,7 @@ export default class SendPage extends Component {
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 1)}
               style={styles.input}
+              value={this.state.values[1]}
             />
             <TextInput
               editable={true}
@@ -94,6 +120,7 @@ export default class SendPage extends Component {
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 2)}
               style={styles.input}
+              value={this.state.values[2]}
             />
             <TextInput
               editable={true}
@@ -101,6 +128,7 @@ export default class SendPage extends Component {
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 3)}
               style={styles.input}
+              value={this.state.values[3]}
             />
           </View>
           <Text style={styles.text}>{this.state.text}</Text>
@@ -108,7 +136,7 @@ export default class SendPage extends Component {
 
         <Tabs
           names={["Back", "Confirm"]}
-          pages={["Back", "Back"]}
+          pages={["Back", this.showAlert]}
           navigation={this.props.navigation}
         />
       </View>

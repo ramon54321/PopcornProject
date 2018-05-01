@@ -51,7 +51,6 @@ class LoginPage extends Component {
 
   getBalance = async () => {
     const response = await balance();
-    console.log(response);
     if (response.balance) {
       const balance = response.balance;
     } else {

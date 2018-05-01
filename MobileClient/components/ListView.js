@@ -1,15 +1,31 @@
 import React, { Component } from "react";
-import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  Alert,
+  ListView
+} from "react-native";
 import Tabs from "./Tabs";
+import { transactionsList } from "../api";
+import { connect } from "react-redux";
 
-export default class SendPage extends Component {
-  constructor() {
-    super();
+class List extends Component {
+  constructor(props) {
+    super(props);
 
     this.showAlert = this.showAlert.bind(this);
     this.back = this.back.bind(this);
+    this.state = {
+      rows: ""
+    };
   }
   inputs = [];
+
+  componentWillMount() {
+    this.renderTransactions();
+  }
 
   showAlert() {
     Alert.alert("Confirmation window", "Do you want send money?", [
@@ -48,23 +64,54 @@ export default class SendPage extends Component {
     );
   };
 
+  renderTransactions = () => {
+    console.log(this.props.requests.requests);
+  };
+
+  formatDate = miliseconds => {
+    const date = new Date(miliseconds);
+    // const day = date.getDate();
+    // const month = date.getMonth() + 1;
+    // const year = date.getFullYear();
+
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${hours}:${minutes}`;
+  };
+
   render() {
+    const requests = this.props.requests.requests;
+    let smth = requests.map(row => (
+      <View key={row.creationDate} style={styles.row}>
+        <Text style={styles.text}>{`${row.amount} $`}</Text>
+        <Text style={styles.text}>{this.formatDate(row.creationDate)}</Text>
+      </View>
+    ));
+
+    console.log(smth);
     return (
       <View style={styles.mainView}>
         <View style={styles.view1}>
           <Text style={styles.header}>List of requests</Text>
-          <View style={styles.list}>
-            <View style={styles.row}>
-              <Text style={styles.text}>65$</Text>
-              <Text style={styles.text}>5:38</Text>
-            </View>
-          </View>
+          <View style={styles.list}>{smth}</View>
         </View>
-        <Tabs names={["Back"]} functions={[this.back]} />
+        <Tabs
+          names={["Back", "Ask"]}
+          pages={[this.back, "AskPage"]}
+          navigation={this.props.navigation}
+        />
       </View>
     );
   }
 }
+
+const mapStateToProps = store => ({
+  user: store.user,
+  balance: store.balance,
+  requests: store.requests
+});
+
+export default connect(mapStateToProps)(List);
 
 const styles = StyleSheet.create({
   text: {

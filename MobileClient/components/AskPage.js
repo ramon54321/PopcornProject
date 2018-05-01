@@ -6,7 +6,6 @@ import { askTransaction } from "../api";
 export default class AskPage extends Component {
   constructor(props) {
     super(props);
-    this.confirmAsk = this.confirmAsk.bind(this);
     this.state = {
       coins: "",
       isHash: false,
@@ -14,14 +13,15 @@ export default class AskPage extends Component {
     };
   }
 
-  async confirmAsk() {
+  confirmAsk = async () => {
+    console.log(this.state.coins);
     const hash = await askTransaction(this.state.coins);
     console.log(hash.requestCode);
     this.setState({
       hash: hash.requestCode,
       isHash: true
     });
-  }
+  };
 
   back() {
     console.log("back");
@@ -59,7 +59,7 @@ export default class AskPage extends Component {
             <View style={styles.inputContainer}>
               <TextInput
                 editable={true}
-                onChange={coins => this.setState({ coins })}
+                onChangeText={coins => this.setState({ coins })}
                 maxLength={6}
                 style={styles.input}
               />

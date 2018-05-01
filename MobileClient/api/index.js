@@ -88,6 +88,7 @@ async function transactionsList() {
 
   const response = await transactionsRequest.json();
   console.log(response);
+  return response;
 }
 
 async function getTransactionByCode(code) {
@@ -132,7 +133,9 @@ async function confirmTransaction(code) {
   });
 
   const response = await transactionsRequest.json();
+
   console.log(response);
+  return response;
 }
 
 export {

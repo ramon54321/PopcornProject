@@ -27,6 +27,9 @@ const SignedIn = StackNavigator({
   },
   SendPage: {
     screen: SendPage
+  },
+  AskList: {
+    screen: ListView
   }
 });
 

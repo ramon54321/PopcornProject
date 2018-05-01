@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import SendPage from "./SendPage";
 import AskPage from "./AskPage";
 import { StackNavigator } from "react-navigation";
+import { transactionsList } from "../api";
 
 export default class Tabs extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ export default class Tabs extends Component {
     this.renderTabs();
   }
 
-  navigate = i => () => {
+  navigate = i => async () => {
     const navigation = this.props.navigation;
     console.log(this.props);
     if (this.props.pages[i] == "Back") {
