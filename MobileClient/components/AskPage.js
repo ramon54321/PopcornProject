@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import Tabs from "./Tabs";
-import { askTransaction } from "../api";
+import { askTransaction, transactionsList } from "../api";
+import { connect } from "react-redux";
+import actions from "../redux/actions";
 
-export default class AskPage extends Component {
+class AskPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,6 +23,9 @@ export default class AskPage extends Component {
       hash: hash.requestCode,
       isHash: true
     });
+
+    const response = await transactionsList();
+    this.props.saveUserRequests(response.requests);
   };
 
   back() {
@@ -77,6 +82,26 @@ export default class AskPage extends Component {
     );
   }
 }
+const mapStateToProps = store => ({
+  user: store.user,
+  balance: store.balance,
+  requests: store.requests
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    saveUserRequests: requests => {
+      const action = {
+        type: actions.SAVE_REQUESTS,
+        payload: {
+          requests
+        }
+      };
+      dispatch(action);
+    }
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AskPage);
 
 const styles = StyleSheet.create({
   currency: {
