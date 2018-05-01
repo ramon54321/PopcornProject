@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  Alert,
-  ListView
-} from "react-native";
+import { Text, View, TextInput, StyleSheet, ListView } from "react-native";
 import Tabs from "./Tabs";
 import { transactionsList } from "../api";
 import { connect } from "react-redux";
@@ -17,56 +10,7 @@ class List extends Component {
 
     this.showAlert = this.showAlert.bind(this);
     this.back = this.back.bind(this);
-    this.state = {
-      rows: ""
-    };
   }
-  inputs = [];
-
-  componentWillMount() {
-    this.renderTransactions();
-  }
-
-  showAlert() {
-    Alert.alert("Confirmation window", "Do you want send money?", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel"
-      },
-      { text: "OK", onPress: () => console.log("OK Pressed") }
-    ]);
-  }
-
-  back() {
-    console.log("back");
-  }
-
-  handleTextInputChange = (value, index) => {
-    if (!value) return;
-    const currentValues = [...this.state.values];
-    currentValues[index] = value;
-
-    this.setState(
-      {
-        values: currentValues
-      },
-      () => {
-        if (index !== 3) {
-          this.inputs[index + 1].focus();
-        } else {
-          this.inputs[index].blur();
-          this.setState({
-            text: "Send 5$ to HannuBoy "
-          });
-        }
-      }
-    );
-  };
-
-  renderTransactions = () => {
-    console.log(this.props.requests.requests);
-  };
 
   formatDate = miliseconds => {
     const date = new Date(miliseconds);
@@ -81,23 +25,21 @@ class List extends Component {
 
   render() {
     const requests = this.props.requests.requests;
-    let smth = requests.map(row => (
+    let rows = requests.map(row => (
       <View key={row.creationDate} style={styles.row}>
         <Text style={styles.text}>{`${row.amount} $`}</Text>
         <Text style={styles.text}>{this.formatDate(row.creationDate)}</Text>
       </View>
     ));
-
-    console.log(smth);
     return (
       <View style={styles.mainView}>
         <View style={styles.view1}>
           <Text style={styles.header}>List of requests</Text>
-          <View style={styles.list}>{smth}</View>
+          <View style={styles.list}>{rows}</View>
         </View>
         <Tabs
           names={["Back", "Ask"]}
-          pages={[this.back, "AskPage"]}
+          pages={["Back", "AskPage"]}
           navigation={this.props.navigation}
         />
       </View>
@@ -106,8 +48,6 @@ class List extends Component {
 }
 
 const mapStateToProps = store => ({
-  user: store.user,
-  balance: store.balance,
   requests: store.requests
 });
 

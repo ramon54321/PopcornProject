@@ -28,32 +28,6 @@ class AskPage extends Component {
     this.props.saveUserRequests(response.requests);
   };
 
-  back() {
-    console.log("back");
-  }
-
-  handleTextInputChange = (value, index) => {
-    if (!value) return;
-    const currentValues = [...this.state.values];
-    currentValues[index] = value;
-
-    this.setState(
-      {
-        values: currentValues
-      },
-      () => {
-        if (index !== 3) {
-          this.inputs[index + 1].focus();
-        } else {
-          this.inputs[index].blur();
-          this.setState({
-            text: "Send 5$ to HannuBoy "
-          });
-        }
-      }
-    );
-  };
-
   render() {
     return (
       <View style={styles.mainView}>

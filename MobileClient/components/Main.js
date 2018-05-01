@@ -10,13 +10,11 @@ class Main extends Component {
     super(props);
 
     this.state = {
-      balance: "",
       askPage: ""
     };
   }
 
   componentDidMount() {
-    this.getBalance();
     this.getListOfTransactions();
     this._sub = this.props.navigation.addListener(
       "willFocus",
@@ -42,12 +40,6 @@ class Main extends Component {
     console.log(this.state.askPage);
   };
 
-  getBalance() {
-    this.setState({
-      balance: this.props.balance
-    });
-  }
-
   static navigationOptions = ({ navigation }) => ({
     headerLeft: (
       <Text
@@ -66,7 +58,7 @@ class Main extends Component {
     return (
       <View style={styles.mainView}>
         <View style={styles.view1}>
-          <Text style={styles.text}>{`${this.state.balance} $`}</Text>
+          <Text style={styles.text}>{`${this.props.balance} $`}</Text>
         </View>
 
         <Tabs

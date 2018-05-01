@@ -50,10 +50,6 @@ export default class SendPage extends Component {
     );
   }
 
-  back() {
-    console.log("back");
-  }
-
   handleTextInputChange = (value, index) => {
     if (!value) return;
     const currentValues = [...this.state.values];
