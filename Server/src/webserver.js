@@ -388,12 +388,18 @@ export default class WebServer {
 	 * the 'stock price' of the coin.
 	 * The value can be manipulated with a push value in the formula, which
 	 * encourages the movement of coins into or out of the bank.
+	 * Defaults to a nominal value of 5, with a centered lookup, resulting in
+	 * a constant 5 being returned if the required functions can not be found.
 	 * @return {number} The calculated value of the coin.
 	 */
 	getCalculatedValue() {
 		const nominalPrice = 5
-		const bankBalance = getBankBalance()
-		const circulationBalance = getCirculationBalance()
-		
+		const bankBalance = typeof getBankBalance !== "undefined"
+			? getBankBalance() : 10
+		const circulationBalance = typeof getCirculationBalance !== "undefined"
+			? getCirculationBalance() : 20
+		const pushFactor = 0 // -- Less than 0 -> Encourage flow TOWARDS bank
+		return nominalPrice / (Math.pow((bankBalance/circulationBalance)
+			+ 0.5 + pushFactor, 8))
 	}
 }
