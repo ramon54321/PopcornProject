@@ -193,4 +193,18 @@ export default class WebServer {
 
 		return true
 	}
+
+	/**
+	 * Gets the calculated value of a single coin. This can also be considered
+	 * the 'stock price' of the coin.
+	 * The value can be manipulated with a push value in the formula, which
+	 * encourages the movement of coins into or out of the bank.
+	 * @return {number} The calculated value of the coin.
+	 */
+	getCalculatedValue() {
+		const nominalPrice = 5
+		const bankBalance = getBankBalance()
+		const circulationBalance = getCirculationBalance()
+		
+	}
 }
