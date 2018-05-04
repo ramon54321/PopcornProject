@@ -27,14 +27,57 @@ export function createRequest(userid, amount) {
 }
 
 /**
+* Gets request by code.
+* @param {string} code Request's code.
+* @return {object} The request object.
+*/
+export function getRequest(code) {
+    for (let i = 0; i < requests.length; i++) {
+        if (requests[i].code === code) {
+            return requests[i]
+        }
+    }
+    return false
+}
+
+/**
+* Gets all request by user
+* @param {string} userid Userid
+* @return {object} List of requests
+*/
+export function getRequestsFromUser(userid) {
+    let list = []
+    for (let i = 0; i < requests.length; i++) {
+        if (requests[i].userid === userid) {
+            list.push(requests[i])
+        }
+    }
+    return list
+}
+
+/**
+* Deletes request by code
+* @param {string} code Request's code.
+* @return {object} The request object.
+*/
+export function deleteRequest(code) {
+    for (let i = 0; i < requests.length; i++) {
+        if (requests[i].code === code) {
+            requests.splice(i, 1)
+            return true
+        }
+    }
+    return false
+}
+
+/**
 * Generates a new code.
 * @return {object} The new code.
 */
 function generateCode() {
   const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  const codeLength = 5
+  const codeLength = 4
   let code = ""
-
   for (let i = 0; i < codeLength; i++) {
     code += characters.charAt(Math.floor(Math.random() * characters.length))
   }
@@ -48,7 +91,7 @@ function generateCode() {
 */
 function isUnique(code) {
   for (let i = 0; i < requests.length; i++) {
-    if (requests[i] === code) {
+    if (requests[i].code === code) {
       return false
     }
   }

@@ -1,1 +1,4 @@
 node_modules/
+MobileClient/node_modules/
+MobileClient/android/app/
+MobileClient/ios/build/

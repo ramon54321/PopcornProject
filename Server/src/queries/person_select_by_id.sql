@@ -1,1 +1,1 @@
-﻿SELECT * FROM person WHERE id = 4 LIMIT 1;
+﻿SELECT * FROM person WHERE id = $1 LIMIT 1;

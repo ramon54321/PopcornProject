@@ -4,10 +4,11 @@
 
 import {Client} from "pg"
 import {readFileSync} from "fs"
+import popLog from "./logger.js"
 
 export default class Database {
     constructor() {
-        console.log("[INFO] Loading environment variables where ENV_NAME = "
+        popLog("info", "Loading environment variables where ENV_NAME = "
         + process.env.ENV_NAME)
 
         this.client = new Client({
@@ -19,20 +20,20 @@ export default class Database {
     }
 
     async connect() {
-        console.log("[INFO][Database] Trying to connect to database")
+        popLog("info", "[Database] Trying to connect to database")
         await this.client.connect()
-        console.log("[INFO][Database] Successfully connected to database")
+        popLog("info", "[Database] Successfully connected to database")
     }
 
-    async runQuery(filename) {
-        const query = readFileSync(filename, {encoding: "UTF8"}).substring(1)
-        const res = await this.client.query(query)
+    async runQuery(filename, params = "") {
+        const query = readFileSync(filename, {encoding: "UTF8"}).trim()
+        const res = await this.client.query(query, params)
 		return res.rows
     }
 
     // -- Admin
     init() {
-        console.log("[ADMIN][Database] Initializing database")
+        popLog("info", "[Database] Initializing database")
         this.runQuery("./src/queries/init.sql")
     }
 
@@ -40,19 +41,23 @@ export default class Database {
     getPersonAll() {
         return this.runQuery("./src/queries/person_select_all.sql")
     }
-    getPersonById(id) {
-        return this.runQuery("./src/queries/person_select_by_id.sql")
+    getPersonById(params) {
+        return this.runQuery("./src/queries/person_select_by_id.sql",
+        params)
     }
-    getPersonByNickname(nickname) {
-        return this.runQuery("./src/queries/person_select_by_nickname.sql")
+    getPersonByNickname(params) {
+        return this.runQuery("./src/queries/person_select_by_nickname.sql",
+        params)
     }
-    createPerson(nickname, password) {
-        // return this.runQuery("./src/queries/person_select_all.sql")
+    createPerson(params) {
+        return this.runQuery("./src/queries/person_create.sql", params)
     }
 
     // -- Blockchain table
-    getBlockById(id) {}
-    getBlockByHash(hash) {}
-    getBlocksAll() {}
-    createBlock(previousHash, data, nonce, hash) {} // MAKE SURE PREHASH MATCHES
+    getBlockAll() {
+        return this.runQuery("./src/queries/block_select_all.sql")
+    }
+    createBlock(params) { // MAKE SURE PREHASH MATCHES
+        return this.runQuery("./src/queries/block_create.sql", params)
+    }
 }

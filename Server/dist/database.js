@@ -8,13 +8,15 @@ var _pg = require("pg");
 
 var _fs = require("fs");
 
-/**
- * @module Database
- */
+var _logger = require("./logger.js");
+
+var _logger2 = _interopRequireDefault(_logger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class Database {
     constructor() {
-        console.log("[INFO] Loading environment variables where ENV_NAME = " + process.env.ENV_NAME);
+        (0, _logger2.default)("info", "Loading environment variables where ENV_NAME = " + process.env.ENV_NAME);
 
         this.client = new _pg.Client({
             connectionString: process.env.DATABASE_URL,
@@ -25,33 +27,46 @@ class Database {
     }
 
     async connect() {
-        console.log("[INFO][Database] Trying to connect to database");
+        (0, _logger2.default)("info", "[Database] Trying to connect to database");
         await this.client.connect();
-        console.log("[INFO][Database] Successfully connected to database");
+        (0, _logger2.default)("info", "[Database] Successfully connected to database");
+    }
+
+    async runQuery(filename, params = "") {
+        const query = (0, _fs.readFileSync)(filename, { encoding: "UTF8" }).trim();
+        const res = await this.client.query(query, params);
+        return res.rows;
     }
 
     // -- Admin
     init() {
-        console.log("[ADMIN][Database] Initializing database");
+        (0, _logger2.default)("info", "[Database] Initializing database");
         this.runQuery("./src/queries/init.sql");
-        // this.runQuery("./src/queries/person_select_all.sql")
     }
 
-    async runQuery(filename) {
-        const query = (0, _fs.readFileSync)(filename, { encoding: "UTF8" }).substring(1);
-        const res = await this.client.query(query);
-        return res.rows;
+    // -- Person table
+    getPersonAll() {
+        return this.runQuery("./src/queries/person_select_all.sql");
     }
-
-    // -- User table
-    getUserById(id) {}
-    getUserByNickname(nickname) {}
-    createUser(nickname, password) {}
+    getPersonById(params) {
+        return this.runQuery("./src/queries/person_select_by_id.sql", params);
+    }
+    getPersonByNickname(params) {
+        return this.runQuery("./src/queries/person_select_by_nickname.sql", params);
+    }
+    createPerson(params) {
+        return this.runQuery("./src/queries/person_create.sql", params);
+    }
 
     // -- Blockchain table
-    getBlockById(id) {}
-    getBlockByHash(hash) {}
-    getBlocksAll() {}
-    createBlock(previousHash, data, nonce, hash) {} // MAKE SURE PREHASH MATCHES
+    getBlockAll() {
+        return this.runQuery("./src/queries/block_select_all.sql");
+    }
+    createBlock(params) {
+        // MAKE SURE PREHASH MATCHES
+        return this.runQuery("./src/queries/block_create.sql", params);
+    }
 }
-exports.default = Database;
+exports.default = Database; /**
+                             * @module Database
+                             */

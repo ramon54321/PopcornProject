@@ -7,21 +7,17 @@ import cookieParser from "cookie-parser"
 import bodyParser from "body-parser"
 import session from "express-session"
 import * as Transactions from "./transactions"
-import * as _ from "lodash"
+import popLog from "./logger.js"
 
-
-const users = [
-	{userid: 0, nickname: "Bobby", password: "bobby123"},
-	{userid: 1, nickname: "Andy", password: "andy123"},
-	{userid: 2, nickname: "Jane", password: "jane123"},
-]
-
+let balanceSheet = {}
 
 export default class WebServer {
 	constructor(blockchain, database) {
 		this.blockchain = blockchain
 		this.database = database
 		this.sessions = {}
+		this.createBalanceSheet()
+		this.initializeBlockchain()
 
 		this.app = express()
 		this.app.use(cookieParser())
@@ -37,88 +33,186 @@ export default class WebServer {
 		this.startListening()
 	}
 	startListening() {
+		popLog("info", "[SERVER] Listening now")
 		this.app.listen(this.port)
 	}
 	setupRoutes() {
+		// API description
 		this.app.get("/api/", (request, response) => {
 			response.send("API - Description")
 		})
+
+		// Initialize database
 		this.app.post("/api/admin/initdatabase", (request, response, next) => {
 			this.database.init()
-			response.send(true)
+			response.send({success: true})
 		})
-		this.app.post("/api/login", (request, response, next) => {
-			const user = _.find(users, (user) => {
-				return user.nickname == request.body.nickname
-			})
 
-			// -- If the password or username was wrong
-			if (!user) {
-				response.send(false)
-
-				// -- Stop execution of this route
+		// Register new user
+		this.app.post("/api/register", (request, response) => {
+			const nickname = request.body.nickname
+			const pass = request.body.pass
+			// -- Check that nickname or password field wasn't empty
+			if (nickname.length == 0 || pass.length == 0) {
+				response.statusCode = 400
+				response.send({success: false})
 				return
 			}
-			console.log("Linking session.")
-
-			// -- Link session with user
-			this.linkSessionWithUser(request, user.userid)
-			response.send(true)
+			// -- Query by nickname to check if it exists already
+			this.database.getPersonByNickname([nickname])
+			.then((resp) => {
+				// -- If nickname existed return false
+				if (resp.length > 0) {
+					response.statusCode = 403
+					response.send({success: false})
+					return
+				}
+				// -- Add new user to database
+				const user = [nickname, pass]
+				this.database.createPerson(user)
+				.then((res) => {
+					// -- Add to locally stored balance sheet
+					this.addUserToBalanceSheet(res[0].id)
+					response.send({success: true})
+				})
+			})
 		})
+
+		// Login user
+		this.app.post("/api/login", (request, response, next) => {
+			const nickname = request.body.nickname
+			const pass = request.body.pass
+			// -- Check that nickname or password field wasn't empty
+			if (nickname.length == 0 || pass.length == 0) {
+				response.statusCode = 400
+				response.send({success: false})
+				return
+			}
+			this.database.getPersonByNickname([nickname])
+			.then((resp) => {
+				// -- Check that database query by nickname result is not empty
+				if (resp.length > 0) {
+					// -- Check if the nickname and password is correct
+					if (nickname === resp[0].nickname && pass === resp[0].pass) {
+						// -- Link session with user
+						this.linkSessionWithUser(request, resp[0].id)
+						response.send({success: true})
+						return
+					}
+				}
+				// -- If the nickname or password was wrong
+				response.statusCode = 400
+				response.send({success: false})
+			})
+		})
+
+		// Logut user
+		// Deletes userid from session
 		this.app.post("/api/logout", (request, response, next) => {
 			delete request.session.userid
-			response.send(true)
+			response.send({success: true})
 		})
-		this.app.all(/\/api\/*/, (request, response, next) => {
-			const user = _.find(users, (user) => {
-				return user.userid == request.session.userid
+
+		// Get user by id
+		this.app.get("/api/userid/:id", (request, response) => {
+			// -- Query database by id
+			this.database.getPersonById([request.params.id])
+			.then((resp) => {
+				// -- Check that response is not empty and send it
+				if (resp.length > 0) {
+					const user = {id: resp[0].id, nickname: resp[0].nickname}
+					response.send({success: true, user: user})
+					return
+				}
+				// -- Else send response with status code 404
+				response.statusCode = 404
+				response.send({success: false})
 			})
+		})
 
-			if (!user) {
-				response.send(false)
+		// Get user by nickname
+		this.app.get("/api/nickname/:nickname", (request, response) => {
+			// -- Query database by nickname
+			this.database.getPersonByNickname([request.params.nickname])
+			.then((resp) => {
+				// -- Check that response is not empty and send it
+				if (resp.length > 0) {
+					const user = {id: resp[0].id, nickname: resp[0].nickname}
+					response.send({success: true, user: user})
+					return
+				}
+				// -- Else send response with status code 404
+				response.statusCode = 404
+				response.send({success: false})
+			})
+		})
 
-				// -- Stop execution of this route
+		// Secure route (every route below this)
+		this.app.all(/\/api\/*/, (request, response, next) => {
+			// -- If userid not found in session stop execution of this route
+			if (!request.session.userid) {
+				response.statusCode = 401
+				response.send({success: false})
 				return
 			}
-
-			console.log("Thanks for viewing the secret page " + user.nickname + "!")
+			// -- Userid found in session so continue to secure page
 			next()
 		})
 
-		/* User creates a request to get specific amount of coins.
-		   User gets the uniq code when the request is done
-		*/
-		this.app.post("/api/transaction/receive", (request, response) => {
-			// params: 1.senderId, amountOfcoins
-			// get: code
-		})
-
-		// User typed the code to get the information of the request
-		this.app.get("/api/transaction/send", (request, response) => {
-			// params: code
-			// get: 1.receiverId 2. amountOfCoins
-		})
-
-		/* User confirm the request to send specific
-		   amount of coinc to a specific person
-		*/
-		this.app.post("/api/transaction/confirm", (request, response) => {
-			// params: 1:senderId 2. receiverId, 3. code
-		})
-
-		// Get a balance of the current user
+		// Get balance of user
 		this.app.get("/api/balance", (request, response) => {
-			// params: 1.userId
-			// get: 1.userBalance
-
-			console.log("The balance is " + 23523523562)
-
-			response.send("Hello the balance is " + 23626262)
+			const balance = this.getBalanceById(request.session.userid)
+			response.send({success: true, balance: balance})
 		})
-	}
-	startListening() {
-		console.log("Listening now")
-		this.app.listen(this.port)
+
+		// Get all transaction requests made by user
+		this.app.get("/api/transaction", (request, response) => {
+			const userid = request.session.userid
+			const reqs = Transactions.getRequestsFromUser(userid)
+			response.send({success: true, requests: reqs})
+		})
+
+		// Get transaction request by code
+		this.app.get("/api/transaction/:code", (request, response) => {
+			const code = request.params.code
+			const req = Transactions.getRequest(code)
+			// -- If request was found
+			if (req) {
+				response.send({success: true, request: req})
+				return
+			}
+			// -- If request was not found send 404 as response
+			response.statusCode = 404
+			response.send({success: false})
+		})
+
+		// Create a request to get specific amount of coins.
+		// Get the uniq code when the request is done
+		this.app.post("/api/transactionrequest/:amount", (request, response) => {
+			const userid = request.session.userid
+			const amount = parseInt(request.params.amount)
+			const requestCode = this.createTransactionRequest(userid, amount)
+			response.send({success: true, requestCode: requestCode})
+		})
+
+		// Confirm transaction (send the coins)
+		this.app.post("/api/transaction/:code", (request, response) => {
+			const code = request.params.code
+			const userid = request.session.userid
+			this.confirmTransaction(code, userid, (success) => {
+				// -- Check that transaction was confirmed successfully
+				if (success) {
+					popLog("info", "[ROUTE] Transaction confirmed successfully")
+					response.send({success: true})
+					// return
+				} else {
+					// -- If transaction was not successful, send 400 as response
+					popLog("warning", "[ROUTE] Transaction not confirmed")
+					response.statusCode = 400
+					response.send({success: false})
+				}
+			})
+		})
 	}
 
 	// -- Route functions
@@ -161,23 +255,30 @@ export default class WebServer {
 	 * transaction request is also deleted.
 	 * @param {string} code The code received when creating the transaction
 	 * request.
-	 * @return {boolean} True if the transaction was added to the blockchain
+	 * @param {number} userid User's id
+	 * @param {function} routeCallback The function to call after the promise
+	 * resolves.
+	 * OLD BEHAVIOUR: True if the transaction was added to the blockchain
 	 * pool. False if there was an error in adding the request, commonly caused
 	 * by the request with the given code not being present in the transaction
 	 * requests array. Ensure the code was first created with
 	 * 'createTransactionRequest'. The request code will only be deleted if the
 	 * returned value is true.
 	 */
-	confirmTransaction(code) {
+	confirmTransaction(code, userid, routeCallback) {
 		// -- Get transaction request with the given code - else return false
+		popLog("info", "[SERVER] Starting to confirm transaction")
 		let request = Transactions.getRequest(code)
 		if (!request) {
-			return false
+			routeCallback(false)
+			return
 		}
 
 		// -- Create transaction data
 		let data = {
-			// some transaction data here
+			"from": userid,
+			"to": request.userid,
+			"amount": request.amount,
 		}
 
 		// -- Create and add block to blockchain
@@ -185,13 +286,101 @@ export default class WebServer {
 			this.blockchain.getLength() - 1)
 		let successfullyAdded = this.blockchain.addBlock(block)
 		if (!successfullyAdded) {
-			return false
+			routeCallback(false)
+			return
 		}
 
-		// -- Delete transaction request
-		Transactions.deleteRequest(code)
+		// -- Add block to database
+		popLog("info", "[SERVER] Starting to add block to database")
+		this.database.createBlock([block.previousHash, block.data, block.nonce,
+		block.hash])
+		.then((resp) => {
+			popLog("info", "[SERVER] Block added to database")
+			// -- Update balance scheet
+			this.updateBalanceSheet(data.from, data.to, data.amount)
+			// -- Delete transaction request
+			Transactions.deleteRequest(code)
+			popLog("info", "[SERVER] Ending confirm transaction")
+			routeCallback(true)
+			return
+		})
+		.catch(() => {
+			routeCallback(false)
+			return
+		})
+	}
 
-		return true
+	/**
+	* Creates balance sheet
+	*/
+	createBalanceSheet() {
+		popLog("info", "[SERVER] Creating balance sheet")
+		// -- Set every persons balance to 0
+		this.database.getPersonAll()
+		.then((resp) => {
+			for (let i = 0; resp[i] != null; i++) {
+				if (resp[i].id != null) {
+					const userid = resp[i].id
+					balanceSheet[userid] = {amount: 0}
+				}
+			}
+			// -- Go through every block's transaction and update balances accordingly
+			this.database.getBlockAll()
+			.then((resp) => {
+				for (let i = 0; resp[i] != null; i++ ) {
+					const from = resp[i].body.from
+					const to = resp[i].body.to
+					const amount = resp[i].body.amount
+					this.updateBalanceSheet(from, to, amount)
+				}
+			})
+		})
+	}
+	/**
+	* Updates balance sheet
+	* @param {object} from Sender
+	* @param {object} to Receiver
+	* @param {object} amount
+	*/
+	updateBalanceSheet(from, to, amount) {
+		// -- Update sender's balance
+		if (from in balanceSheet) {
+			balanceSheet[from] = {amount: (balanceSheet[from].amount - amount)}
+		}
+		// -- Update receiver's balanceSheet
+		if (to in balanceSheet) {
+			balanceSheet[to] = {amount: (balanceSheet[to].amount + amount)}
+		}
+	}
+	/**
+	* Adds new registered user to balance sheet
+	* @param {number} userid User's id
+	*/
+	addUserToBalanceSheet(userid) {
+		balanceSheet[userid] = {amount: 0}
+	}
+	/**
+	* Get user's balance by id
+	* @param {object} id User's id
+	* @return {object} User's balance
+	*/
+	getBalanceById(id) {
+		if (id in balanceSheet) {
+			return balanceSheet[id].amount
+		}
+		return false
+	}
+
+	/**
+	* Initializes the blockchain in servers memory by fetching all the blocks
+	* from database and passing them to loadBlockChain function, which adds
+	* them to blockchain array.
+	*/
+	initializeBlockchain() {
+		this.database.getBlockAll()
+		.then((resp) => {
+			this.blockchain.loadBlockchain(resp)
+		})
 	}
 
 	/**

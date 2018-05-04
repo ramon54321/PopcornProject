@@ -5,6 +5,8 @@
 <dd></dd>
 <dt><a href="#module_Database">Database</a></dt>
 <dd></dd>
+<dt><a href="#module_Logger">Logger</a></dt>
+<dd></dd>
 <dt><a href="#module_Transactions">Transactions</a></dt>
 <dd></dd>
 <dt><a href="#module_WebServer">WebServer</a></dt>
@@ -16,12 +18,24 @@
 ## Blockchain
 
 * [Blockchain](#module_Blockchain)
+    * [.loadBlockchain(blocks)](#module_Blockchain+loadBlockchain)
     * [.getLength()](#module_Blockchain+getLength) ⇒ <code>number</code>
     * [.createBlock(data, previousBlockIndex)](#module_Blockchain+createBlock) ⇒ <code>object</code>
     * [.addBlock(block)](#module_Blockchain+addBlock) ⇒ <code>boolean</code>
     * [.isValid()](#module_Blockchain+isValid) ⇒ <code>boolean</code>
     * [.hashBlock(block)](#module_Blockchain+hashBlock) ⇒ <code>string</code>
     * [.hashData(data)](#module_Blockchain+hashData) ⇒ <code>string</code>
+
+<a name="module_Blockchain+loadBlockchain"></a>
+
+### blockchain.loadBlockchain(blocks)
+Inserts blocks fetched from database to blockchain array.
+
+**Kind**: instance method of [<code>Blockchain</code>](#module_Blockchain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| blocks | <code>object</code> | All block's |
 
 <a name="module_Blockchain+getLength"></a>
 
@@ -89,6 +103,19 @@ Hashes the data with the set blockchain public key.
 <a name="module_Database"></a>
 
 ## Database
+<a name="module_Logger"></a>
+
+## Logger
+<a name="exp_module_Logger--module.exports"></a>
+
+### module.exports(level, message) ⏏
+**Kind**: Exported function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| level | <code>string</code> | log level. |
+| message | <code>string</code> | message to log. |
+
 <a name="module_Transactions"></a>
 
 ## Transactions
@@ -96,6 +123,9 @@ Hashes the data with the set blockchain public key.
 * [Transactions](#module_Transactions)
     * _static_
         * [.createRequest(userid, amount)](#module_Transactions.createRequest) ⇒ <code>object</code>
+        * [.getRequest(code)](#module_Transactions.getRequest) ⇒ <code>object</code>
+        * [.getRequestsFromUser(userid)](#module_Transactions.getRequestsFromUser) ⇒ <code>object</code>
+        * [.deleteRequest(code)](#module_Transactions.deleteRequest) ⇒ <code>object</code>
     * _inner_
         * [~generateCode()](#module_Transactions..generateCode) ⇒ <code>object</code>
         * [~isUnique(code)](#module_Transactions..isUnique) ⇒ <code>boolean</code>
@@ -112,6 +142,42 @@ Creates a new request object that is added to requests[].
 | --- | --- | --- |
 | userid | <code>string</code> | Requester's userID. |
 | amount | <code>number</code> | Amount to transfer. |
+
+<a name="module_Transactions.getRequest"></a>
+
+### Transactions.getRequest(code) ⇒ <code>object</code>
+Gets request by code.
+
+**Kind**: static method of [<code>Transactions</code>](#module_Transactions)  
+**Returns**: <code>object</code> - The request object.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| code | <code>string</code> | Request's code. |
+
+<a name="module_Transactions.getRequestsFromUser"></a>
+
+### Transactions.getRequestsFromUser(userid) ⇒ <code>object</code>
+Gets all request by user
+
+**Kind**: static method of [<code>Transactions</code>](#module_Transactions)  
+**Returns**: <code>object</code> - List of requests  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| userid | <code>string</code> | Userid |
+
+<a name="module_Transactions.deleteRequest"></a>
+
+### Transactions.deleteRequest(code) ⇒ <code>object</code>
+Deletes request by code
+
+**Kind**: static method of [<code>Transactions</code>](#module_Transactions)  
+**Returns**: <code>object</code> - The request object.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| code | <code>string</code> | Request's code. |
 
 <a name="module_Transactions..generateCode"></a>
 
@@ -139,7 +205,12 @@ Checks that the code doesn't already exists in requests[].
 * [WebServer](#module_WebServer)
     * [.linkSessionWithUser(request, userid)](#module_WebServer+linkSessionWithUser)
     * [.createTransactionRequest(userid, amount)](#module_WebServer+createTransactionRequest) ⇒ <code>string</code>
-    * [.confirmTransaction(code)](#module_WebServer+confirmTransaction) ⇒ <code>boolean</code>
+    * [.confirmTransaction(code, userid, routeCallback)](#module_WebServer+confirmTransaction)
+    * [.createBalanceSheet()](#module_WebServer+createBalanceSheet)
+    * [.updateBalanceSheet(from, to, amount)](#module_WebServer+updateBalanceSheet)
+    * [.addUserToBalanceSheet(userid)](#module_WebServer+addUserToBalanceSheet)
+    * [.getBalanceById(id)](#module_WebServer+getBalanceById) ⇒ <code>object</code>
+    * [.initializeBlockchain()](#module_WebServer+initializeBlockchain)
 
 <a name="module_WebServer+linkSessionWithUser"></a>
 
@@ -168,13 +239,62 @@ Creates a transaction request, which can be retrieved using the returnedcode. T
 
 <a name="module_WebServer+confirmTransaction"></a>
 
-### webServer.confirmTransaction(code) ⇒ <code>boolean</code>
+### webServer.confirmTransaction(code, userid, routeCallback)
 Confirms the requested transaction by locking it into the blockchain. Thetransaction request is also deleted.
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
-**Returns**: <code>boolean</code> - True if the transaction was added to the blockchainpool. False if there was an error in adding the request, commonly causedby the request with the given code not being present in the transactionrequests array. Ensure the code was first created with'createTransactionRequest'. The request code will only be deleted if thereturned value is true.  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | code | <code>string</code> | The code received when creating the transaction request. |
+| userid | <code>number</code> | User's id |
+| routeCallback | <code>function</code> | The function to call after the promise resolves. OLD BEHAVIOUR: True if the transaction was added to the blockchain pool. False if there was an error in adding the request, commonly caused by the request with the given code not being present in the transaction requests array. Ensure the code was first created with 'createTransactionRequest'. The request code will only be deleted if the returned value is true. |
 
+<a name="module_WebServer+createBalanceSheet"></a>
+
+### webServer.createBalanceSheet()
+Creates balance sheet
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+<a name="module_WebServer+updateBalanceSheet"></a>
+
+### webServer.updateBalanceSheet(from, to, amount)
+Updates balance sheet
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| from | <code>object</code> | Sender |
+| to | <code>object</code> | Receiver |
+| amount | <code>object</code> |  |
+
+<a name="module_WebServer+addUserToBalanceSheet"></a>
+
+### webServer.addUserToBalanceSheet(userid)
+Adds new registered user to balance sheet
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| userid | <code>number</code> | User's id |
+
+<a name="module_WebServer+getBalanceById"></a>
+
+### webServer.getBalanceById(id) ⇒ <code>object</code>
+Get user's balance by id
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+**Returns**: <code>object</code> - User's balance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>object</code> | User's id |
+
+<a name="module_WebServer+initializeBlockchain"></a>
+
+### webServer.initializeBlockchain()
+Initializes the blockchain in servers memory by fetching all the blocksfrom database and passing them to loadBlockChain function, which addsthem to blockchain array.
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
