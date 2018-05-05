@@ -5,13 +5,6 @@ import { transactionsList } from "../api";
 import { connect } from "react-redux";
 
 class List extends Component {
-  constructor(props) {
-    super(props);
-
-    this.showAlert = this.showAlert.bind(this);
-    this.back = this.back.bind(this);
-  }
-
   formatDate = miliseconds => {
     const date = new Date(miliseconds);
     // const day = date.getDate();

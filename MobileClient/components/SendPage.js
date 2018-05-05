@@ -4,8 +4,10 @@ import Tabs from "./Tabs";
 import Main from "./Main";
 import { StackNavigator } from "react-navigation";
 import { getTransactionByCode, confirmTransaction } from "../api";
+import { connect } from "react-redux";
+import actions from "../redux/actions";
 
-export default class SendPage extends Component {
+class SendPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +19,6 @@ export default class SendPage extends Component {
     };
 
     this.showAlert = this.showAlert.bind(this);
-    this.back = this.back.bind(this);
   }
   inputs = [];
 
@@ -92,6 +93,7 @@ export default class SendPage extends Component {
   render() {
     return (
       <View style={styles.mainView}>
+        <Text style={styles.balance}>{`${this.props.balance} $`}</Text>
         <View style={styles.view1}>
           <View style={styles.inputContainer}>
             <TextInput
@@ -140,6 +142,14 @@ export default class SendPage extends Component {
   }
 }
 
+const mapStateToProps = store => ({
+  user: store.user,
+  balance: store.balance,
+  requests: store.requests
+});
+
+export default connect(mapStateToProps)(SendPage);
+
 const styles = StyleSheet.create({
   text: {
     color: "#663300",
@@ -156,6 +166,12 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center"
+  },
+  balance: {
+    color: "#663300",
+    fontSize: 50,
+    fontWeight: "bold",
+    alignSelf: "flex-end"
   },
   input: {
     borderColor: "#000000",

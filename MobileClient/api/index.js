@@ -49,7 +49,7 @@ async function logout() {
   const response = await logoutRequest.json();
 }
 
-async function balance() {
+async function getBalance() {
   const url = `${HOST}/balance`;
 
   const balanceRequest = await fetch(url, {
@@ -142,7 +142,7 @@ export {
   register,
   login,
   logout,
-  balance,
+  getBalance,
   askTransaction,
   nickname,
   transactionsList,

@@ -14,7 +14,7 @@ class Main extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.getListOfTransactions();
     this._sub = this.props.navigation.addListener(
       "willFocus",

@@ -31,6 +31,7 @@ class AskPage extends Component {
   render() {
     return (
       <View style={styles.mainView}>
+        <Text style={styles.balance}>{`${this.props.balance} $`}</Text>
         <View style={styles.view1}>
           {this.state.isHash ? (
             <Text style={styles.text}>{this.state.hash}</Text>
@@ -79,6 +80,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(AskPage);
 
 const styles = StyleSheet.create({
   currency: {
+    color: "#663300",
     fontSize: 60
   },
   text: {
@@ -97,8 +99,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
+  balance: {
+    color: "#663300",
+    fontSize: 50,
+    fontWeight: "bold",
+    alignSelf: "flex-end"
+  },
   input: {
-    borderColor: "#000000",
+    borderColor: "#663300",
     borderBottomWidth: 1,
     width: 160,
     height: 80,
