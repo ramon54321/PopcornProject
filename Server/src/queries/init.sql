@@ -16,6 +16,7 @@ CREATE TABLE person (
 	pass		varchar(40)					NOT NULL
 );
 
+INSERT INTO person (nickname, pass) VALUES ('HelsinkiBank', 'helsinkibank123');
 INSERT INTO person (nickname, pass) VALUES ('Bob', 'bob123');
 INSERT INTO person (nickname, pass) VALUES ('Jane', 'jane123');
 INSERT INTO person (nickname, pass) VALUES ('Andy', 'andy123');
@@ -35,13 +36,20 @@ CREATE TABLE block (
 
 INSERT INTO block (previous_hash, body, nonce, hash) VALUES (
 	'hash1',
-    '{ "from": 2, "to": 3, "amount": 56 }',
+    '{ "from": 0, "to": 1, "amount": 100 }',
     100,
     'hash2'
 );
+
 INSERT INTO block (previous_hash, body, nonce, hash) VALUES (
 	'hash2',
-    '{ "from": 4, "to": 3, "amount": 18 }',
-    200,
+    '{ "from": 1, "to": 3, "amount": 5 }',
+    100,
     'hash3'
+);
+INSERT INTO block (previous_hash, body, nonce, hash) VALUES (
+	'hash3',
+    '{ "from": 1, "to": 4, "amount": 16}',
+    200,
+    'hash4'
 );

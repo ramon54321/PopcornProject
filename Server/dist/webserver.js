@@ -69,7 +69,9 @@ class WebServer {
 			response.send("API - Description");
 		});
 
-		// Initialize database
+		// Initialize database. Note that after database initialization the server
+		// needs to be restarted for in-memory data such as balance scheet
+		// and blockchain to instantiate correctly.
 		this.app.post("/api/admin/initdatabase", (request, response, next) => {
 			this.database.init();
 			response.send({ success: true });
@@ -328,7 +330,13 @@ class WebServer {
 	}
 
 	/**
- * Creates balance sheet
+ * Creates balance sheet.
+ * Fetches all persons from database and sets their balance to zero, and then
+ * fetches all blocks from database and updates the balance sheet accordingly
+ * to the transactions. Note that the first block with the initial transfer for
+ * the bank, determining the total amount of coins in distribution, does not
+ * come from any person in the database, so only the bank is added to the
+ * balance sheet with the first transaction.
  */
 	createBalanceSheet() {
 		(0, _logger2.default)("info", "[SERVER] Creating balance sheet");
@@ -351,6 +359,7 @@ class WebServer {
 			});
 		});
 	}
+
 	/**
  * Updates balance sheet
  * @param {object} from Sender
@@ -367,6 +376,7 @@ class WebServer {
 			balanceSheet[to] = { amount: balanceSheet[to].amount + amount };
 		}
 	}
+
 	/**
  * Adds new registered user to balance sheet
  * @param {number} userid User's id
@@ -374,16 +384,42 @@ class WebServer {
 	addUserToBalanceSheet(userid) {
 		balanceSheet[userid] = { amount: 0 };
 	}
+
 	/**
- * Get user's balance by id
+ * Get user's balance by id from balanceSheet
  * @param {object} id User's id
- * @return {object} User's balance
+ * @return {number} User's balance
  */
 	getBalanceById(id) {
 		if (id in balanceSheet) {
 			return balanceSheet[id].amount;
 		}
 		return false;
+	}
+
+	/**
+ * Get bank's balance from balanceSheet, hardcoded with bank's id
+ * @return {number} Bank's balance
+ */
+	getBankBalance() {
+		if (1 in balanceSheet) {
+			return balanceSheet[1].amount;
+		}
+		return false;
+	}
+
+	/**
+ * Calculates the total number of coins in balance sheet
+ * @return {number} Total number of coins
+ */
+	getCirculationBalance() {
+		let coinAmount = 0;
+		for (let id in balanceSheet) {
+			if (balanceSheet.hasOwnProperty(id)) {
+				coinAmount += balanceSheet[id].amount;
+			}
+		}
+		return coinAmount;
 	}
 
 	/**
@@ -395,6 +431,23 @@ class WebServer {
 		this.database.getBlockAll().then(resp => {
 			this.blockchain.loadBlockchain(resp);
 		});
+	}
+
+	/**
+  * Gets the calculated value of a single coin. This can also be considered
+  * the 'stock price' of the coin.
+  * The value can be manipulated with a push value in the formula, which
+  * encourages the movement of coins into or out of the bank.
+  * Defaults to a nominal value of 5, with a centered lookup, resulting in
+  * a constant 5 being returned if the required functions can not be found.
+  * @return {number} The calculated value of the coin.
+  */
+	getCalculatedValue() {
+		const nominalPrice = 5;
+		const bankBalance = typeof getBankBalance !== "undefined" ? getBankBalance() : 10;
+		const circulationBalance = typeof getCirculationBalance !== "undefined" ? getCirculationBalance() : 20;
+		const pushFactor = 0; // -- Less than 0 -> Encourage flow TOWARDS bank
+		return nominalPrice / Math.pow(bankBalance / circulationBalance + 0.5 + pushFactor, 8);
 	}
 }
 exports.default = WebServer;

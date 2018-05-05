@@ -209,8 +209,11 @@ Checks that the code doesn't already exists in requests[].
     * [.createBalanceSheet()](#module_WebServer+createBalanceSheet)
     * [.updateBalanceSheet(from, to, amount)](#module_WebServer+updateBalanceSheet)
     * [.addUserToBalanceSheet(userid)](#module_WebServer+addUserToBalanceSheet)
-    * [.getBalanceById(id)](#module_WebServer+getBalanceById) ⇒ <code>object</code>
+    * [.getBalanceById(id)](#module_WebServer+getBalanceById) ⇒ <code>number</code>
+    * [.getBankBalance()](#module_WebServer+getBankBalance) ⇒ <code>number</code>
+    * [.getCirculationBalance()](#module_WebServer+getCirculationBalance) ⇒ <code>number</code>
     * [.initializeBlockchain()](#module_WebServer+initializeBlockchain)
+    * [.getCalculatedValue()](#module_WebServer+getCalculatedValue) ⇒ <code>number</code>
 
 <a name="module_WebServer+linkSessionWithUser"></a>
 
@@ -253,7 +256,7 @@ Confirms the requested transaction by locking it into the blockchain. Thetransa
 <a name="module_WebServer+createBalanceSheet"></a>
 
 ### webServer.createBalanceSheet()
-Creates balance sheet
+Creates balance sheet.Fetches all persons from database and sets their balance to zero, and thenfetches all blocks from database and updates the balance sheet accordinglyto the transactions. Note that the first block with the initial transfer forthe bank, determining the total amount of coins in distribution, does notcome from any person in the database, so only the bank is added to thebalance sheet with the first transaction.
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
 <a name="module_WebServer+updateBalanceSheet"></a>
@@ -282,19 +285,40 @@ Adds new registered user to balance sheet
 
 <a name="module_WebServer+getBalanceById"></a>
 
-### webServer.getBalanceById(id) ⇒ <code>object</code>
-Get user's balance by id
+### webServer.getBalanceById(id) ⇒ <code>number</code>
+Get user's balance by id from balanceSheet
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
-**Returns**: <code>object</code> - User's balance  
+**Returns**: <code>number</code> - User's balance  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | id | <code>object</code> | User's id |
 
+<a name="module_WebServer+getBankBalance"></a>
+
+### webServer.getBankBalance() ⇒ <code>number</code>
+Get bank's balance from balanceSheet, hardcoded with bank's id
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+**Returns**: <code>number</code> - Bank's balance  
+<a name="module_WebServer+getCirculationBalance"></a>
+
+### webServer.getCirculationBalance() ⇒ <code>number</code>
+Calculates the total number of coins in balance sheet
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+**Returns**: <code>number</code> - Total number of coins  
 <a name="module_WebServer+initializeBlockchain"></a>
 
 ### webServer.initializeBlockchain()
 Initializes the blockchain in servers memory by fetching all the blocksfrom database and passing them to loadBlockChain function, which addsthem to blockchain array.
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+<a name="module_WebServer+getCalculatedValue"></a>
+
+### webServer.getCalculatedValue() ⇒ <code>number</code>
+Gets the calculated value of a single coin. This can also be consideredthe 'stock price' of the coin.The value can be manipulated with a push value in the formula, whichencourages the movement of coins into or out of the bank.Defaults to a nominal value of 5, with a centered lookup, resulting ina constant 5 being returned if the required functions can not be found.
+
+**Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
+**Returns**: <code>number</code> - The calculated value of the coin.  
