@@ -78,6 +78,12 @@ class WebServer {
 			response.send({ success: true });
 		});
 
+		// Get current coin value
+		this.app.get("/api/value", (request, response) => {
+			const value = this.getCalculatedValue();
+			response.send({ success: true, value: value });
+		});
+
 		// Register new customer
 		this.app.post("/api/register", (request, response) => {
 			const nickname = request.body.nickname;
@@ -489,8 +495,12 @@ class WebServer {
   */
 	getCalculatedValue() {
 		const nominalPrice = 5;
-		const bankBalance = typeof getBankBalance !== "undefined" ? getBankBalance() : 10;
-		const circulationBalance = typeof getCirculationBalance !== "undefined" ? getCirculationBalance() : 20;
+		// const bankBalance = typeof getBankBalance !== "undefined"
+		//	? getBankBalance() : 10
+		// const circulationBalance = typeof getCirculationBalance !== "undefined"
+		//	? getCirculationBalance() : 20
+		const bankBalance = this.getBankBalance();
+		const circulationBalance = this.getCirculationBalance();
 		const pushFactor = 0; // -- Less than 0 -> Encourage flow TOWARDS bank
 		return nominalPrice / Math.pow(bankBalance / circulationBalance + 0.5 + pushFactor, 8);
 	}
