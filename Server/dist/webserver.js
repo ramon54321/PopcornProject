@@ -228,7 +228,6 @@ class WebServer {
 				if (success) {
 					(0, _logger2.default)("info", "[ROUTE] Transaction confirmed successfully");
 					response.send({ success: true });
-					// return
 				} else {
 					// -- If transaction was not successful, send 400 as response
 					(0, _logger2.default)("warning", "[ROUTE] Transaction not confirmed");
@@ -294,6 +293,13 @@ class WebServer {
 		(0, _logger2.default)("info", "[SERVER] Starting to confirm transaction");
 		let request = Transactions.getRequest(code);
 		if (!request) {
+			routeCallback(false);
+			return;
+		}
+
+		// - Check that user has enough coins for transactions
+		let userBalance = this.getBalanceById(userid);
+		if (userBalance < request.amount) {
 			routeCallback(false);
 			return;
 		}

@@ -206,7 +206,6 @@ export default class WebServer {
 				if (success) {
 					popLog("info", "[ROUTE] Transaction confirmed successfully")
 					response.send({success: true})
-					// return
 				} else {
 					// -- If transaction was not successful, send 400 as response
 					popLog("warning", "[ROUTE] Transaction not confirmed")
@@ -272,6 +271,13 @@ export default class WebServer {
 		popLog("info", "[SERVER] Starting to confirm transaction")
 		let request = Transactions.getRequest(code)
 		if (!request) {
+			routeCallback(false)
+			return
+		}
+
+		// - Check that user has enough coins for transactions
+		let userBalance = this.getBalanceById(userid)
+		if (userBalance < request.amount) {
 			routeCallback(false)
 			return
 		}
