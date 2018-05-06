@@ -215,6 +215,12 @@ class WebServer {
 		this.app.post("/api/transactionrequest/:amount", (request, response) => {
 			const userid = request.session.userid;
 			const amount = parseInt(request.params.amount);
+			// -- Check that the amount is bigger than zero
+			if (amount < 1) {
+				response.statusCode = 400;
+				response.send({ success: false });
+				return;
+			}
 			const requestCode = this.createTransactionRequest(userid, amount);
 			response.send({ success: true, requestCode: requestCode });
 		});
