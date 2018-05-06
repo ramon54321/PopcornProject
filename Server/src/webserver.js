@@ -39,6 +39,7 @@ export default class WebServer {
 	setupRoutes() {
 		// API description
 		this.app.get("/api/", (request, response) => {
+			this.getCirculationBalance()
 			response.send("API - Description")
 		})
 
@@ -50,7 +51,7 @@ export default class WebServer {
 			response.send({success: true})
 		})
 
-		// Register new user
+		// Register new customer
 		this.app.post("/api/register", (request, response) => {
 			const nickname = request.body.nickname
 			const pass = request.body.pass
@@ -70,7 +71,7 @@ export default class WebServer {
 					return
 				}
 				// -- Add new user to database
-				const user = [nickname, pass]
+				const user = [nickname, pass, "customer"]
 				this.database.createPerson(user)
 				.then((res) => {
 					// -- Add to locally stored balance sheet
@@ -325,7 +326,7 @@ export default class WebServer {
 	}
 
 	/**
-	* Creates balance sheet.
+	* Creates balance sheet to store coin amount and user type with userid.
 	* Fetches all persons from database and sets their balance to zero, and then
 	* fetches all blocks from database and updates the balance sheet accordingly
 	* to the transactions. Note that the first block with the initial transfer for
@@ -335,13 +336,13 @@ export default class WebServer {
 	*/
 	createBalanceSheet() {
 		popLog("info", "[SERVER] Creating balance sheet")
-		// -- Set every persons balance to 0
+		// -- Set every persons balance to 0 and declare user type
 		this.database.getPersonAll()
 		.then((resp) => {
 			for (let i = 0; resp[i] != null; i++) {
 				if (resp[i].id != null) {
 					const userid = resp[i].id
-					balanceSheet[userid] = {amount: 0}
+					balanceSheet[userid] = {amount: 0, type: resp[i].type}
 				}
 			}
 			// -- Go through every block's transaction and update balances accordingly
@@ -353,6 +354,7 @@ export default class WebServer {
 					const amount = resp[i].body.amount
 					this.updateBalanceSheet(from, to, amount)
 				}
+				popLog("info", "[SERVER] Balance sheet created")
 			})
 		})
 	}
@@ -366,11 +368,17 @@ export default class WebServer {
 	updateBalanceSheet(from, to, amount) {
 		// -- Update sender's balance
 		if (from in balanceSheet) {
-			balanceSheet[from] = {amount: (balanceSheet[from].amount - amount)}
+			balanceSheet[from] = {
+				amount: (balanceSheet[from].amount - amount),
+				type: balanceSheet[from].type,
+			}
 		}
 		// -- Update receiver's balanceSheet
 		if (to in balanceSheet) {
-			balanceSheet[to] = {amount: (balanceSheet[to].amount + amount)}
+			balanceSheet[to] = {
+				amount: (balanceSheet[to].amount + amount),
+				type: balanceSheet[to].type,
+			}
 		}
 	}
 

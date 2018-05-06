@@ -13,18 +13,21 @@ COMMENT ON SCHEMA public
 CREATE TABLE person (
 	id		BIGSERIAL		PRIMARY KEY		NOT NULL,
 	nickname	varchar(40)		UNIQUE			NOT NULL,
-	pass		varchar(40)					NOT NULL
+	pass		varchar(40)					NOT NULL,
+    type        varchar(40)                 NOT NULL
 );
 
-INSERT INTO person (nickname, pass) VALUES ('HelsinkiBank', 'helsinkibank123');
-INSERT INTO person (nickname, pass) VALUES ('Bob', 'bob123');
-INSERT INTO person (nickname, pass) VALUES ('Jane', 'jane123');
-INSERT INTO person (nickname, pass) VALUES ('Andy', 'andy123');
-INSERT INTO person (nickname, pass) VALUES ('Zoe', 'zoe123');
-INSERT INTO person (nickname, pass) VALUES ('Andrew', 'andrew123');
-INSERT INTO person (nickname, pass) VALUES ('Matti', 'matti123');
-INSERT INTO person (nickname, pass) VALUES ('Pekka', 'pekka123');
-INSERT INTO person (nickname, pass) VALUES ('Saara', 'saara123');
+INSERT INTO person (nickname, pass, type) VALUES ('HelsinkiBank', 'helsinkibank123', 'bank');
+INSERT INTO person (nickname, pass, type) VALUES ('CoffeeShop', 'coffeeshop123', 'store');
+INSERT INTO person (nickname, pass, type) VALUES ('DonutShop', 'donutshop123', 'store');
+INSERT INTO person (nickname, pass, type) VALUES ('Bob', 'bob123', 'customer');
+INSERT INTO person (nickname, pass, type) VALUES ('Jane', 'jane123', 'customer');
+INSERT INTO person (nickname, pass, type) VALUES ('Andy', 'andy123', 'customer');
+INSERT INTO person (nickname, pass, type) VALUES ('Zoe', 'zoe123', 'customer');
+INSERT INTO person (nickname, pass, type) VALUES ('Andrew', 'andrew123', 'customer');
+INSERT INTO person (nickname, pass, type) VALUES ('Matti', 'matti123', 'customer');
+INSERT INTO person (nickname, pass, type) VALUES ('Pekka', 'pekka123', 'customer');
+INSERT INTO person (nickname, pass, type) VALUES ('Saara', 'saara123', 'customer');
 
 CREATE TABLE block (
 	id		BIGSERIAL		PRIMARY KEY		NOT NULL,
@@ -43,13 +46,28 @@ INSERT INTO block (previous_hash, body, nonce, hash) VALUES (
 
 INSERT INTO block (previous_hash, body, nonce, hash) VALUES (
 	'hash2',
-    '{ "from": 1, "to": 3, "amount": 5 }',
+    '{ "from": 1, "to": 2, "amount": 20 }',
     100,
     'hash3'
 );
+
 INSERT INTO block (previous_hash, body, nonce, hash) VALUES (
 	'hash3',
-    '{ "from": 1, "to": 4, "amount": 16}',
+    '{ "from": 1, "to": 3, "amount": 40}',
     200,
     'hash4'
+);
+
+INSERT INTO block (previous_hash, body, nonce, hash) VALUES (
+	'hash4',
+    '{ "from": 2, "to": 4, "amount": 2}',
+    200,
+    'hash5'
+);
+
+INSERT INTO block (previous_hash, body, nonce, hash) VALUES (
+	'hash5',
+    '{ "from": 3, "to": 5, "amount": 1}',
+    200,
+    'hash6'
 );

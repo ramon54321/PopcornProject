@@ -256,7 +256,7 @@ Confirms the requested transaction by locking it into the blockchain. Thetransa
 <a name="module_WebServer+createBalanceSheet"></a>
 
 ### webServer.createBalanceSheet()
-Creates balance sheet.Fetches all persons from database and sets their balance to zero, and thenfetches all blocks from database and updates the balance sheet accordinglyto the transactions. Note that the first block with the initial transfer forthe bank, determining the total amount of coins in distribution, does notcome from any person in the database, so only the bank is added to thebalance sheet with the first transaction.
+Creates balance sheet to store coin amount and user type with userid.Fetches all persons from database and sets their balance to zero, and thenfetches all blocks from database and updates the balance sheet accordinglyto the transactions. Note that the first block with the initial transfer forthe bank, determining the total amount of coins in distribution, does notcome from any person in the database, so only the bank is added to thebalance sheet with the first transaction.
 
 **Kind**: instance method of [<code>WebServer</code>](#module_WebServer)  
 <a name="module_WebServer+updateBalanceSheet"></a>
