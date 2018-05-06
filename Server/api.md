@@ -251,7 +251,7 @@ Confirms the requested transaction by locking it into the blockchain. Thetransa
 | --- | --- | --- |
 | code | <code>string</code> | The code received when creating the transaction request. |
 | userid | <code>number</code> | User's id |
-| routeCallback | <code>function</code> | The function to call after the promise resolves. OLD BEHAVIOUR: True if the transaction was added to the blockchain pool. False if there was an error in adding the request, commonly caused by the request with the given code not being present in the transaction requests array. Ensure the code was first created with 'createTransactionRequest'. The request code will only be deleted if the returned value is true. |
+| routeCallback | <code>function</code> | The function to call after the promise resolves. Customer can only confirm requests made by stores or another customers Store can only confirm requests made by customers or banks Bank can only confirm requests made by stores OLD BEHAVIOUR: True if the transaction was added to the blockchain pool. False if there was an error in adding the request, commonly caused by the request with the given code not being present in the transaction requests array. Ensure the code was first created with 'createTransactionRequest'. The request code will only be deleted if the returned value is true. |
 
 <a name="module_WebServer+createBalanceSheet"></a>
 

@@ -288,6 +288,10 @@ class WebServer {
   * @param {number} userid User's id
   * @param {function} routeCallback The function to call after the promise
   * resolves.
+  * Customer can only confirm requests made by stores or another customers
+  * Store can only confirm requests made by customers or banks
+  * Bank can only confirm requests made by stores
+  *
   * OLD BEHAVIOUR: True if the transaction was added to the blockchain
   * pool. False if there was an error in adding the request, commonly caused
   * by the request with the given code not being present in the transaction
@@ -304,7 +308,28 @@ class WebServer {
 			return;
 		}
 
-		// - Check that user has enough coins for transactions
+		let confirmerType = balanceSheet[userid].type;
+		let requesterType = balanceSheet[request.userid].type;
+
+		// -- If confirmer is customer and requester is bank return false
+		if (confirmerType === "customer" && requesterType === "bank") {
+			routeCallback(false);
+			return;
+		}
+
+		// -- If confirmer is store and requester is store return false
+		if (confirmerType === "store" && requesterType === "store") {
+			routeCallback(false);
+			return;
+		}
+
+		// -- If confirmer is bank and requester is not a store
+		if (confirmerType === "bank" && requesterType != "store") {
+			routeCallback(false);
+			return;
+		}
+
+		// -- Check that user has enough coins for transactions
 		let userBalance = this.getBalanceById(userid);
 		if (userBalance < request.amount) {
 			routeCallback(false);
