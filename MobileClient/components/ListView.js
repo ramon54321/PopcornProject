@@ -1,70 +1,50 @@
 import React, { Component } from "react";
-import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
+import { Text, View, TextInput, StyleSheet, ListView } from "react-native";
 import Tabs from "./Tabs";
+import { transactionsList } from "../api";
+import { connect } from "react-redux";
 
-export default class SendPage extends Component {
-  constructor() {
-    super();
+class List extends Component {
+  formatDate = miliseconds => {
+    const date = new Date(miliseconds);
+    // const day = date.getDate();
+    // const month = date.getMonth() + 1;
+    // const year = date.getFullYear();
 
-    this.showAlert = this.showAlert.bind(this);
-    this.back = this.back.bind(this);
-  }
-  inputs = [];
-
-  showAlert() {
-    Alert.alert("Confirmation window", "Do you want send money?", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel"
-      },
-      { text: "OK", onPress: () => console.log("OK Pressed") }
-    ]);
-  }
-
-  back() {
-    console.log("back");
-  }
-
-  handleTextInputChange = (value, index) => {
-    if (!value) return;
-    const currentValues = [...this.state.values];
-    currentValues[index] = value;
-
-    this.setState(
-      {
-        values: currentValues
-      },
-      () => {
-        if (index !== 3) {
-          this.inputs[index + 1].focus();
-        } else {
-          this.inputs[index].blur();
-          this.setState({
-            text: "Send 5$ to HannuBoy "
-          });
-        }
-      }
-    );
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${hours}:${minutes}`;
   };
 
   render() {
+    const requests = this.props.requests.requests;
+    let rows = requests.map(row => (
+      <View key={row.creationDate} style={styles.row}>
+        <Text style={styles.text}>{`${row.amount} $`}</Text>
+        <Text style={styles.text}>{this.formatDate(row.creationDate)}</Text>
+      </View>
+    ));
     return (
       <View style={styles.mainView}>
         <View style={styles.view1}>
           <Text style={styles.header}>List of requests</Text>
-          <View style={styles.list}>
-            <View style={styles.row}>
-              <Text style={styles.text}>65$</Text>
-              <Text style={styles.text}>5:38</Text>
-            </View>
-          </View>
+          <View style={styles.list}>{rows}</View>
         </View>
-        <Tabs names={["Back"]} functions={[this.back]} />
+        <Tabs
+          names={["Back", "Ask"]}
+          pages={["Back", "AskPage"]}
+          navigation={this.props.navigation}
+        />
       </View>
     );
   }
 }
+
+const mapStateToProps = store => ({
+  requests: store.requests
+});
+
+export default connect(mapStateToProps)(List);
 
 const styles = StyleSheet.create({
   text: {
