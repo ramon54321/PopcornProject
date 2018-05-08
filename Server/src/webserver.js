@@ -33,8 +33,8 @@ export default class WebServer {
 		this.startListening()
 	}
 	startListening() {
-		popLog("info", "[SERVER] Listening now")
-		this.app.listen(this.port, "0.0.0.0")
+		popLog("info", "[SERVER] Listening now on port " + this.port)
+		this.app.listen(this.port)
 	}
 	setupRoutes() {
 		// API description
