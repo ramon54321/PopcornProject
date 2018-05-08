@@ -1,55 +1,37 @@
 import React, { Component } from "react";
 import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import Tabs from "./Tabs";
+import { askTransaction, transactionsList } from "../api";
+import { connect } from "react-redux";
+import actions from "../redux/actions";
 
-export default class AskPage extends Component {
+class AskPage extends Component {
   constructor(props) {
     super(props);
-
-    this.showAlert = this.showAlert.bind(this);
-    this.back = this.back.bind(this);
     this.state = {
+      coins: "",
       isHash: false,
-      hash: 2345
+      hash: ""
     };
   }
-  inputs = [];
 
-  showAlert() {
+  confirmAsk = async () => {
+    console.log(this.state.coins);
+    const hash = await askTransaction(this.state.coins);
+    console.log(hash.requestCode);
     this.setState({
+      hash: hash.requestCode,
       isHash: true
     });
-  }
 
-  back() {
-    console.log("back");
-  }
-
-  handleTextInputChange = (value, index) => {
-    if (!value) return;
-    const currentValues = [...this.state.values];
-    currentValues[index] = value;
-
-    this.setState(
-      {
-        values: currentValues
-      },
-      () => {
-        if (index !== 3) {
-          this.inputs[index + 1].focus();
-        } else {
-          this.inputs[index].blur();
-          this.setState({
-            text: "Send 5$ to HannuBoy "
-          });
-        }
-      }
-    );
+    const response = await transactionsList();
+    this.props.saveUserRequests(response.requests);
   };
 
   render() {
     return (
       <View style={styles.mainView}>
+        <Text style={styles.balance}>{`${this.props.balance} $`}</Text>
         <View style={styles.view1}>
           {this.state.isHash ? (
             <Text style={styles.text}>{this.state.hash}</Text>
@@ -57,7 +39,7 @@ export default class AskPage extends Component {
             <View style={styles.inputContainer}>
               <TextInput
                 editable={true}
-                ref={ref => this.inputs.push(ref)}
+                onChangeText={coins => this.setState({ coins })}
                 maxLength={6}
                 style={styles.input}
               />
@@ -66,14 +48,39 @@ export default class AskPage extends Component {
           )}
         </View>
 
-        <Tabs names={["Back", "Ask"]} functions={[this.back, this.showAlert]} />
+        <Tabs
+          names={["Back", "Ask"]}
+          pages={["Back", this.confirmAsk]}
+          navigation={this.props.navigation}
+        />
       </View>
     );
   }
 }
+const mapStateToProps = store => ({
+  user: store.user,
+  balance: store.balance,
+  requests: store.requests
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    saveUserRequests: requests => {
+      const action = {
+        type: actions.SAVE_REQUESTS,
+        payload: {
+          requests
+        }
+      };
+      dispatch(action);
+    }
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AskPage);
 
 const styles = StyleSheet.create({
   currency: {
+    color: "#663300",
     fontSize: 60
   },
   text: {
@@ -92,8 +99,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
+  balance: {
+    color: "#663300",
+    fontSize: 50,
+    fontWeight: "bold",
+    alignSelf: "flex-end"
+  },
   input: {
-    borderColor: "#000000",
+    borderColor: "#663300",
     borderBottomWidth: 1,
     width: 160,
     height: 80,
