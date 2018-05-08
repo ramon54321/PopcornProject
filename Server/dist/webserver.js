@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 
 var _express = require("express");
@@ -28,25 +28,9 @@ var _logger = require("./logger.js");
 
 var _logger2 = _interopRequireDefault(_logger);
 
-function _interopRequireWildcard(obj) {
-  if (obj && obj.__esModule) {
-    return obj;
-  } else {
-    var newObj = {};
-    if (obj != null) {
-      for (var key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key))
-          newObj[key] = obj[key];
-      }
-    }
-    newObj.default = obj;
-    return newObj;
-  }
-}
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * @module WebServer
@@ -71,12 +55,12 @@ class WebServer {
 				maxAge: 5 * 60 * 1000
 			}
 		}));
-		this.port = process.env.PORT | 3000;
+		this.port = process.env.PORT || 3000;
 		this.setupRoutes();
 		this.startListening();
 	}
 	startListening() {
-		(0, _logger2.default)("info", "[SERVER] Listening now");
+		(0, _logger2.default)("info", "[SERVER] Listening now on port " + this.port);
 		this.app.listen(this.port);
 	}
 	setupRoutes() {
