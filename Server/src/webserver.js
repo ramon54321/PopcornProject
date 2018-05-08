@@ -28,7 +28,7 @@ export default class WebServer {
 				maxAge: 5 * 60 * 1000,
 			},
 		}))
-		this.port = process.env.PORT | 3000
+		this.port = process.env.PORT || 3000
 		this.setupRoutes()
 		this.startListening()
 	}
