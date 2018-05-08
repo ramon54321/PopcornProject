@@ -1,29 +1,23 @@
-import createRequest from "./transactions"
-/*
-
+import dotenv from "dotenv"
 import Blockchain from "./blockchain"
+import Database from "./database"
+import WebServer from "./webserver"
 
-const myChain = new Blockchain()
-
-// -- Creating a transaction
-if(from and to exist)
-if(from has enough money)
-return true
-const myTransaction = {from: "Alex", to: "Hannah", amount: 56}
-const myNewBlock = myChain.createBlock(myTransaction, myChain.getLength()-1)
-myChain.addBlock(myNewBlock)
-Database.saveChain(myChain)
-
-
-// -- Get current user balance  [GET] /api/user/{username}/balance
-const myUser = Database.getUserByName("username")
-myChain.getBalance(myUser.id)
-
-console.log(mychain.getLength())
-console.log(mychain.isValid())
+/**
+    Import dotenv to load environment variables from .env in the
+    root server folder.
+    The log is to see if the hello world appears, meaning the
+    environment variables are loaded correctly.
+    This is very useful when the application gets deployed, to see if
+    the variables loaded correctly.
 */
+dotenv.config()
 
-console.log(createRequest())
-console.log(createRequest())
-console.log(createRequest())
-console.log(createRequest())
+// -- Our blockchain instance
+const blockchain = new Blockchain()
+
+// -- Our database handle
+const database = new Database()
+
+// -- Our webserver - Giving it the blockchain instance so it can manipulate it
+const webServer = new WebServer(blockchain, database)

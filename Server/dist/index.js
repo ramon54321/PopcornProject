@@ -1,36 +1,38 @@
 "use strict";
 
-var _transactions = require("./transactions");
+var _dotenv = require("dotenv");
 
-var _transactions2 = _interopRequireDefault(_transactions);
+var _dotenv2 = _interopRequireDefault(_dotenv);
+
+var _blockchain = require("./blockchain");
+
+var _blockchain2 = _interopRequireDefault(_blockchain);
+
+var _database = require("./database");
+
+var _database2 = _interopRequireDefault(_database);
+
+var _webserver = require("./webserver");
+
+var _webserver2 = _interopRequireDefault(_webserver);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*
-
-import Blockchain from "./blockchain"
-
-const myChain = new Blockchain()
-
-// -- Creating a transaction
-if(from and to exist)
-if(from has enough money)
-return true
-const myTransaction = {from: "Alex", to: "Hannah", amount: 56}
-const myNewBlock = myChain.createBlock(myTransaction, myChain.getLength()-1)
-myChain.addBlock(myNewBlock)
-Database.saveChain(myChain)
-
-
-// -- Get current user balance  [GET] /api/user/{username}/balance
-const myUser = Database.getUserByName("username")
-myChain.getBalance(myUser.id)
-
-console.log(mychain.getLength())
-console.log(mychain.isValid())
+/**
+    Import dotenv to load environment variables from .env in the
+    root server folder.
+    The log is to see if the hello world appears, meaning the
+    environment variables are loaded correctly.
+    This is very useful when the application gets deployed, to see if
+    the variables loaded correctly.
 */
+_dotenv2.default.config();
 
-console.log((0, _transactions2.default)());
-console.log((0, _transactions2.default)());
-console.log((0, _transactions2.default)());
-console.log((0, _transactions2.default)());
+// -- Our blockchain instance
+const blockchain = new _blockchain2.default();
+
+// -- Our database handle
+const database = new _database2.default();
+
+// -- Our webserver - Giving it the blockchain instance so it can manipulate it
+const webServer = new _webserver2.default(blockchain, database);
