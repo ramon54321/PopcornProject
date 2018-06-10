@@ -18,10 +18,11 @@ class List extends Component {
 
   render() {
     const requests = this.props.requests.requests;
+    console.log("requests", requests);
     let rows = requests.map(row => (
       <View key={row.creationDate} style={styles.row}>
         <Text style={styles.text}>{`${row.amount} $`}</Text>
-        <Text style={styles.text}>{this.formatDate(row.creationDate)}</Text>
+        <Text style={styles.text}>{row.code}</Text>
       </View>
     ));
     return (

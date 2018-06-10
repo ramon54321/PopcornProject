@@ -24,7 +24,7 @@ class Main extends Component {
 
   getListOfTransactions = async () => {
     const response = await transactionsList();
-    console.log(response.requests);
+    console.log("responese", response);
     const requests = response.requests;
     console.log(requests);
     this.props.saveUserRequests(requests);

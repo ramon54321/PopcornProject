@@ -12,30 +12,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/exploded-aar/com.facebook.fresco/imagepipeline-okhttp3/1.3.0/jars/classes.jar"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.1"
-        sha1="c03c08c9934b23c8c09c803345ec51a74119127b">
-        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-okhttp3-1.3.0_3efe3df53c7f3532e39f1270f4f2a6c3c65315db.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/exploded-aar/com.facebook.fresco/drawee/1.3.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="c65a2e39d54023bac3aef64a2f0cff89289c7ff6">
-        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-drawee-1.3.0_7c4af4b9bd4c170739165afc5a3e2aaebb5db190.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
-        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.0.1_b4d029ecef092a388f198dafc4a94c8c13b4dc6b.jar" />
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.0.1_94b706c6dbb08a5d9aec47bf5991c2bee77f5dda.jar" />
     </item>
     <item
         is-multidex="false"
@@ -66,30 +48,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="/Users/aelittaezugbaya/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="a9283170b7305c8d92d25aff02a6ab7e45d06cbe">
-        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/okio-1.13.0_a95151e7b7265c3b3749147ec1312c98a68be50f.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="/Users/aelittaezugbaya/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.1"
         sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
         <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.1_dd0bdfafe1bb58b56558310eff95c6a31fc924e7.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/exploded-aar/com.facebook.fresco/fbcore/1.3.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="37345de2ed2772f385eaeec37a9c2ff0fea99ad7">
-        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fbcore-1.3.0_ce7a84ce753447cd2980b4e81954e1948a554aee.jar" />
     </item>
     <item
         is-multidex="false"
@@ -111,12 +75,138 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.facebook.react/react-native/0.54.4/jars/libs/infer-annotations-4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="9809e90be788acdb479b2b44e2112f3295a03068">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/infer-annotations-4.0_c8a06c245a3576e2ed35bee9e4170bb1537f0374.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.1"
         sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
         <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.0.1_7b1d8d1e09b391193be6d5565c616e40a392a22e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.0/5871fb60dc68d67da54a663c3fd636a10a532948/jsr305-3.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="5871fb60dc68d67da54a663c3fd636a10a532948">
+        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/jsr305-3.0.0_ae38ed507f0bdbf154926b3038a5ecce9432df17.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.facebook.fresco/fbcore/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="37345de2ed2772f385eaeec37a9c2ff0fea99ad7">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fbcore-1.3.0_5dc1baf6088baafa12edb7a796a921ad665f627f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.0.1_47924845d85c6a4a0e430d06f442e6596926c3f6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.facebook.fresco/imagepipeline/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="48c7f54c2515a2312d3a4481d10c43fbb807f3af">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-1.3.0_640d47b9b98e9159449535d492fa8834e018b334.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.facebook.fresco/imagepipeline-base/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="72128af126ddd7d6252da9357fe560d3abcdfb0c">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-base-1.3.0_9cdf0c5fa1660b539616aac7a8c097fba8c3fcfb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/exploded-aar/com.facebook.fresco/imagepipeline-okhttp3/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c03c08c9934b23c8c09c803345ec51a74119127b">
+        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-okhttp3-1.3.0_3efe3df53c7f3532e39f1270f4f2a6c3c65315db.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/exploded-aar/com.facebook.fresco/drawee/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c65a2e39d54023bac3aef64a2f0cff89289c7ff6">
+        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-drawee-1.3.0_7c4af4b9bd4c170739165afc5a3e2aaebb5db190.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.0.1_b4d029ecef092a388f198dafc4a94c8c13b4dc6b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.facebook.fresco/imagepipeline-okhttp3/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c03c08c9934b23c8c09c803345ec51a74119127b">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-okhttp3-1.3.0_593234c66c7cb0b63e272aa2cbd75c9e81f3a0d6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="a9283170b7305c8d92d25aff02a6ab7e45d06cbe">
+        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/okio-1.13.0_a95151e7b7265c3b3749147ec1312c98a68be50f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.facebook.fresco/drawee/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c65a2e39d54023bac3aef64a2f0cff89289c7ff6">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-drawee-1.3.0_32f94d657a5ed971658be7f264bfbc1a30f59f21.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/exploded-aar/com.facebook.fresco/fbcore/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="37345de2ed2772f385eaeec37a9c2ff0fea99ad7">
+        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fbcore-1.3.0_ce7a84ce753447cd2980b4e81954e1948a554aee.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.facebook.react/react-native/0.54.4/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="9236445249b688377917bbf182bb651ba5a9c5f1">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.facebook.react-react-native-0.54.4_47e95e426701b0351da1896da662e5ef72897581.jar" />
     </item>
     <item
         is-multidex="false"
@@ -138,6 +228,15 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.facebook.soloader/soloader/0.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="8f615bca00639150c9eb6175d4b5471193f70794">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.facebook.soloader-soloader-0.1.0_68f84072e568c6d283a72a88bab95630c9ef99f4.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/exploded-aar/com.facebook.react/react-native/0.54.4/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -153,15 +252,6 @@
         revision="23.0.1"
         sha1="72128af126ddd7d6252da9357fe560d3abcdfb0c">
         <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-base-1.3.0_77b9e05d1553e9987fb1fa2d49834d8e5a97842b.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/aelittaezugbaya/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.0/5871fb60dc68d67da54a663c3fd636a10a532948/jsr305-3.0.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="5871fb60dc68d67da54a663c3fd636a10a532948">
-        <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/jsr305-3.0.0_ae38ed507f0bdbf154926b3038a5ecce9432df17.jar" />
     </item>
     <item
         is-multidex="false"
@@ -183,12 +273,39 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.facebook.fresco/fresco/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="fe85b87215e405f5917d40ae4960488ac9224b74">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fresco-1.3.0_6f5f1d94e46a02a635b0d517687011e5aaa1ddf8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.facebook.fbui.textlayoutbuilder/textlayoutbuilder/1.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="f90b593491e4044903f0bbf68dc3fa2790b151b9">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/com.facebook.fbui.textlayoutbuilder-textlayoutbuilder-1.0.0_a3ba1e20b8064a535a3a6a0021e0eb9cffe7252d.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/aelittaezugbaya/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.1"
         sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
         <dex dex="/Users/aelittaezugbaya/AwesomeProject/android/app/build/intermediates/pre-dexed/debug/bolts-tasks-1.4.0_f07a3ec20465c868f9d1b6d1eb0256de06fef0aa.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/libs/internal_impl-23.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="/Users/aelittaezugbaya/Projects/PopcornProject/MobileClient/android/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.1_6b5517efeccd3db422e8c9c6d13980cf4a3d3bd2.jar" />
     </item>
 
 </items>

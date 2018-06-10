@@ -52,42 +52,46 @@ class SendPage extends Component {
   }
 
   handleTextInputChange = (value, index) => {
-    if (!value) return;
     const currentValues = [...this.state.values];
     currentValues[index] = value;
-
-    this.setState(
-      {
-        values: currentValues
-      },
-      async () => {
-        if (index !== 3) {
-          this.inputs[index + 1].focus();
-        } else {
-          this.inputs[index].blur();
-          console.log(currentValues);
-          const code = currentValues.reduce((string, input) => {
-            return string + input;
-          }, "");
-          const response = await getTransactionByCode(code);
-          console.log(response);
-          if (response.request) {
-            this.setState({
-              text: `Send ${response.request.amount}$ to ${
-                response.request.userid
-              } `,
-              user: response.request.userid,
-              coins: response.request.amount,
-              hash: code
-            });
+    if (value) {
+      this.setState(
+        {
+          values: currentValues
+        },
+        async () => {
+          if (index !== 3) {
+            this.inputs[index + 1].focus();
           } else {
-            this.setState({
-              text: `The code is wrong! `
-            });
+            this.inputs[index].blur();
+            console.log(currentValues);
+            const code = currentValues.reduce((string, input) => {
+              return string + input;
+            }, "");
+            const response = await getTransactionByCode(code);
+            console.log(response);
+            if (response.request) {
+              this.setState({
+                text: `Send ${response.request.amount}$ to ${
+                  response.request.userid
+                } `,
+                user: response.request.userid,
+                coins: response.request.amount,
+                hash: code
+              });
+            } else {
+              this.setState({
+                text: `The code is wrong! `
+              });
+            }
           }
         }
-      }
-    );
+      );
+    } else {
+      this.setState({
+        values: currentValues
+      });
+    }
   };
 
   render() {

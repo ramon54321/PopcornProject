@@ -1,5 +1,13 @@
-const HOST = "http://localhost:3000/api";
+import { Platform } from "react-native";
 
+let endpoint = Platform.select({
+  ios: "localhost",
+  android: "10.0.2.2"
+});
+
+const HOST = `http://${endpoint}:3000/api`;
+
+console.log(process.env);
 async function register(nickname, password) {
   const url = `${HOST}/register`;
   let body = `nickname=${encodeURIComponent(nickname)}`;
