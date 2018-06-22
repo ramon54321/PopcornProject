@@ -8,13 +8,15 @@ var _pg = require("pg");
 
 var _fs = require("fs");
 
-/**
- * @module Database
- */
+var _logger = require("./logger.js");
+
+var _logger2 = _interopRequireDefault(_logger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class Database {
     constructor() {
-        console.log("[INFO] Loading environment variables where ENV_NAME = " + process.env.ENV_NAME);
+        (0, _logger2.default)("info", "Loading environment variables where ENV_NAME = " + process.env.ENV_NAME);
 
         this.client = new _pg.Client({
             connectionString: process.env.DATABASE_URL,
@@ -25,9 +27,9 @@ class Database {
     }
 
     async connect() {
-        console.log("[INFO][Database] Trying to connect to database");
+        (0, _logger2.default)("info", "[Database] Trying to connect to database");
         await this.client.connect();
-        console.log("[INFO][Database] Successfully connected to database");
+        (0, _logger2.default)("info", "[Database] Successfully connected to database");
     }
 
     async runQuery(filename, params = "") {
@@ -38,13 +40,16 @@ class Database {
 
     // -- Admin
     init() {
-        console.log("[ADMIN][Database] Initializing database");
+        (0, _logger2.default)("info", "[Database] Initializing database");
         this.runQuery("./src/queries/init.sql");
     }
 
     // -- Person table
     getPersonAll() {
         return this.runQuery("./src/queries/person_select_all.sql");
+    }
+    getPersonById(params) {
+        return this.runQuery("./src/queries/person_select_by_id.sql", params);
     }
     getPersonByNickname(params) {
         return this.runQuery("./src/queries/person_select_by_nickname.sql", params);
@@ -62,4 +67,6 @@ class Database {
         return this.runQuery("./src/queries/block_create.sql", params);
     }
 }
-exports.default = Database;
+exports.default = Database; /**
+                             * @module Database
+                             */

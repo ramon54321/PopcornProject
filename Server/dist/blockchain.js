@@ -8,7 +8,17 @@ var _crypto = require("crypto");
 
 var Crypto = _interopRequireWildcard(_crypto);
 
+var _logger = require("./logger.js");
+
+var _logger2 = _interopRequireDefault(_logger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/**
+ * @module Blockchain
+ */
 
 class Blockchain {
   constructor() {
@@ -21,7 +31,7 @@ class Blockchain {
   * @param {object} blocks All block's
   */
   loadBlockchain(blocks) {
-    console.log("[INFO][BLOCKCHAIN] Initializing blockchain");
+    (0, _logger2.default)("info", "[BLOCKCHAIN] Initializing blockchain");
     for (let i = 0; blocks[i] != null; i++) {
       // Assigning to different variable because database has different name
       blocks[i].previousHash = blocks[i].previous_hash;
@@ -75,7 +85,7 @@ class Blockchain {
 
     // -- If blockchain is NOT empty AND previousHash is not correct
     if (this.blockchain.length > 0 && block.previousHash !== this.blockchain[this.blockchain.length - 1].hash) {
-      console.log("[INFO][BLOCKCHAIN] Previous hash was not correct");
+      (0, _logger2.default)("warning", "[BLOCKCHAIN] Previous hash was not correct");
       return false;
     }
 
@@ -132,6 +142,4 @@ class Blockchain {
     return Crypto.createHmac("sha256", this.publicKey).update(JSON.stringify(data)).digest("hex");
   }
 }
-exports.default = Blockchain; /**
-                               * @module Blockchain
-                               */
+exports.default = Blockchain;
