@@ -96,6 +96,7 @@ export default class RegistrationPage extends Component {
             autoCorrect={false}
             autoCapitalize="none"
             onEndEditing={this.checkName}
+            underlineColorAndroid="transparent"
             editable={true}
             maxLength={40}
             onChangeText={nickname => this.setState({ nickname })}
@@ -107,6 +108,7 @@ export default class RegistrationPage extends Component {
             editable={true}
             maxLength={40}
             onEndEditing={this.checkPassword}
+            underlineColorAndroid="transparent"
             onContentSizeChange={
               this.state.passwordsError ? this.checkPassword : () => {}
             }
@@ -119,6 +121,7 @@ export default class RegistrationPage extends Component {
             placeholder={"Repeat Password"}
             editable={true}
             maxLength={40}
+            underlineColorAndroid="transparent"
             onContentSizeChange={
               this.state.passwordsError ? this.checkPassword : () => {}
             }

@@ -16,16 +16,17 @@ class AskPage extends Component {
   }
 
   confirmAsk = async () => {
-    console.log(this.state.coins);
-    const hash = await askTransaction(this.state.coins);
-    console.log(hash.requestCode);
-    this.setState({
-      hash: hash.requestCode,
-      isHash: true
-    });
+    if (!this.state.isHash) {
+      const hash = await askTransaction(this.state.coins);
+      console.log(hash.requestCode);
+      this.setState({
+        hash: hash.requestCode,
+        isHash: true
+      });
 
-    const response = await transactionsList();
-    this.props.saveUserRequests(response.requests);
+      const response = await transactionsList();
+      this.props.saveUserRequests(response.requests);
+    }
   };
 
   render() {
@@ -40,6 +41,7 @@ class AskPage extends Component {
               <TextInput
                 editable={true}
                 onChangeText={coins => this.setState({ coins })}
+                underlineColorAndroid="transparent"
                 maxLength={6}
                 style={styles.input}
               />

@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import Tabs from "./Tabs";
-import Main from "./Main";
-import { StackNavigator } from "react-navigation";
 import { getTransactionByCode, confirmTransaction } from "../api";
 import { connect } from "react-redux";
-import actions from "../redux/actions";
 
 class SendPage extends Component {
   constructor(props) {
@@ -15,7 +12,8 @@ class SendPage extends Component {
       text: "",
       user: "",
       coins: "",
-      hash: ""
+      hash: "",
+      confirmed: false
     };
 
     this.showAlert = this.showAlert.bind(this);
@@ -103,6 +101,7 @@ class SendPage extends Component {
             <TextInput
               editable={true}
               ref={ref => this.inputs.push(ref)}
+              underlineColorAndroid="transparent"
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 0)}
               style={styles.input}
@@ -111,6 +110,7 @@ class SendPage extends Component {
             <TextInput
               editable={true}
               ref={ref => this.inputs.push(ref)}
+              underlineColorAndroid="transparent"
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 1)}
               style={styles.input}
@@ -119,6 +119,7 @@ class SendPage extends Component {
             <TextInput
               editable={true}
               ref={ref => this.inputs.push(ref)}
+              underlineColorAndroid="transparent"
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 2)}
               style={styles.input}
@@ -127,6 +128,7 @@ class SendPage extends Component {
             <TextInput
               editable={true}
               ref={ref => this.inputs.push(ref)}
+              underlineColorAndroid="transparent"
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 3)}
               style={styles.input}

@@ -88,6 +88,7 @@ class LoginPage extends Component {
             placeholder={"Nickname"}
             autoCorrect={false}
             autoCapitalize="none"
+            underlineColorAndroid="transparent"
             editable={true}
             maxLength={40}
             onChangeText={nickname => this.setState({ nickname })}
@@ -100,6 +101,8 @@ class LoginPage extends Component {
             autoCorrect={false}
             autoCapitalize="none"
             maxLength={40}
+            secureTextEntry={true}
+            underlineColorAndroid="transparent"
             onChangeText={password => this.setState({ password })}
             style={styles.input}
           />

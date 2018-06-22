@@ -24,10 +24,9 @@ class Main extends Component {
 
   getListOfTransactions = async () => {
     const response = await transactionsList();
-    console.log("responese", response);
     const requests = response.requests;
-    console.log(requests);
     this.props.saveUserRequests(requests);
+
     if (response.requests.length > 0) {
       this.setState({
         askPage: "AskList"
@@ -54,7 +53,6 @@ class Main extends Component {
     )
   });
   render() {
-    console.log(this.props);
     return (
       <View style={styles.mainView}>
         <View style={styles.view1}>
@@ -90,7 +88,10 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main);
 
 const styles = StyleSheet.create({
   text: {

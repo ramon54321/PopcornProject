@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, StyleSheet, View, AsyncStorage } from "react-native";
+import { logoutHandler } from "../api";
 
 const style = StyleSheet.create({
   view: {
@@ -18,6 +19,8 @@ class AuthLoadingScreen extends React.Component {
   async loadUser() {
     const nickname = await AsyncStorage.getItem("nickname");
     this.props.navigation.navigate(nickname ? "SignedIn" : "SignedOut");
+
+    logoutHandler(this.props.navigation);
   }
 
   render() {
