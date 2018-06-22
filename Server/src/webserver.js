@@ -25,7 +25,7 @@ export default class WebServer {
 		this.app.use(session({
 			secret: "thisisthesecretfortestingonly!",
 			cookie: {
-				maxAge: 5 * 60 * 1000,
+				maxAge: 60 * 60 * 1000,
 			},
 		}))
 		this.port = process.env.PORT || 3000
