@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Text, View, StyleSheet, AsyncStorage } from "react-native";
 import { connect } from "react-redux";
 import Tabs from "./Tabs";
-import { transactionsList, confirmTransaction } from "../api";
+import { transactionsList, confirmTransaction, getBalance } from "../api";
 import actions from "../redux/actions";
 
 class Main extends Component {
@@ -10,8 +10,16 @@ class Main extends Component {
     super(props);
 
     this.state = {
-      askPage: ""
+      askPage: "",
+      balance: this.props.balance
     };
+  }
+
+  askNewBalance = async () => {
+    const newBalance = await getBalance();
+    if(this.props.balance !== newBalance.balance){
+      this.props.saveUserBalance(newBalance.balance);
+    }
   }
 
   componentWillMount() {
@@ -20,7 +28,11 @@ class Main extends Component {
       "willFocus",
       this.getListOfTransactions
     );
-  }
+    this._sub2 = this.props.navigation.addListener(
+      "willFocus",
+      this.askNewBalance
+    );
+  };
 
   getListOfTransactions = async () => {
     const response = await transactionsList();
@@ -36,7 +48,6 @@ class Main extends Component {
         askPage: "AskPage"
       });
     }
-    console.log(this.state.askPage);
   };
 
   static navigationOptions = ({ navigation }) => ({
@@ -83,6 +94,13 @@ const mapDispatchToProps = dispatch => {
         payload: {
           requests
         }
+      };
+      dispatch(action);
+    },
+    saveUserBalance: balance => {
+      const action = {
+        type: actions.SAVE_BALANCE,
+        payload: balance
       };
       dispatch(action);
     }

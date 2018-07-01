@@ -18,7 +18,6 @@ class List extends Component {
 
   render() {
     const requests = this.props.requests.requests;
-    console.log("requests", requests);
     let rows = requests.map(row => (
       <View key={row.creationDate} style={styles.row}>
         <Text style={styles.text}>{`${row.amount} $`}</Text>

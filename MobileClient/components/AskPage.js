@@ -18,7 +18,6 @@ class AskPage extends Component {
   confirmAsk = async () => {
     if (!this.state.isHash) {
       const hash = await askTransaction(this.state.coins);
-      console.log(hash.requestCode);
       this.setState({
         hash: hash.requestCode,
         isHash: true

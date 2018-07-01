@@ -10,7 +10,6 @@ function popcornProject(state, action) {
   if (typeof state === "undefined") {
     return initialState;
   }
-  console.log(action);
 
   switch (action.type) {
     case actions.SAVE_USER:

@@ -5,9 +5,11 @@ const endpoint = Platform.select({
   android: "10.0.2.2"
 });
 
-const HOST = `http://${endpoint}:3000/api`;
+const HOST = `https://popcorn-project.herokuapp.com/api`;
 
 let timeoutLogout;
+
+
 
 const logoutHandler = navigation =>
   (timeoutLogout = async () => {
@@ -55,7 +57,6 @@ async function login(nickname, password) {
   const url = `${HOST}/login`;
   let body = `nickname=${encodeURIComponent(nickname)}`;
   body += `&pass=${encodeURIComponent(password)}`;
-
   const loginRequest = await fetch(url, {
     method: "POST",
     headers: {
@@ -65,7 +66,21 @@ async function login(nickname, password) {
   });
 
   const response = await loginRequest.json();
+  return response;
+}
 
+async function getNickname(id){
+  const url = `${HOST}/userid/${id}`;
+
+  const request = await fetch(url, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  });
+
+  const response = await request.json();
   return response;
 }
 
@@ -79,6 +94,7 @@ async function logout() {
       "Content-Type": "application/x-www-form-urlencoded"
     }
   });
+
 }
 
 async function getBalance() {
@@ -101,7 +117,6 @@ async function askTransaction(coins) {
   });
 
   const response = await transactionRequest.json();
-  console.log(response);
   return response;
 }
 
@@ -176,5 +191,6 @@ export {
   transactionsList,
   getTransactionByCode,
   confirmTransaction,
-  logoutHandler
+  logoutHandler,
+  getNickname
 };

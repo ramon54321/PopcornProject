@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import actions from "../redux/actions";
 import { login, getBalance } from "../api";
 
+import Spinner from 'react-native-loading-spinner-overlay';
+
 import {
   Text,
   View,
@@ -43,24 +45,26 @@ class LoginPage extends Component {
     super(props);
     this.state = {
       nickname: "",
-      password: ""
+      password: "",
+      visible: false,
     };
   }
 
   getBalance = async () => {
     const response = await getBalance();
-    console.log(response.balance);
     let balance = 0;
     if (response.balance) {
       balance = response.balance;
     } else {
       balance = 0;
     }
-    console.log(balance);
     this.props.saveUserBalance(balance);
   };
 
   onPressLogin = async () => {
+    this.setState({
+      visible: true
+    });
     const { nickname, password } = this.state;
     if (nickname === "" || password === "") return;
 
@@ -68,7 +72,9 @@ class LoginPage extends Component {
     if (response) {
       await AsyncStorage.setItem("nickname", nickname);
       await this.getBalance();
-
+      this.setState({
+        visible: false
+      });
       this.props.saveUserData(nickname);
       this.props.navigation.navigate("SignedIn");
     }
@@ -81,6 +87,7 @@ class LoginPage extends Component {
   render() {
     return (
       <View style={styles.view}>
+        <Spinner visible={this.state.visible}/>
         <Text style={styles.header}>Log in</Text>
         <View>
           <Text style={styles.text}>Nickname</Text>
