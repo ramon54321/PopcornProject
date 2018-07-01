@@ -17,6 +17,8 @@ import {
   transactionsList,
   getTransactionByCode
 } from "../api";
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 export default class RegistrationPage extends Component {
   constructor(props) {
@@ -26,7 +28,8 @@ export default class RegistrationPage extends Component {
       password: "",
       checkPassword: "",
       nicknameError: false,
-      passwordsError: false
+      passwordsError: false,
+      visible: false,
     };
     this.createNewAccount = this.createNewAccount.bind(this);
   }
@@ -49,9 +52,6 @@ export default class RegistrationPage extends Component {
 
   checkName = async () => {
     const response = await nickname(this.state.nickname);
-    console.log("kek");
-    console.log(response);
-    console.log(this.state.checkNickText);
     if (response && response.success) {
       this.setState({
         nicknameError: true
@@ -64,21 +64,26 @@ export default class RegistrationPage extends Component {
   };
 
   createNewAccount = async () => {
+  
     const { nickname, password, checkPassword } = this.state;
     this.checkPassword();
     if (nickname === "" || password === "" || checkPassword !== password)
       return;
-
+    this.setState({
+      visible: true
+    });
     const response = await register(nickname, password);
     if (response.success) {
       this.props.navigation.navigate("Login");
       this.setState({
-        error: false
+        error: false,
+        visible: false
       });
     } else {
       this.setState({
         error: true,
-        text: "Something went wrong!"
+        text: "Something went wrong!",
+        visible: false
       });
     }
   };
@@ -86,6 +91,7 @@ export default class RegistrationPage extends Component {
   render() {
     return (
       <View style={styles.view}>
+        <Spinner visible={this.state.visible}/>
         <View>
           <Text style={styles.header}>Registration</Text>
         </View>
@@ -96,6 +102,7 @@ export default class RegistrationPage extends Component {
             autoCorrect={false}
             autoCapitalize="none"
             onEndEditing={this.checkName}
+            underlineColorAndroid="transparent"
             editable={true}
             maxLength={40}
             onChangeText={nickname => this.setState({ nickname })}
@@ -107,6 +114,7 @@ export default class RegistrationPage extends Component {
             editable={true}
             maxLength={40}
             onEndEditing={this.checkPassword}
+            underlineColorAndroid="transparent"
             onContentSizeChange={
               this.state.passwordsError ? this.checkPassword : () => {}
             }
@@ -119,6 +127,7 @@ export default class RegistrationPage extends Component {
             placeholder={"Repeat Password"}
             editable={true}
             maxLength={40}
+            underlineColorAndroid="transparent"
             onContentSizeChange={
               this.state.passwordsError ? this.checkPassword : () => {}
             }

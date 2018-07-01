@@ -21,7 +21,7 @@ class List extends Component {
     let rows = requests.map(row => (
       <View key={row.creationDate} style={styles.row}>
         <Text style={styles.text}>{`${row.amount} $`}</Text>
-        <Text style={styles.text}>{this.formatDate(row.creationDate)}</Text>
+        <Text style={styles.text}>{row.code}</Text>
       </View>
     ));
     return (

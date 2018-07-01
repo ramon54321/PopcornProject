@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import Tabs from "./Tabs";
-import Main from "./Main";
-import { StackNavigator } from "react-navigation";
-import { getTransactionByCode, confirmTransaction } from "../api";
+import { getTransactionByCode, confirmTransaction, getNickname } from "../api";
+import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from "react-redux";
-import actions from "../redux/actions";
 
 class SendPage extends Component {
   constructor(props) {
@@ -15,7 +13,9 @@ class SendPage extends Component {
       text: "",
       user: "",
       coins: "",
-      hash: ""
+      hash: "",
+      confirmed: false,
+      visible: false
     };
 
     this.showAlert = this.showAlert.bind(this);
@@ -23,15 +23,20 @@ class SendPage extends Component {
   inputs = [];
 
   confirmRequest = async () => {
+    this.setState({
+      visible: true
+    })
     const response = await confirmTransaction(this.state.hash);
     if (response.success) {
       this.setState({
         text: "You sent brownies!",
-        values: [null, null, null, null]
+        values: [null, null, null, null],
+        visible: false,
       });
     } else {
       this.setState({
-        text: "Something went wrong!"
+        text: "Something went wrong!",
+        visible: false,
       });
     }
   };
@@ -52,53 +57,68 @@ class SendPage extends Component {
   }
 
   handleTextInputChange = (value, index) => {
-    if (!value) return;
     const currentValues = [...this.state.values];
     currentValues[index] = value;
-
-    this.setState(
-      {
-        values: currentValues
-      },
-      async () => {
-        if (index !== 3) {
-          this.inputs[index + 1].focus();
-        } else {
-          this.inputs[index].blur();
-          console.log(currentValues);
-          const code = currentValues.reduce((string, input) => {
-            return string + input;
-          }, "");
-          const response = await getTransactionByCode(code);
-          console.log(response);
-          if (response.request) {
-            this.setState({
-              text: `Send ${response.request.amount}$ to ${
-                response.request.userid
-              } `,
-              user: response.request.userid,
-              coins: response.request.amount,
-              hash: code
-            });
+    if (value) {
+      this.setState(
+        {
+          values: currentValues
+        },
+        async () => {
+          if (index !== 3 && currentValues.includes(null)) {
+            this.inputs[index + 1].focus();
           } else {
-            this.setState({
-              text: `The code is wrong! `
-            });
+            this.inputs[index].blur();
+            const code = currentValues.reduce((string, input) => {
+              return string + input;
+            }, "");
+            const response = await getTransactionByCode(code);
+            if (response.request) {
+              if(response.request.amount <= this.props.balance){
+                const nicknameResponse = await getNickname(response.request.userid);
+                if(nicknameResponse){
+                  this.setState({
+                    text: `Send ${response.request.amount}$ to ${
+                      nicknameResponse.user.nickname
+                    } `,
+                    user: nicknameResponse.user.nickname,
+                    coins: response.request.amount,
+                    hash: code
+                  });
+                }
+              } else{
+                this.setState({
+                  text: `You can't send ${response.request.amount}$`
+                });  
+              }
+            } else {
+              this.setState({
+                text: `The code is wrong! `
+              });
+            }
           }
         }
-      }
-    );
+      );
+    } else {
+      this.setState({
+        values: currentValues
+      });
+    }
   };
+
+
 
   render() {
     return (
       <View style={styles.mainView}>
+        <Spinner visible={this.state.visible}/>
         <Text style={styles.balance}>{`${this.props.balance} $`}</Text>
         <View style={styles.view1}>
           <View style={styles.inputContainer}>
             <TextInput
               editable={true}
               ref={ref => this.inputs.push(ref)}
+              underlineColorAndroid="transparent"
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 0)}
               style={styles.input}
@@ -107,6 +127,7 @@ class SendPage extends Component {
             <TextInput
               editable={true}
               ref={ref => this.inputs.push(ref)}
+              underlineColorAndroid="transparent"
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 1)}
               style={styles.input}
@@ -115,6 +136,7 @@ class SendPage extends Component {
             <TextInput
               editable={true}
               ref={ref => this.inputs.push(ref)}
+              underlineColorAndroid="transparent"
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 2)}
               style={styles.input}
@@ -123,6 +145,7 @@ class SendPage extends Component {
             <TextInput
               editable={true}
               ref={ref => this.inputs.push(ref)}
+              underlineColorAndroid="transparent"
               maxLength={1}
               onChangeText={code => this.handleTextInputChange(code, 3)}
               style={styles.input}

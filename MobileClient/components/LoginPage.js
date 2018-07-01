@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import actions from "../redux/actions";
 import { login, getBalance } from "../api";
 
+import Spinner from 'react-native-loading-spinner-overlay';
+
 import {
   Text,
   View,
@@ -43,34 +45,44 @@ class LoginPage extends Component {
     super(props);
     this.state = {
       nickname: "",
-      password: ""
+      password: "",
+      visible: false,
     };
   }
 
   getBalance = async () => {
     const response = await getBalance();
-    console.log(response.balance);
     let balance = 0;
     if (response.balance) {
       balance = response.balance;
     } else {
       balance = 0;
     }
-    console.log(balance);
     this.props.saveUserBalance(balance);
   };
 
   onPressLogin = async () => {
+    
     const { nickname, password } = this.state;
     if (nickname === "" || password === "") return;
-
+    this.setState({
+      visible: true
+    });
     const response = await login(nickname, password);
-    if (response) {
+    if (response.success) {
       await AsyncStorage.setItem("nickname", nickname);
       await this.getBalance();
-
+      this.setState({
+        visible: false
+      });
       this.props.saveUserData(nickname);
       this.props.navigation.navigate("SignedIn");
+    } else {
+      this.passwordInput.clear();
+      this.setState({
+        visible: false,
+        nickname: ''
+      });
     }
   };
 
@@ -81,6 +93,7 @@ class LoginPage extends Component {
   render() {
     return (
       <View style={styles.view}>
+        <Spinner visible={this.state.visible}/>
         <Text style={styles.header}>Log in</Text>
         <View>
           <Text style={styles.text}>Nickname</Text>
@@ -88,8 +101,10 @@ class LoginPage extends Component {
             placeholder={"Nickname"}
             autoCorrect={false}
             autoCapitalize="none"
+            underlineColorAndroid="transparent"
             editable={true}
             maxLength={40}
+            value={this.state.nickname}
             onChangeText={nickname => this.setState({ nickname })}
             style={styles.input}
           />
@@ -100,7 +115,10 @@ class LoginPage extends Component {
             autoCorrect={false}
             autoCapitalize="none"
             maxLength={40}
+            secureTextEntry={true}
+            underlineColorAndroid="transparent"
             onChangeText={password => this.setState({ password })}
+            value={this.state.password}
             style={styles.input}
           />
         </View>

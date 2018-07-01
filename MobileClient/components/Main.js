@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, AsyncStorage } from "react-native";
+import { Text, View, StyleSheet, AsyncStorage, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import Tabs from "./Tabs";
-import { transactionsList, confirmTransaction } from "../api";
+import { transactionsList, confirmTransaction, getBalance } from "../api";
 import actions from "../redux/actions";
 
 class Main extends Component {
@@ -10,8 +10,16 @@ class Main extends Component {
     super(props);
 
     this.state = {
-      askPage: ""
+      askPage: "",
+      balance: this.props.balance
     };
+  }
+
+  askNewBalance = async () => {
+    const newBalance = await getBalance();
+    if(this.props.balance !== newBalance.balance){
+      this.props.saveUserBalance(newBalance.balance);
+    }
   }
 
   componentWillMount() {
@@ -20,14 +28,17 @@ class Main extends Component {
       "willFocus",
       this.getListOfTransactions
     );
-  }
+    this._sub2 = this.props.navigation.addListener(
+      "willFocus",
+      this.askNewBalance
+    );
+  };
 
   getListOfTransactions = async () => {
     const response = await transactionsList();
-    console.log(response.requests);
     const requests = response.requests;
-    console.log(requests);
     this.props.saveUserRequests(requests);
+
     if (response.requests.length > 0) {
       this.setState({
         askPage: "AskList"
@@ -37,7 +48,6 @@ class Main extends Component {
         askPage: "AskPage"
       });
     }
-    console.log(this.state.askPage);
   };
 
   static navigationOptions = ({ navigation }) => ({
@@ -54,9 +64,11 @@ class Main extends Component {
     )
   });
   render() {
-    console.log(this.props);
     return (
       <View style={styles.mainView}>
+      <TouchableOpacity style={styles.balance} onPress={this.askNewBalance}>
+          <Text style={styles.buttonText}> Refresh </Text>
+        </TouchableOpacity>
         <View style={styles.view1}>
           <Text style={styles.text}>{`${this.props.balance} $`}</Text>
         </View>
@@ -87,10 +99,20 @@ const mapDispatchToProps = dispatch => {
         }
       };
       dispatch(action);
+    },
+    saveUserBalance: balance => {
+      const action = {
+        type: actions.SAVE_BALANCE,
+        payload: balance
+      };
+      dispatch(action);
     }
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main);
 
 const styles = StyleSheet.create({
   text: {
@@ -98,10 +120,26 @@ const styles = StyleSheet.create({
     fontSize: 85,
     fontWeight: "bold"
   },
+  balance: {
+    alignSelf: "flex-end",
+    backgroundColor: "#d9b18c",
+    width: 110,
+    height: 45,
+    marginTop: 10,
+    marginRight: 10,
+    padding: 5,
+    alignItems: "center",
+    borderRadius: 30
+  },
   view1: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  buttonText: {
+    fontSize: 25,
+    color: "#663300",
+    fontWeight: "bold"
   },
   mainView: {
     flex: 1,
