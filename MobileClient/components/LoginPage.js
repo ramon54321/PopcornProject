@@ -62,14 +62,14 @@ class LoginPage extends Component {
   };
 
   onPressLogin = async () => {
+    
+    const { nickname, password } = this.state;
+    if (nickname === "" || password === "") return;
     this.setState({
       visible: true
     });
-    const { nickname, password } = this.state;
-    if (nickname === "" || password === "") return;
-
     const response = await login(nickname, password);
-    if (response) {
+    if (response.success) {
       await AsyncStorage.setItem("nickname", nickname);
       await this.getBalance();
       this.setState({
@@ -77,6 +77,12 @@ class LoginPage extends Component {
       });
       this.props.saveUserData(nickname);
       this.props.navigation.navigate("SignedIn");
+    } else {
+      this.passwordInput.clear();
+      this.setState({
+        visible: false,
+        nickname: ''
+      });
     }
   };
 
@@ -98,6 +104,7 @@ class LoginPage extends Component {
             underlineColorAndroid="transparent"
             editable={true}
             maxLength={40}
+            value={this.state.nickname}
             onChangeText={nickname => this.setState({ nickname })}
             style={styles.input}
           />
@@ -111,6 +118,7 @@ class LoginPage extends Component {
             secureTextEntry={true}
             underlineColorAndroid="transparent"
             onChangeText={password => this.setState({ password })}
+            value={this.state.password}
             style={styles.input}
           />
         </View>

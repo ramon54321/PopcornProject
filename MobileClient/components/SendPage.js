@@ -65,7 +65,7 @@ class SendPage extends Component {
           values: currentValues
         },
         async () => {
-          if (index !== 3) {
+          if (index !== 3 && currentValues.includes(null)) {
             this.inputs[index + 1].focus();
           } else {
             this.inputs[index].blur();

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, AsyncStorage } from "react-native";
+import { Text, View, StyleSheet, AsyncStorage, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import Tabs from "./Tabs";
 import { transactionsList, confirmTransaction, getBalance } from "../api";
@@ -66,6 +66,9 @@ class Main extends Component {
   render() {
     return (
       <View style={styles.mainView}>
+      <TouchableOpacity style={styles.balance} onPress={this.askNewBalance}>
+          <Text style={styles.buttonText}> Refresh </Text>
+        </TouchableOpacity>
         <View style={styles.view1}>
           <Text style={styles.text}>{`${this.props.balance} $`}</Text>
         </View>
@@ -117,10 +120,26 @@ const styles = StyleSheet.create({
     fontSize: 85,
     fontWeight: "bold"
   },
+  balance: {
+    alignSelf: "flex-end",
+    backgroundColor: "#d9b18c",
+    width: 110,
+    height: 45,
+    marginTop: 10,
+    marginRight: 10,
+    padding: 5,
+    alignItems: "center",
+    borderRadius: 30
+  },
   view1: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  buttonText: {
+    fontSize: 25,
+    color: "#663300",
+    fontWeight: "bold"
   },
   mainView: {
     flex: 1,
