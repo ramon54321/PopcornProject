@@ -9,8 +9,6 @@ const HOST = `https://popcorn-project.herokuapp.com/api`;
 
 let timeoutLogout;
 
-
-
 const logoutHandler = navigation =>
   (timeoutLogout = async () => {
     await AsyncStorage.removeItem("nickname");
@@ -69,8 +67,23 @@ async function login(nickname, password) {
   return response;
 }
 
-async function getNickname(id){
+async function getNickname(id) {
   const url = `${HOST}/userid/${id}`;
+
+  const request = await fetch(url, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  });
+
+  const response = await request.json();
+  return response;
+}
+
+async function getCoinValue() {
+  const url = `${HOST}/value`;
 
   const request = await fetch(url, {
     method: "GET",
@@ -94,7 +107,6 @@ async function logout() {
       "Content-Type": "application/x-www-form-urlencoded"
     }
   });
-
 }
 
 async function getBalance() {
@@ -192,5 +204,6 @@ export {
   getTransactionByCode,
   confirmTransaction,
   logoutHandler,
-  getNickname
+  getNickname,
+  getCoinValue
 };

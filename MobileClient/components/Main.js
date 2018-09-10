@@ -1,8 +1,14 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, AsyncStorage, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  AsyncStorage,
+  TouchableOpacity
+} from "react-native";
 import { connect } from "react-redux";
 import Tabs from "./Tabs";
-import { transactionsList, confirmTransaction, getBalance } from "../api";
+import { transactionsList, getCoinValue, getBalance } from "../api";
 import actions from "../redux/actions";
 
 class Main extends Component {
@@ -11,18 +17,31 @@ class Main extends Component {
 
     this.state = {
       askPage: "",
-      balance: this.props.balance
+      balance: this.props.balance,
+      value: false
     };
   }
 
   askNewBalance = async () => {
     const newBalance = await getBalance();
-    if(this.props.balance !== newBalance.balance){
+    if (this.props.balance !== newBalance.balance) {
       this.props.saveUserBalance(newBalance.balance);
     }
-  }
+  };
+
+  askCoinValue = async () => {
+    const coinValue = await getCoinValue();
+    const roundedValue = coinValue.value.toFixed(3);
+    if (coinValue.value) {
+      this.setState({
+        value: true,
+        coin: roundedValue
+      });
+    }
+  };
 
   componentWillMount() {
+    this.askCoinValue();
     this.getListOfTransactions();
     this._sub = this.props.navigation.addListener(
       "willFocus",
@@ -32,7 +51,7 @@ class Main extends Component {
       "willFocus",
       this.askNewBalance
     );
-  };
+  }
 
   getListOfTransactions = async () => {
     const response = await transactionsList();
@@ -66,11 +85,18 @@ class Main extends Component {
   render() {
     return (
       <View style={styles.mainView}>
-      <TouchableOpacity style={styles.balance} onPress={this.askNewBalance}>
+        <TouchableOpacity style={styles.balance} onPress={this.askNewBalance}>
           <Text style={styles.buttonText}> Refresh </Text>
         </TouchableOpacity>
         <View style={styles.view1}>
           <Text style={styles.text}>{`${this.props.balance} $`}</Text>
+          {this.state.value ? (
+            <Text style={styles.valueText}>{`Coin value: ${
+              this.state.coin
+            } €`}</Text>
+          ) : (
+            ""
+          )}
         </View>
 
         <Tabs
@@ -119,6 +145,11 @@ const styles = StyleSheet.create({
     color: "#663300",
     fontSize: 85,
     fontWeight: "bold"
+  },
+  valueText: {
+    color: "#663300",
+    fontSize: 25,
+    top: 110
   },
   balance: {
     alignSelf: "flex-end",

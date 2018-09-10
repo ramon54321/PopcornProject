@@ -17,8 +17,7 @@ import {
   transactionsList,
   getTransactionByCode
 } from "../api";
-import Spinner from 'react-native-loading-spinner-overlay';
-
+import Spinner from "react-native-loading-spinner-overlay";
 
 export default class RegistrationPage extends Component {
   constructor(props) {
@@ -29,7 +28,7 @@ export default class RegistrationPage extends Component {
       checkPassword: "",
       nicknameError: false,
       passwordsError: false,
-      visible: false,
+      visible: false
     };
     this.createNewAccount = this.createNewAccount.bind(this);
   }
@@ -51,6 +50,7 @@ export default class RegistrationPage extends Component {
   };
 
   checkName = async () => {
+    return;
     const response = await nickname(this.state.nickname);
     if (response && response.success) {
       this.setState({
@@ -64,7 +64,6 @@ export default class RegistrationPage extends Component {
   };
 
   createNewAccount = async () => {
-  
     const { nickname, password, checkPassword } = this.state;
     this.checkPassword();
     if (nickname === "" || password === "" || checkPassword !== password)
@@ -91,7 +90,7 @@ export default class RegistrationPage extends Component {
   render() {
     return (
       <View style={styles.view}>
-        <Spinner visible={this.state.visible}/>
+        <Spinner visible={this.state.visible} />
         <View>
           <Text style={styles.header}>Registration</Text>
         </View>
